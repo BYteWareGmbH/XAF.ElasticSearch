@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="BYteWare XAF Regelsatz" Description="Dieser Regelsatz enthält alle Regeln die für BYteWare XAF Sinn machen." ToolsVersion="14.0">
+  <IncludeAll Action="Warning" />
+  <Rules AnalyzerId="CodeCracker.CSharp" RuleNamespace="CodeCracker.CSharp">
+    <Rule Id="CC0003" Action="None" />
+    <Rule Id="CC0004" Action="None" />
+    <Rule Id="CC0013" Action="Hidden" />
+    <Rule Id="CC0014" Action="Hidden" />
+    <Rule Id="CC0020" Action="Info" />
+    <Rule Id="CC0022" Action="None" />
+    <Rule Id="CC0037" Action="None" />
+    <Rule Id="CC0044" Action="Info" />
+    <Rule Id="CC0047" Action="None" />
+    <Rule Id="CC0057" Action="None" />
+    <Rule Id="CC0070" Action="Info" />
+    <Rule Id="CC0071" Action="None" />
+    <Rule Id="CC0073" Action="None" />
+    <Rule Id="CC0075" Action="Info" />
+    <Rule Id="CC0076" Action="None" />
+    <Rule Id="CC0079" Action="None" />
+    <Rule Id="CC0088" Action="None" />
+    <Rule Id="CC0090" Action="None" />
+    <Rule Id="CC0091" Action="None" />
+    <Rule Id="CC0108" Action="Hidden" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.Analyzers.ManagedCodeAnalysis" RuleNamespace="Microsoft.Rules.Managed">
+    <Rule Id="CA1006" Action="None" />
+    <Rule Id="CA1010" Action="Warning" />
+    <Rule Id="CA1021" Action="None" />
+    <Rule Id="CA1034" Action="Warning" />
+    <Rule Id="CA1303" Action="None" />
+    <Rule Id="CA1721" Action="Warning" />
+    <Rule Id="CA2000" Action="Warning" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp" RuleNamespace="Microsoft.CodeAnalysis.CSharp">
+    <Rule Id="CS1591" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="Microsoft.CodeAnalysis.CSharp.Features" RuleNamespace="Microsoft.CodeAnalysis.CSharp.Features">
+    <Rule Id="IDE0001" Action="None" />
+    <Rule Id="IDE0002" Action="Warning" />
+    <Rule Id="IDE0003" Action="None" />
+    <Rule Id="IDE0004" Action="None" />
+    <Rule Id="IDE0005" Action="None" />
+  </Rules>
+  <Rules AnalyzerId="StyleCop.Analyzers" RuleNamespace="StyleCop.Analyzers">
+    <Rule Id="SA1101" Action="None" />
+    <Rule Id="SA1117" Action="Warning" />
+    <Rule Id="SA1118" Action="None" />
+    <Rule Id="SA1127" Action="None" />
+    <Rule Id="SA1128" Action="None" />
+    <Rule Id="SA1131" Action="Warning" />
+    <Rule Id="SA1133" Action="None" />
+    <Rule Id="SA1134" Action="None" />
+    <Rule Id="SA1201" Action="None" />
+    <Rule Id="SA1202" Action="Warning" />
+    <Rule Id="SA1204" Action="Warning" />
+    <Rule Id="SA1208" Action="None" />
+    <Rule Id="SA1306" Action="None" />
+    <Rule Id="SA1309" Action="None" />
+    <Rule Id="SA1412" Action="Warning" />
+    <Rule Id="SA1513" Action="None" />
+    <Rule Id="SA1516" Action="None" />
+    <Rule Id="SA1601" Action="None" />
+    <Rule Id="SA1610" Action="None" />
+    <Rule Id="SA1623" Action="None" />
+    <Rule Id="SA1624" Action="None" />
+    <Rule Id="SA1625" Action="Warning" />
+    <Rule Id="SA1627" Action="Warning" />
+    <Rule Id="SA1633" Action="None" />
+    <Rule Id="SA1634" Action="None" />
+    <Rule Id="SA1635" Action="None" />
+    <Rule Id="SA1636" Action="None" />
+    <Rule Id="SA1637" Action="None" />
+    <Rule Id="SA1638" Action="None" />
+    <Rule Id="SA1640" Action="None" />
+    <Rule Id="SA1642" Action="None" />
+    <Rule Id="SA1643" Action="None" />
+    <Rule Id="SA1644" Action="Warning" />
+    <Rule Id="SA1645" Action="Warning" />
+    <Rule Id="SA1646" Action="Warning" />
+    <Rule Id="SA1647" Action="Warning" />
+    <Rule Id="SA1649" Action="None" />
+    <Rule Id="SA1652" Action="None" />
+  </Rules>
+</RuleSet>

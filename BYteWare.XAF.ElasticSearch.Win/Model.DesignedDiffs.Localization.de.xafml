@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <ActionDesign>
+    <Actions>
+      <Action Id="FilterPanelFilterFields" Caption="Suche in" />
+      <Action Id="FilterPanelFuzzySearch" Caption="Unscharf Suchen" />
+      <Action Id="FilterPanelSearchEdit" Caption="Suche nach" ShortCaption="Suche" ToolTip="Suche nach Datensätzen anhand der angegebenen Wörter" NullValuePrompt="Suchtext" />
+    </Actions>
+  </ActionDesign>
+</Application>

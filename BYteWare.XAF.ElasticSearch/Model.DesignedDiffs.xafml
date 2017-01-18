@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <Localization>
+    <LocalizationGroup Name="Exceptions">
+      <LocalizationGroup Name="ElasticIndexException" IsNewNode="True">
+        <LocalizationItem Name="ElasticSearchAttributeWrong" Value="Definition of the ElasticSearch Attribut for the Type: {0} is wrong." IsNewNode="True" />
+        <LocalizationItem Name="ElasticSearchIndexMergeError" Value="The Merge Index Operation on the Indexes: {0} failed with Status: {1}" IsNewNode="True" />
+        <LocalizationItem Name="ElasticSearchServerNoConnection" Value="It wasn't possible to connect any of the ElasticSearch Nodes." IsNewNode="True" />
+        <LocalizationItem Name="IndexError" Value="Error: {1} on trying to index instances of Type: {0}." IsNewNode="True" />
+        <LocalizationItem Name="MissingKeyMemberName" Value="The name of the Keymember for the Member: '{0}' of the Type: '{1}' could not be found." IsNewNode="True" />
+        <LocalizationItem Name="PutMappingError" Value="The Mapping for the Type: {0} couldn't be saved." IsNewNode="True" />
+        <LocalizationItem Name="ReindexAtWork" Value="Another Reindex Operation is already at work." IsNewNode="True" />
+        <LocalizationItem Name="SuggestNoString" Value="A Suggest Field can only be defined for a string property." IsNewNode="True" />
+      </LocalizationGroup>
+    </LocalizationGroup>
+    <LocalizationGroup Name="Messages">
+      <LocalizationGroup Name="ElasticSearch" IsNewNode="True">
+        <LocalizationItem Name="FullTextSearchWaitScreenCaption" Value="Searching" IsNewNode="True" />
+        <LocalizationItem Name="FullTextSearchWaitScreenText" Value="Please Wait..." IsNewNode="True" />
+        <LocalizationItem Name="IndexListProgress" Value="ElasticSearch {0} ({1})" IsNewNode="True" />
+        <LocalizationItem Name="RefreshIndexesProgressName" Value="ElasticSearch" IsNewNode="True" />
+        <LocalizationItem Name="RefreshIndexesProgressPhase" Value="Reindex" IsNewNode="True" />
+        <LocalizationItem Name="RefreshLogError" Value="Error on Refreshing inconsistent ElasticSearch Indexes:" IsNewNode="True" />
+        <LocalizationItem Name="RefreshProgress" Value="{0} {1} of {2} = {3:P} completed" IsNewNode="True" />
+        <LocalizationItem Name="ReIndexWaitScreenCaption" Value="ElasticSearch" IsNewNode="True" />
+        <LocalizationItem Name="ReIndexWaitScreenText" Value="Rebuild started" IsNewNode="True" />
+        <LocalizationItem Name="ReIndexWaitScreenUpdateCaption" Value="ElasticSearch: {0}" IsNewNode="True" />
+        <LocalizationItem Name="ReIndexWaitScreenUpdateText" Value="{0} indexed Instances" IsNewNode="True" />
+        <LocalizationItem Name="ValidationWrongType" Value="The type isn't (fully) indexed through ElasticSearch or the ElasticSearch Server isn't available." IsNewNode="True" />
+      </LocalizationGroup>
+    </LocalizationGroup>
+  </Localization>
+  <SchemaModules>
+    <SchemaModule Name="SystemModule" Version="16.2.3.0" IsNewNode="True" />
+  </SchemaModules>
+</Application>

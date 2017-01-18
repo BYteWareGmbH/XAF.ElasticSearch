@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Application>
+  <ActionDesign>
+    <Actions>
+      <Action Id="ElasticSearchFullReIndex" Caption="Vollständige Neuindizierung" ConfirmationMessage="Sollen alle ElasticSearch Indizes wirklich neu aufgebaut werden?" />
+      <Action Id="ElasticSearchReIndex" Caption="Neuindizierung" ConfirmationMessage="Soll der ElasticSearch Index wirklich neu aufgebaut werden?" />
+      <Action Id="FilterFields" Caption="Suche in" />
+      <Action Id="LookupFilterFields" Caption="Suche in" />
+      <Action Id="LookupSetFilter" Caption="Filter" />
+    </Actions>
+  </ActionDesign>
+  <Localization>
+    <LocalizationGroup Name="Exceptions">
+      <LocalizationGroup Name="ElasticIndexException">
+        <LocalizationItem Name="ElasticSearchAttributeWrong" Value="Es konnte kein korrektes ElasticSearch Attribut für den Typ: {0} gefunden werden" />
+        <LocalizationItem Name="ElasticSearchIndexMergeError" Value="Beim Optimieren der Indizes: {0} sind Fehler aufgetreten: {1}" />
+        <LocalizationItem Name="ElasticSearchServerNoConnection" Value="Es konnte keine Verbindung zu einem der angegebenen ElasticSearch Knoten aufgebaut werden." />
+        <LocalizationItem Name="IndexError" Value="Beim Indizieren der Instanzen des Typs: {0} sind Fehler aufgetreten: {1}" />
+        <LocalizationItem Name="MissingKeyMemberName" Value="Für das Element: '{0}' des Typs: '{1}' konnte der Name des Schlüsselelements nicht ermittelt werden." />
+        <LocalizationItem Name="PutMappingError" Value="Das Mapping für den Typ: {0} konnte nicht gespeichert werden." />
+        <LocalizationItem Name="ReindexAtWork" Value="Es wird bereits eine Reindizierung durchgeführt." />
+        <LocalizationItem Name="SuggestNoString" Value="Ein Suggest Feld kann nur für eine string Eigenschaft definiert werden." />
+      </LocalizationGroup>
+    </LocalizationGroup>
+    <LocalizationGroup Name="Messages">
+      <LocalizationGroup Name="ElasticSearch">
+        <LocalizationItem Name="FullTextSearchWaitScreenCaption" Value="Suche läuft" />
+        <LocalizationItem Name="FullTextSearchWaitScreenText" Value="Bitte warten..." />
+        <LocalizationItem Name="RefreshIndexesProgressPhase" Value="Reindizieren" />
+        <LocalizationItem Name="RefreshLogError" Value="Fehler beim Aktualisieren der inkonsistenten ElasticSearch Indizes:" />
+        <LocalizationItem Name="RefreshProgress" Value="{0} {1} von {2} = {3:P} abgeschlossen" />
+        <LocalizationItem Name="ReIndexWaitScreenCaption" Value="ElasticSearch" />
+        <LocalizationItem Name="ReIndexWaitScreenText" Value="Neuindizierung gestartet" />
+        <LocalizationItem Name="ReIndexWaitScreenUpdateCaption" Value="ElasticSearch: {0}" />
+        <LocalizationItem Name="ReIndexWaitScreenUpdateText" Value="{0} Instanzen indiziert" />
+        <LocalizationItem Name="ValidationWrongType" Value="Der Typ wird nicht (vollständig) in ElasticSearch indiziert oder es ist kein ElasticSearch Server verfügbar." />
+      </LocalizationGroup>
+    </LocalizationGroup>
+  </Localization>
+</Application>

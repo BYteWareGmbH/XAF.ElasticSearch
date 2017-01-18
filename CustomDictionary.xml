@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Dictionary>
+  <Acronyms>
+    <CasingExceptions>
+      <Acronym>PLZ</Acronym>
+      <Acronym>WWW</Acronym>
+      <Acronym>ISO</Acronym>
+      <Acronym>XAF</Acronym>
+      <Acronym>PDF</Acronym>
+    </CasingExceptions>
+  </Acronyms>
+</Dictionary>

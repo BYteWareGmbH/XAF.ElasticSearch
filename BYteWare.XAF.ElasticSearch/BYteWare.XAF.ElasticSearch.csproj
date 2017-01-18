@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7171A283-10A5-47C0-942E-633680BEC541}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BYteWare.XAF.ElasticSearch</RootNamespace>
+    <AssemblyName>BYteWare.XAF.ElasticSearch</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup>
+    <DoNotCopyLocalIfInGac>true</DoNotCopyLocalIfInGac>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>..\BYteWareXAF.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\BYteWare.XAF.ElasticSearch.XML</DocumentationFile>
+    <CodeAnalysisRuleSet>..\BYteWareXAF.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>..\BYteWare.XAF.ElasticSearch.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.ExpressApp.Security.v16.2, Version=16.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.ExpressApp.Xpo.v16.2">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v16.2">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.ExpressApp.v16.2">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Persistent.Base.v16.2">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Persistent.BaseImpl.v16.2">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v16.2">
+      <SpecificVersion>False</SpecificVersion>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Elasticsearch.Net, Version=5.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.5.0.0\lib\net45\Elasticsearch.Net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Fasterflect, Version=2.1.3.0, Culture=neutral, PublicKeyToken=38d18473284c1ca7, processorArchitecture=MSIL">
+      <HintPath>..\packages\fasterflect.2.1.3\lib\net40\Fasterflect.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\AssemblyInfoBYteWare.cs">
+      <Link>Properties\AssemblyInfoBYteWare.cs</Link>
+    </Compile>
+    <Compile Include="ApplicationEx.cs" />
+    <Compile Include="BusinessObjects\IElasticSearchIndex.cs" />
+    <Compile Include="BusinessObjects\IElasticSearchIndexRefresh.cs" />
+    <Compile Include="BusinessObjects\IObjectPermissionElasticSearchFilter.cs" />
+    <Compile Include="BusinessObjects\ISearchPosition.cs" />
+    <Compile Include="BYteWareTypeInfo.cs" />
+    <Compile Include="ContainingType.cs" />
+    <Compile Include="Controllers\CustomSearchEventArgs.cs" />
+    <Compile Include="Controllers\ElasticIndexController.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controllers\ElasticSearchFilterController.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controllers\ObjectPermissionController.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ElasticAttribute.cs" />
+    <Compile Include="ElasticContainingAttribute.cs" />
+    <Compile Include="ElasticIndexException.cs" />
+    <Compile Include="ElasticIndexLockingException.cs" />
+    <Compile Include="ElasticMultiFieldAttribute.cs" />
+    <Compile Include="ElasticPropertyAttribute.cs" />
+    <Compile Include="ElasticSearchClient.cs" />
+    <Compile Include="ElasticSearchAttribute.cs" />
+    <Compile Include="ElasticSearchContractResolver.cs" />
+    <Compile Include="ElasticSearchModule.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ElasticSuggestContextAttribute.cs" />
+    <Compile Include="ElasticSuggestContextMultiFieldAttribute.cs" />
+    <Compile Include="EmptyAttributeProvider.cs" />
+    <Compile Include="FieldType.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IElasticProperties.cs" />
+    <Compile Include="IElasticSearchFieldProperties.cs" />
+    <Compile Include="IElasticSearchSuggestContext.cs" />
+    <Compile Include="Model\ElasticSearchIndexGenerator.cs" />
+    <Compile Include="Model\IModelApplicationElasticSearch.cs" />
+    <Compile Include="Model\IModelClassElasticSearch.cs" />
+    <Compile Include="Model\IModelElasticSearch.cs" />
+    <Compile Include="Model\IModelElasticSearchFieldProperties.cs" />
+    <Compile Include="Model\IModelElasticSearchIndex.cs" />
+    <Compile Include="Model\IModelElasticSearchIndexes.cs" />
+    <Compile Include="Model\IModelListViewFilterItemElasticSearch.cs" />
+    <Compile Include="Model\IModelMemberElasticSearch.cs" />
+    <Compile Include="Model\IModelMemberElasticSearchField.cs" />
+    <Compile Include="Model\IModelMemberElasticSearchFields.cs" />
+    <Compile Include="Model\IModelMemberElasticSearchSuggestContext.cs" />
+    <Compile Include="Model\IModelMemberElasticSearchSuggestContexts.cs" />
+    <Compile Include="Model\ModelClassElasticSearchLogic.cs" />
+    <Compile Include="Model\ModelClassGeneratorUpdater.cs" />
+    <Compile Include="Model\ModelElasticSearchContainingVisibilityCalculator.cs" />
+    <Compile Include="Model\ModelElasticSearchMappingVisibilityCalculator.cs" />
+    <Compile Include="Model\ModelListViewFilterItemElasticSearchLogic.cs" />
+    <Compile Include="Model\ModelMemberElasticSearchFieldLogic.cs" />
+    <Compile Include="Model\ModelMemberElasticSearchSuggestContextLogic.cs" />
+    <Compile Include="Model\ModelMemberGeneratorUpdater.cs" />
+    <Compile Include="Response\Hit.cs" />
+    <Compile Include="Response\HitsMetaData.cs" />
+    <Compile Include="Model\DefaultElasticSearchParameterConverter.cs" />
+    <Compile Include="Model\IModelElasticSearchFilterSettings.cs" />
+    <Compile Include="Model\IModelElasticSearchField.cs" />
+    <Compile Include="Model\IModelElasticSearchFieldList.cs" />
+    <Compile Include="Model\IModelElasticSearchFieldsItem.cs" />
+    <Compile Include="Model\IModelElasticSearchFieldsList.cs" />
+    <Compile Include="Model\IModelElasticSearchSuggestContext.cs" />
+    <Compile Include="Model\IModelElasticSearchSuggestContextList.cs" />
+    <Compile Include="Model\IModelElasticSearchSuggestField.cs" />
+    <Compile Include="Model\IModelElasticSearchSuggestFieldList.cs" />
+    <Compile Include="Model\IModelListViewElasticSearchFilterSettings.cs" />
+    <Compile Include="Model\ModelElasticSearchFieldLogic.cs" />
+    <Compile Include="Model\ModelElasticSearchFieldsItemLogic.cs" />
+    <Compile Include="Model\ModelElasticSearchFieldsListLogic.cs" />
+    <Compile Include="Model\ModelElasticSearchSuggestContextLogic.cs" />
+    <Compile Include="Model\ModelElasticSearchSuggestFieldLogic.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RessourceLock.cs" />
+    <Compile Include="Response\ShardsMetaData.cs" />
+    <Compile Include="Response\ShardsFailureReason.cs" />
+    <Compile Include="Response\Suggest.cs" />
+    <Compile Include="SuggestContextAttribute.cs" />
+    <Compile Include="Response\SuggestOption.cs" />
+    <Compile Include="Response\SuggestResponse.cs" />
+    <Compile Include="Response\SuggestResponseConverter.cs" />
+    <Compile Include="SuggestField.cs" />
+    <Compile Include="SuggestWeightFieldValueProvider.cs" />
+    <Compile Include="TaskExtensions.cs" />
+    <Compile Include="TypeMappingWriter.cs" />
+    <Compile Include="TypeNamesValueProvider.cs" />
+    <Compile Include="WaitScreen.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\licenses.licx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Model.DesignedDiffs.xafml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BYteWare.XAF.ElasticSearch.nuspec">
+      <SubType>Designer</SubType>
+    </None>
+    <EmbeddedResource Include="Model.DesignedDiffs.Localization.de.xafml">
+      <DependentUpon>Model.DesignedDiffs.xafml</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <AdditionalFiles Include="..\stylecop.json">
+      <Link>stylecop.json</Link>
+    </AdditionalFiles>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BYteWare.Utils\BYteWare.Utils.csproj">
+      <Project>{a592b97c-279c-48ac-b14e-765fb0543eeb}</Project>
+      <Name>BYteWare.Utils</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\packages\codecracker.CSharp.1.0.1\analyzers\dotnet\cs\CodeCracker.Common.dll" />
+    <Analyzer Include="..\packages\codecracker.CSharp.1.0.1\analyzers\dotnet\cs\CodeCracker.CSharp.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <CodeAnalysisDictionary Include="..\CustomDictionary.xml">
+      <Link>CustomDictionary.xml</Link>
+    </CodeAnalysisDictionary>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
