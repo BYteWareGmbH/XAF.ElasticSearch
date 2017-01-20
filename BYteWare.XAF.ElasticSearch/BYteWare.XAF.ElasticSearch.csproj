@@ -100,10 +100,8 @@
       <Link>Properties\AssemblyInfoBYteWare.cs</Link>
     </Compile>
     <Compile Include="ApplicationEx.cs" />
-    <Compile Include="BusinessObjects\ElasticSearchIndex.cs" />
     <Compile Include="BusinessObjects\IElasticSearchIndex.cs" />
     <Compile Include="BusinessObjects\IElasticSearchIndexRefresh.cs" />
-    <Compile Include="BusinessObjects\ElasticSearchIndexUpdate.cs" />
     <Compile Include="BusinessObjects\IObjectPermissionElasticSearchFilter.cs" />
     <Compile Include="BusinessObjects\ISearchPosition.cs" />
     <Compile Include="BYteWareTypeInfo.cs" />

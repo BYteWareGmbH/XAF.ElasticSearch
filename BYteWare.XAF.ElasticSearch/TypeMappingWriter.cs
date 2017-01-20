@@ -20,24 +20,11 @@
     /// </summary>
     public class TypeMappingWriter
     {
-        private readonly Type _type;
-
-        /// <summary>
-        /// ElasticSearch Type Name for the base class
-        /// </summary>
-        public string BaseTypeName
-        {
-            get;
-            set;
-        }
+        private readonly BYteWareTypeInfo byteWareTypeInfo;
+        private readonly BYteWareTypeInfo baseBWTypeInfo;
+        private readonly ElasticSearchClient elasticSearchClient;
 
         private int MaxRecursion
-        {
-            get;
-            set;
-        }
-
-        private string TypeName
         {
             get;
             set;
@@ -58,28 +45,28 @@
         /// <summary>
         /// Initalizes a new instance of the <see cref="TypeMappingWriter"/> class.
         /// </summary>
-        /// <param name="type">Type to create the mapping for</param>
-        /// <param name="typeName">The ElasticSearch Type Name</param>
+        /// <param name="ec">ElasticSearchClient instance</param>
+        /// <param name="bti">Type to create the mapping for</param>
         /// <param name="maxRecursion">Maximum number of recursions for nested types</param>
         /// <param name="optOut">Was the type marked as opting out of ElasticSearch indexing</param>
-        public TypeMappingWriter(Type type, string typeName, int maxRecursion, bool optOut)
+        public TypeMappingWriter(ElasticSearchClient ec, BYteWareTypeInfo bti, int maxRecursion, bool optOut)
         {
-            _type = type;
+            byteWareTypeInfo = bti;
+            baseBWTypeInfo = bti;
+            elasticSearchClient = ec;
 
-            TypeName = typeName;
-            BaseTypeName = typeName;
             MaxRecursion = maxRecursion;
             OptOut = optOut;
 
             SeenTypes = new ConcurrentDictionary<Type, int>();
-            SeenTypes.TryAdd(type, 0);
+            SeenTypes.TryAdd(bti.Type, 0);
         }
 
         /// <summary>
         /// Returns a json string with mapping settings for all properties of the type
         /// </summary>
         /// <returns>ElasticSearch json mapping string</returns>
-        public string MapFromAttributes()
+        public string Map()
         {
             var sb = new StringBuilder();
             StringWriter sw = null;
@@ -92,7 +79,7 @@
                     jsonWriter.Formatting = Formatting.Indented;
                     jsonWriter.WriteStartObject();
                     {
-                        jsonWriter.WritePropertyName(TypeName);
+                        jsonWriter.WritePropertyName(elasticSearchClient.TypeName(byteWareTypeInfo.ESTypeName));
                         jsonWriter.WriteStartObject();
                         {
                             jsonWriter.WritePropertyName("properties");
@@ -122,20 +109,21 @@
         /// Initalizes a new instance of the <see cref="TypeMappingWriter"/> class.
         /// internal constructor by TypeMappingWriter itself when it recurses, passes seenTypes as safeguard against maxRecursion
         /// </summary>
-        /// <param name="t">Type to create the mapping for</param>
-        /// <param name="typeName">The ElasticSearch Type Name</param>
+        /// <param name="ec">ElasticSearchClient instance</param>
+        /// <param name="bti">Type to create the mapping for</param>
         /// <param name="maxRecursion">Maximum number of recursions for nested types</param>
         /// <param name="optOut">Was the type marked as opting out of ElasticSearch indexing</param>
-        /// <param name="baseTypeName">ElasticSearch Type Name for the base class</param>
+        /// <param name="baseType">Type Info for the base class</param>
         /// <param name="seenTypes">Already visited types</param>
-        internal TypeMappingWriter(Type t, string typeName, int maxRecursion, bool optOut, string baseTypeName, ConcurrentDictionary<Type, int> seenTypes)
+        internal TypeMappingWriter(ElasticSearchClient ec, BYteWareTypeInfo bti, int maxRecursion, bool optOut, BYteWareTypeInfo baseType, ConcurrentDictionary<Type, int> seenTypes)
         {
-            _type = BYteWareTypeInfo.GetUnderlyingType(t);
+            byteWareTypeInfo = bti;
+            baseBWTypeInfo = baseType;
+            elasticSearchClient = ec;
 
-            TypeName = typeName;
             MaxRecursion = maxRecursion;
             OptOut = optOut;
-            BaseTypeName = baseTypeName;
+
             SeenTypes = seenTypes;
         }
 
@@ -143,10 +131,10 @@
         /// Returns a JObject ElasticSearch mapping for a nested/object type
         /// </summary>
         /// <returns>JObject with the ElasticSearch mapping</returns>
-        internal JObject MapPropertiesFromAttributes()
+        internal JObject MapProperties()
         {
             int seen;
-            if (SeenTypes.TryGetValue(_type, out seen) && seen > MaxRecursion)
+            if (SeenTypes.TryGetValue(byteWareTypeInfo.Type, out seen) && seen > MaxRecursion)
             {
                 return JObject.Parse("{}");
             }
@@ -184,10 +172,9 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(ElasticSearch))]
         internal void WriteProperties(JsonWriter jsonWriter)
         {
-            var bti = BYteWareTypeInfo.GetBYteWareTypeInfo(_type);
-            foreach (var p in bti.GetTopPropertyInfos)
+            foreach (var p in byteWareTypeInfo.GetTopPropertyInfos)
             {
-                var props = bti.ESProperties(p.Name);
+                var props = byteWareTypeInfo.ESProperties(p.Name);
                 var type = ElasticSearchClient.GetElasticSearchType(props, p.PropertyType);
                 var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.Name) ? p.Name : props.Name);
                 if ((props != null && props.OptOut) || (props == null && OptOut) || (type == null))
@@ -210,7 +197,7 @@
                     }
                     else
                     {
-                        WriteProperties(jsonWriter, bti, p, props, type);
+                        WriteProperties(jsonWriter, byteWareTypeInfo, p, props, type);
                         var multiFields = BYteWareTypeInfo.Model != null ? (props as IModelMemberElasticSearchField)?.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                         if (multiFields != null && multiFields.Any())
                         {
@@ -221,7 +208,7 @@
                                 var a = ga.First();
                                 jsonWriter.WritePropertyName(ElasticSearchClient.FieldName(ga.Key));
                                 jsonWriter.WriteStartObject();
-                                WriteProperties(jsonWriter, bti, p, a, ElasticSearchClient.GetElasticSearchType(a, p.PropertyType));
+                                WriteProperties(jsonWriter, byteWareTypeInfo, p, a, ElasticSearchClient.GetElasticSearchType(a, p.PropertyType));
                                 jsonWriter.WriteEndObject();
                             }
                             jsonWriter.WriteEndObject();
@@ -230,17 +217,12 @@
                     if (type == "object" || type == "nested")
                     {
                         var deepType = p.PropertyType;
-                        var dbti = BYteWareTypeInfo.GetBYteWareTypeInfo(deepType);
-                        var typeName = dbti.ESTypeName;
-                        if (string.IsNullOrWhiteSpace(typeName))
-                        {
-                            typeName = deepType.Name.ToLowerInvariant();
-                        }
+                        var dbti = BYteWareTypeInfo.GetBYteWareTypeInfo(BYteWareTypeInfo.GetUnderlyingType(deepType));
                         var seenTypes = new ConcurrentDictionary<Type, int>(SeenTypes);
                         seenTypes.AddOrUpdate(deepType, 0, (t, i) => ++i);
 
-                        var newTypeMappingWriter = new TypeMappingWriter(deepType, typeName, MaxRecursion, OptOut, BaseTypeName, seenTypes);
-                        var nestedProperties = newTypeMappingWriter.MapPropertiesFromAttributes();
+                        var newTypeMappingWriter = new TypeMappingWriter(elasticSearchClient, dbti, MaxRecursion, OptOut, baseBWTypeInfo, seenTypes);
+                        var nestedProperties = newTypeMappingWriter.MapProperties();
 
                         jsonWriter.WritePropertyName("properties");
                         nestedProperties.WriteTo(jsonWriter);

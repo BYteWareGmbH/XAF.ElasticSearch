@@ -209,6 +209,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BusinessObjects\Department.cs" />
+    <Compile Include="BusinessObjects\ElasticSearchIndex.cs" />
+    <Compile Include="BusinessObjects\ElasticSearchIndexRefresh.cs" />
     <Compile Include="BusinessObjects\PortfolioFileData.cs" />
     <Compile Include="BusinessObjects\Position.cs" />
     <Compile Include="Controllers\ClearContactTasksController.cs">

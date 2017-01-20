@@ -32,9 +32,9 @@
         }
 
         /// <summary>
-        /// Was the connection defined through a ElasticContainingAttribute
+        /// Was the connection defined through an explicit setting in the Model/through the Attribute
         /// </summary>
-        public bool HasContainingAttribute
+        public bool HasContainingSetting
         {
             get;
             internal set;

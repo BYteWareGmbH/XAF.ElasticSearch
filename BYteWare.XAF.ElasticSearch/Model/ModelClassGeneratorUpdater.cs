@@ -21,17 +21,23 @@
         /// <param name="node">The Business Class Model node</param>
         public override void UpdateNode(ModelNode node)
         {
+            var boModel = node as IModelBOModel;
             var appElasticSearch = node?.Application as IModelApplicationElasticSearch;
-            var modelElasticSearch = node as IModelClassElasticSearch;
-            var modelClass = (IModelClass)modelElasticSearch;
-            if (appElasticSearch != null && modelClass?.TypeInfo?.Type != null)
+            if (boModel != null && appElasticSearch != null)
             {
-                var bi = BYteWareTypeInfo.GetBYteWareTypeInfo(modelClass.TypeInfo.Type);
-                if (bi?.ESAttribute != null)
+                foreach (var modelClass in boModel)
                 {
-                    modelElasticSearch.ElasticSearchIndex = appElasticSearch.ElasticSearch.Indexes.GetNode(bi.ESAttribute.IndexName) as IModelElasticSearchIndex;
-                    modelElasticSearch.TypeName = bi.ESAttribute.TypeName;
-                    modelElasticSearch.SourceFieldDisabled = bi.ESAttribute.SourceFieldDisabled;
+                    var modelElasticSearch = modelClass as IModelClassElasticSearch;
+                    if (modelClass.TypeInfo?.Type != null)
+                    {
+                        var bi = BYteWareTypeInfo.GetBYteWareTypeInfo(modelClass.TypeInfo.Type);
+                        if (bi?.ESAttribute != null)
+                        {
+                            modelElasticSearch.ElasticSearchIndex = appElasticSearch.ElasticSearch.Indexes.GetNode(bi.ESAttribute.IndexName) as IModelElasticSearchIndex;
+                            modelElasticSearch.TypeName = bi.ESAttribute.TypeName;
+                            modelElasticSearch.SourceFieldDisabled = bi.ESAttribute.SourceFieldDisabled;
+                        }
+                    }
                 }
             }
         }

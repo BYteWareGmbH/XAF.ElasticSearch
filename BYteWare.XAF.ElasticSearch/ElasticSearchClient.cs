@@ -197,7 +197,7 @@
         /// <summary>
         /// Get the Elastic Search Field Type Related.
         /// </summary>
-        /// <param name="props">ElasticPropertyAttribute</param>
+        /// <param name="props">ElasticSearch Field Properties</param>
         /// <param name="type">Property Type</param>
         /// <returns>String with the type name or null if can not be inferred</returns>
         public static string GetElasticSearchType(IElasticSearchFieldProperties props, Type type)
@@ -661,7 +661,7 @@
                     jsonSerializerSettings = new JsonSerializerSettings
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        ContractResolver = new ElasticSearchContractResolver(),
+                        ContractResolver = new ElasticSearchContractResolver(this),
                         NullValueHandling = NullValueHandling.Ignore
                     };
                     jsonSerializerSettings.Converters.Add(new StringEnumConverter());
@@ -766,6 +766,17 @@
         }
 
         /// <summary>
+        /// Type Name for ElasticSearch Server
+        /// </summary>
+        /// <param name="name">Name of the Type</param>
+        /// <returns>Converted Type Name</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
+        public string TypeName(string name)
+        {
+            return name.ToLowerInvariant();
+        }
+
+        /// <summary>
         /// Sends an Index Request for BusinessObject bo
         /// </summary>
         /// <param name="bo">XPO BusinessClass Instance</param>
@@ -833,9 +844,9 @@
 
                         writer.WriteStartObject();
                         writer.WritePropertyName("_index");
-                        writer.WriteValue(ci.ESIndexName);
+                        writer.WriteValue(IndexName(ci.ESIndexName));
                         writer.WritePropertyName("_type");
-                        writer.WriteValue(ci.ESTypeName);
+                        writer.WriteValue(TypeName(ci.ESTypeName));
                         writer.WritePropertyName("_version_type");
                         writer.WriteValue("external_gte");
                         writer.WritePropertyName("_version");
@@ -1109,13 +1120,13 @@
         /// <param name="types">string of comma separated type names</param>
         /// <param name="body">The query string in ElasticSearch Query DSL</param>
         /// <returns>A HitsMetaData instance with the results of the query</returns>
-        public HitsMetaData Search(string indexes, string types, string body)
+        public HitsMetaData Search(string[] indexes, string[] types, string body)
         {
             HitsMetaData hits = null;
             var ec = ElasticLowLevelClient;
             if (ec != null)
             {
-                var res = ec.Search<DynamicResponse>(indexes, types, body);
+                var res = ec.Search<DynamicResponse>(string.Join(",", indexes.Select(IndexName)), string.Join(",", types.Select(TypeName)), body);
                 if (res.Success)
                 {
 #pragma warning disable CC0021 // Use nameof
@@ -1340,7 +1351,7 @@
                 {
                     JObject.Parse(string.Format(CultureInfo.InvariantCulture, "{{{0}}}", filter));
                     var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(ti.Type);
-                    var explanations = ElasticLowLevelClient.IndicesValidateQuery<DynamicResponse>(string.Join(",", ci.ESIndexes), string.Join(",", ci.ESTypes), SearchBody("*", false, true, filter, true), t => t.Explain(true));
+                    var explanations = ElasticLowLevelClient.IndicesValidateQuery<DynamicResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), string.Join(",", ci.ESTypes.Select(TypeName)), SearchBody("*", false, true, filter, true), t => t.Explain(true));
                     if (explanations.Success)
                     {
                         dynamic response = explanations.Body;
@@ -1399,23 +1410,28 @@
             using (var os = (XPObjectSpace)application.ObjectSpaceProvider.CreateUpdatingObjectSpace(false))
             {
                 string[] indexes = null;
+                var indexMap = new Dictionary<string, string>();
                 using (var lck = new ResourceLock(os.Session, ElasticSearchCheckNeccesary, LockMode.Shared))
                 {
                     if (lck.Acquire(0))
                     {
                         var existingIndexes = os.GetObjects(elasticSearchIndexPersistentType).Cast<IElasticSearchIndex>().Select(t => t.Name).ToList();
-                        foreach (var ti in os.TypesInfo.PersistentTypes.Where(t => t.IsPersistent && t.FindAttribute<ElasticSearchAttribute>(true) != null))
+                        foreach (var ti in os.TypesInfo.PersistentTypes.Where(t => t.IsPersistent))
                         {
                             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(ti.Type);
-                            if (ci.IsESIndexed && !string.IsNullOrWhiteSpace(ci.ESIndexName) && !existingIndexes.Contains(ci.ESIndexName))
+                            if (ci.IsESIndexed && !string.IsNullOrWhiteSpace(ci.ESIndexName))
                             {
-                                existingIndexes.Add(ci.ESIndexName);
-                                IndexChange(ci.ESIndexName, os.Session, false);
+                                indexMap[IndexName(ci.ESIndexName)] = ci.ESIndexName;
+                                if (!existingIndexes.Contains(IndexName(ci.ESIndexName)))
+                                {
+                                    existingIndexes.Add(IndexName(ci.ESIndexName));
+                                    IndexChange(ci.ESIndexName, os.Session, false);
+                                }
                             }
                         }
                         indexes = os.GetObjects(elasticSearchIndexPersistentType).Cast<IElasticSearchIndex>().Where(t => !t.Active).
                             Concat(os.GetObjects(elasticSearchIndexRefreshPersistentType).Cast<IElasticSearchIndexRefresh>().Select(t => t.Index)).
-                            Select(t => t.Name).Distinct().ToArray();
+                            Where(t => indexMap.ContainsKey(t.Name)).Select(t => indexMap[t.Name]).Distinct().ToArray();
                     }
                 }
                 if (indexes != null && indexes.Any())
@@ -1461,23 +1477,25 @@
                                 if (lck.Acquire(0))
                                 {
                                     var typeCount = 0;
-                                    foreach (var ti in objectspace.TypesInfo.PersistentTypes
-                                        .Where(t => t.IsPersistent && t.FindAttribute<ElasticSearchAttribute>(true) != null))
+                                    foreach (var ti in objectspace.TypesInfo.PersistentTypes.Where(t => t.IsPersistent))
                                     {
                                         var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(ti.Type);
-                                        if (!ci.IsESIndexed || string.IsNullOrWhiteSpace(ci.ESIndexName))
+                                        if (ci.IsESIndexed)
                                         {
-                                            throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "ElasticSearchAttributeWrong"), ti.Name));
-                                        }
-                                        else
-                                        {
-                                            if (indexNames == null || indexNames.Length == 0 || indexNames.Contains(ci.ESIndexName))
+                                            if (string.IsNullOrWhiteSpace(ci.ESIndexName))
                                             {
-                                                if (indexes.Add(ci.ESIndexName))
+                                                throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "ElasticSearchAttributeWrong"), ti.Name));
+                                            }
+                                            else
+                                            {
+                                                if (indexNames == null || indexNames.Length == 0 || indexNames.Contains(ci.ESIndexName))
                                                 {
-                                                    IndexChange(ci.ESIndexName, objectspace.Session, false);
+                                                    if (indexes.Add(ci.ESIndexName))
+                                                    {
+                                                        IndexChange(ci.ESIndexName, objectspace.Session, false);
+                                                    }
+                                                    typeCount++;
                                                 }
-                                                typeCount++;
                                             }
                                         }
                                     }
@@ -1485,11 +1503,11 @@
                                     var indexList = objectspace.GetObjects(elasticSearchIndexPersistentType).OfType<IElasticSearchIndex>().ToList();
 
                                     // Delete ElasticSearchIndex'es, who are in indexNames but not in indexes
-                                    objectspace.Delete(indexList.Where(t => !indexes.Contains(t.Name) && (indexNames == null || indexNames.Length == 0 || indexNames.Contains(t.Name))));
+                                    objectspace.Delete(indexList.Where(t => !indexes.Select(IndexName).Contains(t.Name) && (indexNames == null || indexNames.Length == 0 || indexNames.Contains(t.Name))).ToList());
 
                                     var si = string.Join(",", indexes.ToArray());
                                     workerProgress.Maximum = typeCount;
-                                    indexList = indexList.Where(t => indexes.Contains(t.Name)).ToList();
+                                    indexList = indexList.Where(t => indexes.Select(IndexName).Contains(t.Name)).ToList();
                                     Parallel.ForEach(
                                         new OrderableListPartitioner<IElasticSearchIndex>(indexList),
                                     new ParallelOptions
@@ -1592,7 +1610,7 @@
                                     Fuzzy = true,
                                     Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => GetParameterValue(t.QueryParameter))
                                 };
-                                suggester.Contexts[TypeContext] = "[\"" + string.Join("\",\"", ci.ESTypes) + "\"]";
+                                suggester.Contexts[TypeContext] = "[\"" + string.Join("\",\"", ci.ESTypes.Select(TypeName)) + "\"]";
                                 suggesters.Add(suggester);
                             }
                         }
@@ -1622,7 +1640,7 @@
                                             suggester.Contexts[modelContext.Name] = GetParameterValue(modelContext.Parameter);
                                         }
                                     }
-                                    suggester.Contexts[TypeContext] = "[\"" + string.Join("\",\"", ci.ESTypes) + "\"]";
+                                    suggester.Contexts[TypeContext] = "[\"" + string.Join("\",\"", ci.ESTypes.Select(TypeName)) + "\"]";
                                     suggesters.Add(suggester);
                                 }
                             }
@@ -1676,6 +1694,7 @@
         {
             using (var xpColl = new XPCollection(session, elasticSearchIndexPersistentType))
             {
+                indexName = IndexName(indexName);
                 var ei = xpColl.OfType<IElasticSearchIndex>().FirstOrDefault(t => indexName.Equals(t.Name, StringComparison.OrdinalIgnoreCase));
                 if (ei == null || ei.Active != aktiv)
                 {
@@ -1710,7 +1729,7 @@
                             if (t.IsPersistent)
                             {
                                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(t.Type);
-                                return ci.ESIndexName != null && ci.ESIndexName.Equals(index.Name, StringComparison.OrdinalIgnoreCase);
+                                return ci.ESIndexName != null && IndexName(ci.ESIndexName).Equals(index.Name, StringComparison.OrdinalIgnoreCase);
                             }
                             return false;
                         }).ToList();
@@ -1806,7 +1825,7 @@
         {
             using (var xpColl = new XPCollection(session, elasticSearchIndexPersistentType))
             {
-                var ei = xpColl.OfType<IElasticSearchIndex>().FirstOrDefault(t => indexName.Equals(t.Name, StringComparison.OrdinalIgnoreCase));
+                var ei = xpColl.OfType<IElasticSearchIndex>().FirstOrDefault(t => IndexName(indexName).Equals(t.Name, StringComparison.OrdinalIgnoreCase));
                 return ei == null ? false : ei.Active;
             }
         }
@@ -2048,28 +2067,30 @@
                         var ec = ElasticLowLevelClient;
                         if (ec != null)
                         {
-                            var res = ec.IndicesExists<VoidResponse>(ci.ESIndexName);
+                            var indexName = IndexName(ci.ESIndexName);
+                            var res = ec.IndicesExists<VoidResponse>(indexName);
                             if (!res.HttpStatusCode.HasValue || res.HttpStatusCode.Value != 200)
                             {
-                                res = ec.IndicesCreate<VoidResponse>(ci.ESIndexName, ci.ESIndexSettings);
+                                res = ec.IndicesCreate<VoidResponse>(indexName, ci.ESIndexSettings);
                             }
-                            res = ec.IndicesExistsType<VoidResponse>(ci.ESIndexName, ci.ESTypeName);
+                            var typeName = TypeName(ci.ESTypeName);
+                            res = ec.IndicesExistsType<VoidResponse>(indexName, typeName);
                             if (!res.HttpStatusCode.HasValue || res.HttpStatusCode.Value != 200)
                             {
-                                var tmw = new TypeMappingWriter(ci.Type, ci.ESTypeName, 0, true);
-                                var json = JObject.Parse(tmw.MapFromAttributes());
-                                json[ci.ESTypeName]["_id"] = new JObject();
+                                var tmw = new TypeMappingWriter(this, ci, 0, true);
+                                var json = JObject.Parse(tmw.Map());
+                                json[typeName]["_id"] = new JObject();
                                 var keyMember = ci.ClassInfo.KeyProperty.Name;
                                 var keyProps = ci.ESProperties(ci.ClassInfo.KeyProperty.Name);
-                                json[ci.ESTypeName]["_id"]["path"] = FieldName(string.IsNullOrEmpty(keyProps.Name) ? keyMember : keyProps.Name);
-                                json[ci.ESTypeName]["_id"]["index"] = "no";
-                                json[ci.ESTypeName]["_id"]["store"] = true;
+                                json[typeName]["_id"]["path"] = FieldName(string.IsNullOrEmpty(keyProps?.Name) ? keyMember : keyProps.Name);
+                                json[typeName]["_id"]["index"] = "no";
+                                json[typeName]["_id"]["store"] = true;
                                 if (ci.ESSourceFieldDisabled ?? false)
                                 {
-                                    json[ci.ESTypeName]["_source"] = new JObject();
-                                    json[ci.ESTypeName]["_source"]["enabled"] = false;
+                                    json[typeName]["_source"] = new JObject();
+                                    json[typeName]["_source"]["enabled"] = false;
                                 }
-                                res = ec.IndicesPutMapping<VoidResponse>(ci.ESIndexName, ci.ESTypeName, JsonConvert.SerializeObject(json));
+                                res = ec.IndicesPutMapping<VoidResponse>(indexName, typeName, JsonConvert.SerializeObject(json));
                             }
                             return res.Success;
                         }
@@ -2222,7 +2243,7 @@
             {
                 foreach (var containingType in ci.ContainingTypes)
                 {
-                    if (containingType.HasContainingAttribute || propertyChanged)
+                    if (containingType.HasContainingSetting || propertyChanged)
                     {
                         CriteriaOperator crit = new BinaryOperator(containingType.MemberInfo.Name, bo);
                         if (containingType.MemberInfo.ListElementType != null)
@@ -2327,7 +2348,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    var res = await ElasticLowLevelClient.IndexAsync<VoidResponse>(ci.ESIndexName, ci.ESTypeName, json, i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
+                    var res = await ElasticLowLevelClient.IndexAsync<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), json, i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
                     success = res.Success;
                 }
             }
@@ -2357,7 +2378,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    var res = ElasticLowLevelClient.Index<VoidResponse>(ci.ESIndexName, ci.ESTypeName, json, i => i.VersionType(VersionType.ExternalGte).Version(version));
+                    var res = ElasticLowLevelClient.Index<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), json, i => i.VersionType(VersionType.ExternalGte).Version(version));
                     success = res.Success;
                 }
             }
@@ -2384,7 +2405,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    var res = await ElasticLowLevelClient.DeleteAsync<VoidResponse>(ci.ESIndexName, ci.ESTypeName, bo.Session.GetKeyValue(bo).ToString(), i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
+                    var res = await ElasticLowLevelClient.DeleteAsync<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
                     success = res.Success;
                 }
             }
@@ -2414,7 +2435,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    var res = ElasticLowLevelClient.Delete<VoidResponse>(ci.ESIndexName, ci.ESTypeName, bo.Session.GetKeyValue(bo).ToString(), i => i.VersionType(VersionType.ExternalGte).Version(version));
+                    var res = ElasticLowLevelClient.Delete<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), i => i.VersionType(VersionType.ExternalGte).Version(version));
                     success = res.Success;
                 }
             }
@@ -2441,7 +2462,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    response = ElasticLowLevelClient.Suggest<SuggestResponse>(string.Join(",", ci.ESIndexes), request, t => t.DeserializationOverride(DeserializeSuggestResponse));
+                    response = ElasticLowLevelClient.Suggest<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse));
                 }
             }
             catch (JsonReaderException)
@@ -2465,7 +2486,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    return await ElasticLowLevelClient.SuggestAsync<SuggestResponse>(string.Join(",", ci.ESIndexes), request, t => t.DeserializationOverride(DeserializeSuggestResponse)).ConfigureAwait(false);
+                    return await ElasticLowLevelClient.SuggestAsync<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse)).ConfigureAwait(false);
                 }
             }
             catch (JsonReaderException)

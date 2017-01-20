@@ -324,8 +324,8 @@
                         }
                         var customSearchEventArgs = new CustomSearchEventArgs(
                             args.ParameterCurrentValue == null ? string.Empty : args.ParameterCurrentValue.ToString(),
-                            string.Join(",", ci.ESIndexes),
-                            string.Join(",", ci.ESTypes),
+                            ci.ESIndexes.ToArray(),
+                            ci.ESTypes.ToArray(),
                             filter,
                             ci.ESSecurityFilter);
                         SearchOptions(searchText, fuzzy, wildcard, customSearchEventArgs);

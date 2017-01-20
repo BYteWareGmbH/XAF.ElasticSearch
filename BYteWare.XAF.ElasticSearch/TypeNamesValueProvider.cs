@@ -15,14 +15,10 @@
         /// <summary>
         /// Initalizes a new instance of the <see cref="TypeNameValueProvider"/> class.
         /// </summary>
-        /// <param name="type">Type to return the ElasticSearch type name for</param>
-        public TypeNameValueProvider(Type type)
+        /// <param name="typeName">Type Name to return</param>
+        public TypeNameValueProvider(string typeName)
         {
-            var descci = BYteWareTypeInfo.GetBYteWareTypeInfo(type);
-            if (descci != null && descci.ESTypeName.IsNotNullOrWhiteSpace())
-            {
-                _Types = new string[] { descci.ESTypeName };
-            }
+            _Types = new string[] { typeName };
         }
 
         /// <summary>

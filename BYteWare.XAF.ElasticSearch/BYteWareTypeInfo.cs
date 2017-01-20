@@ -289,7 +289,7 @@
                                 {
                                     BYteWareType = ici,
                                     MemberInfo = mi,
-                                    HasContainingAttribute = ici.IsMemberESContaining(mi.Name)
+                                    HasContainingSetting = ici.IsMemberESContaining(mi.Name)
                                 });
                             }
                         }
@@ -525,7 +525,6 @@
         /// <summary>
         /// Returns the ElasticSearchAttribute instance for the type if one was defined
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         public ElasticSearchAttribute ESAttribute
         {
             get
@@ -537,17 +536,6 @@
                     if (attrs.Length > 0)
                     {
                         _ElasticSearchAttribute = attrs[0] as ElasticSearchAttribute;
-                    }
-                    if (_ElasticSearchAttribute != null && !string.IsNullOrWhiteSpace(_ElasticSearchAttribute.IndexName))
-                    {
-                        if (string.IsNullOrWhiteSpace(_ElasticSearchAttribute.TypeName))
-                        {
-                            _ElasticSearchAttribute.TypeName = Type.Name.ToLowerInvariant();
-                        }
-                        else
-                        {
-                            _ElasticSearchAttribute.TypeName = _ElasticSearchAttribute.TypeName.ToLowerInvariant();
-                        }
                     }
                 }
                 return _ElasticSearchAttribute;
@@ -618,7 +606,8 @@
         {
             get
             {
-                return Model == null ? ESAttribute?.TypeName : (ModelClass as IModelClassElasticSearch)?.TypeName;
+                var tname = Model == null ? ESAttribute?.TypeName : (ModelClass as IModelClassElasticSearch)?.TypeName;
+                return string.IsNullOrEmpty(tname) ? Type.Name : tname;
             }
         }
 

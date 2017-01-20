@@ -14,6 +14,17 @@
     /// </summary>
     public class ElasticSearchContractResolver : DefaultContractResolver
     {
+        private readonly ElasticSearchClient elasticSearchClient;
+
+        /// <summary>
+        /// Initalizes a new instance of the <see cref="ElasticSearchContractResolver"/> class.
+        /// </summary>
+        /// <param name="ec">ElasticSearchClient instance</param>
+        public ElasticSearchContractResolver(ElasticSearchClient ec) : base()
+        {
+            elasticSearchClient = ec;
+        }
+
         /// <inheritdoc/>
         protected override IList<JsonProperty> CreateProperties(Type type, MemberSerialization memberSerialization)
         {
@@ -25,7 +36,7 @@
                 {
                     PropertyType = typeof(string[]),
                     DeclaringType = type,
-                    ValueProvider = new TypeNameValueProvider(type),
+                    ValueProvider = new TypeNameValueProvider(elasticSearchClient.TypeName(ci.ESTypeName)),
                     AttributeProvider = new EmptyAttributeProvider(),
                     Readable = true,
                     Writable = false

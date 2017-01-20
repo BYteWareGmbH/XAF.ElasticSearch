@@ -18,13 +18,13 @@
         /// <param name="types">The types to search in</param>
         /// <param name="filter">The filter to be applied</param>
         /// <param name="securityFilter">The filter defined through the security system</param>
-        public CustomSearchEventArgs(string searchText, string indexes, string types, string filter, string securityFilter)
+        public CustomSearchEventArgs(string searchText, string[] indexes, string[] types, string filter, string securityFilter)
         {
-            this.SearchText = searchText;
-            this.Indexes = indexes;
-            this.Types = types;
-            this.Filter = filter;
-            this.SecurityFilter = securityFilter;
+            SearchText = searchText;
+            Indexes = indexes;
+            Types = types;
+            Filter = filter;
+            SecurityFilter = securityFilter;
         }
 
         /// <summary>
@@ -39,7 +39,7 @@
         /// <summary>
         /// The indexes to search in
         /// </summary>
-        public string Indexes
+        public string[] Indexes
         {
             get;
             set;
@@ -48,7 +48,7 @@
         /// <summary>
         /// The types to search in
         /// </summary>
-        public string Types
+        public string[] Types
         {
             get;
             set;

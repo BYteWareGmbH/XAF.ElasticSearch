@@ -19,7 +19,7 @@
             _IndexName = indexName;
         }
 
-        private string _IndexName;
+        private readonly string _IndexName;
 
         /// <summary>
         /// Name of the ElasticSearch Index
@@ -28,7 +28,7 @@
         {
             get
             {
-                return ElasticSearchClient.Instance.IndexName(_IndexName);
+                return _IndexName;
             }
         }
 

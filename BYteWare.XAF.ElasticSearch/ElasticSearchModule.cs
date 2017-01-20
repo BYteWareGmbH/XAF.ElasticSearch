@@ -47,7 +47,6 @@
             {
                 throw new ArgumentNullException(nameof(application));
             }
-            BYteWareTypeInfo.Model = Application.Model;
             application.LoggingOff += Application_LoggingOff;
             application.Disposed += Application_Disposed;
             application.SetupComplete += Application_SetupComplete;
@@ -248,6 +247,7 @@
         private void Application_ModelChanged(object sender, EventArgs e)
         {
             BYteWareTypeInfo.ModelRefresh();
+            BYteWareTypeInfo.Model = Application.Model;
         }
 
         private void Application_Disposed(object sender, EventArgs e)
