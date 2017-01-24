@@ -19,7 +19,6 @@
         /// </summary>
         [Category(nameof(ElasticSearch))]
         [Description("Contexts to filter suggestions.")]
-        [ModelBrowsable(typeof(ModelElasticSearchMappingVisibilityCalculator))]
         IModelMemberElasticSearchSuggestContexts SuggestContexts
         {
             get;

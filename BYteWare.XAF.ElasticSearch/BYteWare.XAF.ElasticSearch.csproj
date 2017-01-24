@@ -158,6 +158,7 @@
     <Compile Include="Model\ModelMemberElasticSearchFieldLogic.cs" />
     <Compile Include="Model\ModelMemberElasticSearchSuggestContextLogic.cs" />
     <Compile Include="Model\ModelMemberGeneratorUpdater.cs" />
+    <Compile Include="Model\ModelSuggestContextsReadOnlyCalculator.cs" />
     <Compile Include="Response\Hit.cs" />
     <Compile Include="Response\HitsMetaData.cs" />
     <Compile Include="Model\DefaultElasticSearchParameterConverter.cs" />

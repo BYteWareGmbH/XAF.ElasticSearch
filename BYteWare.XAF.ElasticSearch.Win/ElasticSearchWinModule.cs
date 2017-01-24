@@ -44,7 +44,12 @@
         public override void ExtendModelInterfaces(ModelInterfaceExtenders extenders)
         {
             base.ExtendModelInterfaces(extenders);
-            extenders?.Add<IModelClass, IModelFilterPanel>();
+            if (extenders == null)
+            {
+                throw new ArgumentNullException(nameof(extenders));
+            }
+            extenders.Add<IModelClass, IModelFilterPanel>();
+            extenders.Add<IModelListView, IModelListViewFilterPanel>();
         }
 
         /// <inheritdoc/>
@@ -59,6 +64,7 @@
             return new Type[]
             {
                 typeof(IModelFilterPanel),
+                typeof(IModelListViewFilterPanel),
             };
         }
 

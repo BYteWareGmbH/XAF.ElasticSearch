@@ -1,18 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application Logo="ExpressAppLogo">
+<Application Logo="ExpressAppLogo" WebSite="http://www.devexpress.com">
   <BOModel>
     <Class Name="DevExpress.Persistent.BaseImpl.Note">
       <OwnMembers>
         <Member Name="Text" PropertyEditorType="DevExpress.ExpressApp.HtmlPropertyEditor.Win.HtmlPropertyEditor" />
       </OwnMembers>
     </Class>
+    <Class Name="MainDemo.Module.BusinessObjects.Contact" FilterPanelPosition="Top" />
   </BOModel>
   <SchemaModules>
-    <SchemaModule Name="SchedulerModuleBase" Version="13.2.0.0" IsNewNode="True" />
-    <SchemaModule Name="SchedulerWindowsFormsModule" Version="13.2.0.0" IsNewNode="True" />
-    <SchemaModule Name="SystemModule" Version="13.2.0.0" />
-    <SchemaModule Name="SystemWindowsFormsModule" Version="13.2.0.0" IsNewNode="True" />
-    <SchemaModule Name="ValidationModule" Version="13.2.0.0" />
-    <SchemaModule Name="ViewVariantsModule" Version="13.2.0.0" />
+    <SchemaModule Name="SchedulerModuleBase" Version="16.2.3.0" IsNewNode="True" />
+    <SchemaModule Name="SchedulerWindowsFormsModule" Version="16.2.3.0" IsNewNode="True" />
+    <SchemaModule Name="SystemModule" Version="16.2.3.0" />
+    <SchemaModule Name="SystemWindowsFormsModule" Version="16.2.3.0" IsNewNode="True" />
+    <SchemaModule Name="ValidationModule" Version="16.2.3.0" />
+    <SchemaModule Name="ViewVariantsModule" Version="16.2.3.0" />
   </SchemaModules>
 </Application>

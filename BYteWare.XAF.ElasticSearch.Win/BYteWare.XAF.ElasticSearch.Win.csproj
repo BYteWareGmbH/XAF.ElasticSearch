@@ -92,6 +92,7 @@
     <Compile Include="..\AssemblyInfoBYteWare.cs">
       <Link>Properties\AssemblyInfoBYteWare.cs</Link>
     </Compile>
+    <Compile Include="Model\IModelListViewFilterPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyEditor\ButtonsContainersParametrizedActionComboItem.cs" />
     <Compile Include="Template\ElasticLookupControlTemplate.cs">

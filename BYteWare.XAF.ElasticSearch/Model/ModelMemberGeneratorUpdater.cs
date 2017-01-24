@@ -39,7 +39,7 @@
                         var pa = member.MemberInfo.FindAttribute<ElasticPropertyAttribute>();
                         if (pa != null)
                         {
-                            esProperties.IncludeInAll = pa.IncludeInAll;
+                            esProperties.IncludeInAll = ((IElasticProperties)pa).IncludeInAll;
                             esProperties.OptOut = pa.OptOut;
                             esProperties.CopyTo = pa.CopyTo;
                             esProperties.WeightFieldMember = member.ModelClass.AllMembers.FirstOrDefault(t => t.Name == pa.WeightField);
@@ -69,16 +69,14 @@
             }
         }
 
-        private static void MapContextProperties(SuggestContextAttribute sca, IModelMemberElasticSearchSuggestContext scaNode)
+        private static void MapContextProperties(SuggestContextAttribute sca, IElasticSearchSuggestContext scaNode)
         {
-            var esContext = (IElasticSearchSuggestContext)sca;
-            esContext.Map(scaNode, Flags.InstancePublicDeclaredOnly);
+            MapInterfaceProperties<IElasticSearchSuggestContext>(sca, scaNode);
         }
 
-        private static void MapFieldProperties(ElasticAttribute pa, IModelElasticSearchFieldProperties field, IModelMember member)
+        private static void MapFieldProperties(ElasticAttribute pa, IElasticSearchFieldProperties field, IModelMember member)
         {
-            var fp = (IElasticSearchFieldProperties)pa;
-            fp.Map(field, Flags.InstancePublicDeclaredOnly);
+            MapInterfaceProperties<IElasticSearchFieldProperties>(pa, field);
             if (string.IsNullOrWhiteSpace(field.FieldName))
             {
                 field.FieldName = ElasticSearchClient.FieldName(member.Name);
@@ -86,6 +84,14 @@
             if (!field.FieldType.HasValue)
             {
                 field.FieldType = ElasticSearchClient.GetFieldTypeFromType(member.Type);
+            }
+        }
+
+        private static void MapInterfaceProperties<T>(T source, T destination) where T : class
+        {
+            foreach (var prop in typeof(T).Properties(Flags.InstancePublic))
+            {
+                prop.SetValue(destination, prop.GetValue(source));
             }
         }
     }

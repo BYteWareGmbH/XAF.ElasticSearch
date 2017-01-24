@@ -71,8 +71,6 @@
                         return fieldType == FieldType.completion;
                     case nameof(IModelElasticSearchFieldProperties.DefaultSuggestField):
                         return fieldType == FieldType.completion;
-                    case nameof(IModelElasticSearchFieldProperties.SuggestContexts):
-                        return fieldType == FieldType.completion;
                 }
             }
             return false;

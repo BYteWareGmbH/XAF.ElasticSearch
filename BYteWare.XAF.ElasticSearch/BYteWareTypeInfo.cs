@@ -399,7 +399,7 @@
                 foreach (var p in GetTopPropertyInfos)
                 {
                     var props = ESProperties(p.Name);
-                    var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props.FieldName) ? p.Name : props.FieldName);
+                    var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? p.Name : props.FieldName);
                     if (props != null && !props.OptOut)
                     {
                         var etype = props.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType);

@@ -163,6 +163,7 @@
                 typeof(ModelListViewFilterItemElasticSearchLogic),
                 typeof(ModelMemberElasticSearchFieldLogic),
                 typeof(ModelMemberElasticSearchSuggestContextLogic),
+                typeof(ModelSuggestContextsReadOnlyCalculator),
             };
         }
 

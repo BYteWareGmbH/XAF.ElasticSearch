@@ -198,6 +198,7 @@
       <DependentUpon>Model.DesignedDiffs.xafml</DependentUpon>
       <Subtype>Designer</Subtype>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\licenses.licx" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\BYteWare.XAF.ElasticSearch.Win\BYteWare.XAF.ElasticSearch.Win.csproj">
