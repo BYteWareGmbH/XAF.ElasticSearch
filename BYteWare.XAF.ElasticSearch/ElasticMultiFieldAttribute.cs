@@ -17,7 +17,7 @@
         public ElasticMultiFieldAttribute(string name)
             : base()
         {
-            Name = name;
+            FieldName = name;
         }
     }
 }

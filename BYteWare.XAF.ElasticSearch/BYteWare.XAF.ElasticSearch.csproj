@@ -146,6 +146,7 @@
     <Compile Include="Model\IModelListViewFilterItemElasticSearch.cs" />
     <Compile Include="Model\IModelMemberElasticSearch.cs" />
     <Compile Include="Model\IModelMemberElasticSearchField.cs" />
+    <Compile Include="Model\IModelMemberElasticSearchFieldItem.cs" />
     <Compile Include="Model\IModelMemberElasticSearchFields.cs" />
     <Compile Include="Model\IModelMemberElasticSearchSuggestContext.cs" />
     <Compile Include="Model\IModelMemberElasticSearchSuggestContexts.cs" />

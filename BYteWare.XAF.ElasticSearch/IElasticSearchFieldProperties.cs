@@ -19,7 +19,7 @@
         /// </summary>
         [Category(nameof(ElasticSearch))]
         [Description("ElasticSearch Name for the field")]
-        string Name
+        string FieldName
         {
             get;
             set;

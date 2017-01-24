@@ -851,11 +851,8 @@
                         writer.WriteValue("external_gte");
                         writer.WritePropertyName("_version");
                         writer.WriteValue(ci.GetVersion(bo));
-                        if (bo.IsDeleted)
-                        {
-                            writer.WritePropertyName("_id");
-                            writer.WriteValue(bo.Session.GetKeyValue(bo).ToString());
-                        }
+                        writer.WritePropertyName("_id");
+                        writer.WriteValue(bo.Session.GetKeyValue(bo).ToString());
                         writer.WriteEnd();
 
                         writer.WriteEndObject();
@@ -1505,7 +1502,6 @@
                                     // Delete ElasticSearchIndex'es, who are in indexNames but not in indexes
                                     objectspace.Delete(indexList.Where(t => !indexes.Select(IndexName).Contains(t.Name) && (indexNames == null || indexNames.Length == 0 || indexNames.Contains(t.Name))).ToList());
 
-                                    var si = string.Join(",", indexes.ToArray());
                                     workerProgress.Maximum = typeCount;
                                     indexList = indexList.Where(t => indexes.Select(IndexName).Contains(t.Name)).ToList();
                                     Parallel.ForEach(
@@ -1525,9 +1521,10 @@
                                             }
                                         });
                                     });
+                                    var si = string.Join(",", indexes.ToArray());
                                     if (!string.IsNullOrWhiteSpace(si))
                                     {
-                                        var res = ElasticLowLevelClient.IndicesForcemerge<VoidResponse>(si);
+                                        var res = ElasticLowLevelClient.IndicesForcemerge<VoidResponse>(string.Join(",", indexes.Select(IndexName).ToArray()));
                                         if (!res.Success)
                                         {
                                             throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "ElasticSearchIndexMergeError"), si, res.HttpStatusCode));
@@ -2078,19 +2075,7 @@
                             if (!res.HttpStatusCode.HasValue || res.HttpStatusCode.Value != 200)
                             {
                                 var tmw = new TypeMappingWriter(this, ci, 0, true);
-                                var json = JObject.Parse(tmw.Map());
-                                json[typeName]["_id"] = new JObject();
-                                var keyMember = ci.ClassInfo.KeyProperty.Name;
-                                var keyProps = ci.ESProperties(ci.ClassInfo.KeyProperty.Name);
-                                json[typeName]["_id"]["path"] = FieldName(string.IsNullOrEmpty(keyProps?.Name) ? keyMember : keyProps.Name);
-                                json[typeName]["_id"]["index"] = "no";
-                                json[typeName]["_id"]["store"] = true;
-                                if (ci.ESSourceFieldDisabled ?? false)
-                                {
-                                    json[typeName]["_source"] = new JObject();
-                                    json[typeName]["_source"]["enabled"] = false;
-                                }
-                                res = ec.IndicesPutMapping<VoidResponse>(indexName, typeName, JsonConvert.SerializeObject(json));
+                                res = ec.IndicesPutMapping<VoidResponse>(indexName, typeName, tmw.Map());
                             }
                             return res.Success;
                         }
@@ -2348,7 +2333,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    var res = await ElasticLowLevelClient.IndexAsync<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), json, i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
+                    var res = await ElasticLowLevelClient.IndexAsync<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), json, i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
                     success = res.Success;
                 }
             }
@@ -2378,7 +2363,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    var res = ElasticLowLevelClient.Index<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), json, i => i.VersionType(VersionType.ExternalGte).Version(version));
+                    var res = ElasticLowLevelClient.Index<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), json, i => i.VersionType(VersionType.ExternalGte).Version(version));
                     success = res.Success;
                 }
             }

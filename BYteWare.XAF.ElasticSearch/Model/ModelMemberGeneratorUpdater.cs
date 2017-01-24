@@ -52,13 +52,13 @@
                         }
                         else
                         {
-                            esProperties.Name = string.Empty;
+                            esProperties.FieldName = string.Empty;
                         }
                         foreach (var mf in member.MemberInfo.FindAttributes<ElasticMultiFieldAttribute>())
                         {
-                            var mfNode = esProperties.Fields.AddNode<IModelElasticSearchFieldProperties>();
+                            var mfNode = esProperties.Fields.AddNode<IModelMemberElasticSearchFieldItem>();
                             MapFieldProperties(mf, mfNode, member);
-                            foreach (var sca in member.MemberInfo.FindAttributes<ElasticSuggestContextMultiFieldAttribute>().Where(t => t.FieldName.Equals(mfNode.Name, StringComparison.OrdinalIgnoreCase)))
+                            foreach (var sca in member.MemberInfo.FindAttributes<ElasticSuggestContextMultiFieldAttribute>().Where(t => t.FieldName.Equals(mfNode.FieldName, StringComparison.OrdinalIgnoreCase)))
                             {
                                 var scaNode = mfNode.SuggestContexts.AddNode<IModelMemberElasticSearchSuggestContext>();
                                 MapContextProperties(sca, scaNode);
@@ -79,9 +79,9 @@
         {
             var fp = (IElasticSearchFieldProperties)pa;
             fp.Map(field, Flags.InstancePublicDeclaredOnly);
-            if (string.IsNullOrWhiteSpace(field.Name))
+            if (string.IsNullOrWhiteSpace(field.FieldName))
             {
-                field.Name = ElasticSearchClient.FieldName(member.Name);
+                field.FieldName = ElasticSearchClient.FieldName(member.Name);
             }
             if (!field.FieldType.HasValue)
             {

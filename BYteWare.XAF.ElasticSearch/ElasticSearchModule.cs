@@ -149,6 +149,7 @@
                 typeof(IElasticSearchFieldProperties),
                 typeof(IElasticProperties),
                 typeof(IModelMemberElasticSearchField),
+                typeof(IModelMemberElasticSearchFieldItem),
                 typeof(IModelMemberElasticSearchFields),
                 typeof(IElasticSearchSuggestContext),
                 typeof(IModelMemberElasticSearchSuggestContext),

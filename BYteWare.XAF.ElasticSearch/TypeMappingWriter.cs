@@ -82,6 +82,14 @@
                         jsonWriter.WritePropertyName(elasticSearchClient.TypeName(byteWareTypeInfo.ESTypeName));
                         jsonWriter.WriteStartObject();
                         {
+                            if (byteWareTypeInfo.ESSourceFieldDisabled ?? false)
+                            {
+                                jsonWriter.WritePropertyName("_source");
+                                jsonWriter.WriteStartObject();
+                                jsonWriter.WritePropertyName("enabled");
+                                jsonWriter.WriteValue(false);
+                                jsonWriter.WriteEnd();
+                            }
                             jsonWriter.WritePropertyName("properties");
                             jsonWriter.WriteStartObject();
                             {
@@ -176,7 +184,7 @@
             {
                 var props = byteWareTypeInfo.ESProperties(p.Name);
                 var type = ElasticSearchClient.GetElasticSearchType(props, p.PropertyType);
-                var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.Name) ? p.Name : props.Name);
+                var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? p.Name : props.FieldName);
                 if ((props != null && props.OptOut) || (props == null && OptOut) || (type == null))
                 {
                     continue;
@@ -203,7 +211,7 @@
                         {
                             jsonWriter.WritePropertyName("fields");
                             jsonWriter.WriteStartObject();
-                            foreach (var ga in multiFields.GroupBy(t => t.Name))
+                            foreach (var ga in multiFields.GroupBy(t => t.FieldName))
                             {
                                 var a = ga.First();
                                 jsonWriter.WritePropertyName(ElasticSearchClient.FieldName(ga.Key));
@@ -382,7 +390,7 @@
                 {
                     throw new ElasticIndexException(CaptionHelper.GetLocalizedText(ElasticSearchClient.IndexExceptionGroup, "SuggestNoString"));
                 }
-                var sf = bti.ESSuggestFields.FirstOrDefault(t => t.FieldName == ElasticSearchClient.FieldName(!string.IsNullOrWhiteSpace(props.Name) ? props.Name : propInfo.Name));
+                var sf = bti.ESSuggestFields.FirstOrDefault(t => t.FieldName == ElasticSearchClient.FieldName(!string.IsNullOrWhiteSpace(props.FieldName) ? props.FieldName : propInfo.Name));
                 jsonWriter.WritePropertyName("contexts");
                 jsonWriter.WriteStartArray();
 

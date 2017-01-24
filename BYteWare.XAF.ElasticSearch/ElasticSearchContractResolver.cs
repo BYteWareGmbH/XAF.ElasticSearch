@@ -73,7 +73,7 @@
             var jp = base.CreateProperty(member, memberSerialization);
             var bti = BYteWareTypeInfo.GetBYteWareTypeInfo(member.DeclaringType);
             var props = bti.ESProperties(member.Name);
-            jp.PropertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.Name) ? member.Name : props.Name);
+            jp.PropertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? member.Name : props.FieldName);
             if (!string.IsNullOrEmpty(props.WeightField))
             {
                 jp.PropertyType = typeof(object);

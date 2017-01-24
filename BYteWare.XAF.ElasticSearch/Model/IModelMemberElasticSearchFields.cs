@@ -7,7 +7,7 @@
     /// ElasticSearch Multi Fields Model settings
     /// </summary>
     [CLSCompliant(false)]
-    public interface IModelMemberElasticSearchFields : IModelNode, IModelList<IModelElasticSearchFieldProperties>
+    public interface IModelMemberElasticSearchFields : IModelNode, IModelList<IModelMemberElasticSearchFieldItem>
     {
     }
 }

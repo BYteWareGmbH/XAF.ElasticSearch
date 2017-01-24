@@ -12,7 +12,6 @@
     /// ElasticSearch Field Model settings
     /// </summary>
     [CLSCompliant(false)]
-    [KeyProperty(nameof(Name))]
     public interface IModelElasticSearchFieldProperties : IElasticSearchFieldProperties, IModelNode
     {
         /// <summary>

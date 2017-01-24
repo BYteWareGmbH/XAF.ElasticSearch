@@ -89,7 +89,7 @@
         /// <summary>
         /// Name of the field
         /// </summary>
-        public string Name
+        public string FieldName
         {
             get;
             set;
