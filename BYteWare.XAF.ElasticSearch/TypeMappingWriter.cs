@@ -51,6 +51,14 @@
         /// <param name="optOut">Was the type marked as opting out of ElasticSearch indexing</param>
         public TypeMappingWriter(ElasticSearchClient ec, BYteWareTypeInfo bti, int maxRecursion, bool optOut)
         {
+            if (ec == null)
+            {
+                throw new ArgumentNullException(nameof(ec));
+            }
+            if (bti == null)
+            {
+                throw new ArgumentNullException(nameof(bti));
+            }
             byteWareTypeInfo = bti;
             baseBWTypeInfo = bti;
             elasticSearchClient = ec;

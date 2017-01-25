@@ -9,6 +9,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
+
+[assembly: ComVisible(false)]
+
 #if DEBUG
 [assembly: AssemblyVersion(AssemblyInfo.VersionShort + ".*")]
 #else

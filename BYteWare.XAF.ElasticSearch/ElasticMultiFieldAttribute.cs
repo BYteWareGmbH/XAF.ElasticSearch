@@ -13,11 +13,11 @@
         /// <summary>
         /// Initalizes a new instance of the <see cref="ElasticMultiFieldAttribute"/> class.
         /// </summary>
-        /// <param name="name">Name of the additional field</param>
-        public ElasticMultiFieldAttribute(string name)
+        /// <param name="fieldName">Name of the additional field</param>
+        public ElasticMultiFieldAttribute(string fieldName)
             : base()
         {
-            FieldName = name;
+            FieldName = fieldName;
         }
     }
 }

@@ -2,6 +2,7 @@
 {
     using DevExpress.ExpressApp.DC;
     using DevExpress.ExpressApp.Model;
+    using DevExpress.ExpressApp.Model.Core;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -45,6 +46,25 @@
         public static string Get_WeightField(IModelMemberElasticSearchField esField)
         {
             return esField?.WeightFieldMember?.Name;
+        }
+
+        /// <summary>
+        /// Returns the name of the WeightFieldMember
+        /// </summary>
+        /// <param name="esField">IModelMemberElasticSearchField instance</param>
+        /// <param name="value">FieldType value</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
+        public static void Set_FieldType(IModelMemberElasticSearchField esField, FieldType? value)
+        {
+            if (esField != null)
+            {
+                var member = esField.Parent as IModelMember;
+                if (value.HasValue && member != null && string.IsNullOrEmpty(esField.FieldName))
+                {
+                    esField.FieldName = ElasticSearchClient.FieldName(member.Name);
+                }
+                ((ModelNode)esField).SetValue<FieldType?>(nameof(IModelMemberElasticSearchField.FieldType), value);
+            }
         }
     }
 }

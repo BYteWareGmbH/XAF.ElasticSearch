@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project DefaultTargets="NugetPackAndPush" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">  
+  <PropertyGroup>
+    <NugetExePath>"$(MSBuildProjectDirectory)\NuGet.exe"</NugetExePath>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <NugetSpecFiles>
+      <IncludeReferencedProjects>-IncludeReferencedProjects</IncludeReferencedProjects>
+    </NugetSpecFiles>
+  </ItemDefinitionGroup>
+  
+  <ItemGroup>
+    <NugetSpecFiles Include="**\*.nuspec" />
+  </ItemGroup>
+
+  <Target Name="RestorePackages">
+    <Exec Command="$(NugetExePath) restore &quot;$(MSBuildProjectName).sln&quot;" />
+  </Target>
+
+  <Target Name="NugetPackAndPush" Inputs="@(NugetSpecFiles)" Outputs="@(NugetSpecFiles->'%(filename).nupkg')" DependsOnTargets="RestorePackages">
+    <ItemGroup>
+      <NugetProjectFiles Include="@(NugetSpecFiles->'%(RelativeDir)%(filename).csproj')" />
+      <NuPkgFiles Include="@(NugetSpecFiles->'%(filename).nupkg'" />
+    </ItemGroup>
+    <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
+    <Exec Command="$(NugetExePath) push %(NuPkgFiles.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package" IgnoreExitCode="true" />
+  </Target>
+</Project>  

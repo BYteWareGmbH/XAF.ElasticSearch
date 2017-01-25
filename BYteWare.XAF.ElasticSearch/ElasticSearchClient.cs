@@ -773,7 +773,7 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         public string TypeName(string name)
         {
-            return name.ToLowerInvariant();
+            return name?.ToLowerInvariant();
         }
 
         /// <summary>
@@ -1113,11 +1113,11 @@
         /// <summary>
         /// Search in indexes and types with the query string body
         /// </summary>
-        /// <param name="indexes">string of comma separated index names</param>
-        /// <param name="types">string of comma separated type names</param>
+        /// <param name="indexes">Enumeration of index names</param>
+        /// <param name="types">Enumeration of type names</param>
         /// <param name="body">The query string in ElasticSearch Query DSL</param>
         /// <returns>A HitsMetaData instance with the results of the query</returns>
-        public HitsMetaData Search(string[] indexes, string[] types, string body)
+        public HitsMetaData Search(IEnumerable<string> indexes, IEnumerable<string> types, string body)
         {
             HitsMetaData hits = null;
             var ec = ElasticLowLevelClient;

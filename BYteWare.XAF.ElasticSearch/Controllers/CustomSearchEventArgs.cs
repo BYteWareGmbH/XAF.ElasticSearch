@@ -39,7 +39,7 @@
         /// <summary>
         /// The indexes to search in
         /// </summary>
-        public string[] Indexes
+        public IEnumerable<string> Indexes
         {
             get;
             set;
@@ -48,7 +48,7 @@
         /// <summary>
         /// The types to search in
         /// </summary>
-        public string[] Types
+        public IEnumerable<string> Types
         {
             get;
             set;
