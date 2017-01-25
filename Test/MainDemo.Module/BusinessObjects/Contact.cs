@@ -40,7 +40,7 @@ namespace MainDemo.Module.BusinessObjects {
             }
         }
         [ElasticProperty]
-        [ElasticMultiField("Nickname.suggest", Type = FieldType.completion)]
+        [ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true)]
         public string NickName {
             get {
                 return nickName;

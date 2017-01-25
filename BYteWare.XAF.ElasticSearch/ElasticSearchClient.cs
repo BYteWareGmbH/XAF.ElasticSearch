@@ -356,18 +356,18 @@
                     if (fuzzy)
                     {
                         writer.WritePropertyName("fuzzy");
-                        writer.WriteValue("true");
+                        writer.WriteValue(true);
                     }
                     if (contexts != null && contexts.Any())
                     {
                         writer.WritePropertyName("contexts");
-                        writer.WriteStartArray();
+                        writer.WriteStartObject();
                         foreach (var context in contexts)
                         {
                             writer.WritePropertyName(context.Key);
                             writer.WriteRawValue(context.Value);
                         }
-                        writer.WriteEndArray();
+                        writer.WriteEndObject();
                     }
                     writer.WriteEndObject();
 
@@ -1975,7 +1975,7 @@
                 {
                     using (var uSession = session.DataLayer != null ? new Session(session.DataLayer) : new Session(session.ObjectLayer))
                     {
-                        using (var xpColl = new XPCollection(session, elasticSearchIndexRefreshPersistentType))
+                        using (var xpColl = new XPCollection(uSession, elasticSearchIndexRefreshPersistentType))
                         {
                             uSession.Delete(xpColl.OfType<IElasticSearchIndexRefresh>().Where(t => indexName.Equals(t.Index?.Name, StringComparison.OrdinalIgnoreCase) && t.Timestamp <= timeStamp).ToList());
                             break;

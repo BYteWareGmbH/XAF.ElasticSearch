@@ -34,6 +34,7 @@
             {
                 props.Add(new JsonProperty
                 {
+                    PropertyName = ElasticSearchClient.TypeContext,
                     PropertyType = typeof(string[]),
                     DeclaringType = type,
                     ValueProvider = new TypeNameValueProvider(elasticSearchClient.TypeName(ci.ESTypeName)),
@@ -55,7 +56,7 @@
             {
                 var props = bti.ESProperties(p.Name);
                 var type = ElasticSearchClient.GetElasticSearchType(props, p.PropertyType);
-                if ((bti.IsESIndexed && Attribute.GetCustomAttributes(p, typeof(KeyAttribute), true).Any()) || (props != null && !props.OptOut && type != null))
+                if (props != null && !props.OptOut && type != null)
                 {
                     source.Add(p);
                 }

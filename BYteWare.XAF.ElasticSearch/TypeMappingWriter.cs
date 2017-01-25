@@ -205,7 +205,7 @@
                     }
                     else
                     {
-                        WriteProperties(jsonWriter, byteWareTypeInfo, p, props, type);
+                        WriteProperties(jsonWriter, byteWareTypeInfo, p, props, propertyName, type);
                         var multiFields = BYteWareTypeInfo.Model != null ? (props as IModelMemberElasticSearchField)?.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                         if (multiFields != null && multiFields.Any())
                         {
@@ -214,9 +214,10 @@
                             foreach (var ga in multiFields.GroupBy(t => t.FieldName))
                             {
                                 var a = ga.First();
-                                jsonWriter.WritePropertyName(ElasticSearchClient.FieldName(ga.Key));
+                                var fieldName = ElasticSearchClient.FieldName(ga.Key);
+                                jsonWriter.WritePropertyName(fieldName);
                                 jsonWriter.WriteStartObject();
-                                WriteProperties(jsonWriter, byteWareTypeInfo, p, a, ElasticSearchClient.GetElasticSearchType(a, p.PropertyType));
+                                WriteProperties(jsonWriter, byteWareTypeInfo, p, a, string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, fieldName), ElasticSearchClient.GetElasticSearchType(a, p.PropertyType));
                                 jsonWriter.WriteEndObject();
                             }
                             jsonWriter.WriteEndObject();
@@ -242,7 +243,7 @@
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(ElasticSearch))]
-        private static void WriteProperties(JsonWriter jsonWriter, BYteWareTypeInfo bti, PropertyInfo propInfo, IElasticSearchFieldProperties props, string type)
+        private static void WriteProperties(JsonWriter jsonWriter, BYteWareTypeInfo bti, PropertyInfo propInfo, IElasticSearchFieldProperties props, string fieldName, string type)
         {
 #pragma warning disable CC0021 // Use nameof
             var fieldProps = props as IElasticProperties;
@@ -386,11 +387,10 @@
             if (type == ElasticSearchClient.GetElasticSearchTypeFromFieldType(FieldType.completion))
             {
                 var defType = ElasticSearchClient.GetFieldTypeFromType(propInfo.PropertyType);
-                if (defType != FieldType.text || defType != FieldType.keyword)
+                if (defType != FieldType.text && defType != FieldType.keyword)
                 {
                     throw new ElasticIndexException(CaptionHelper.GetLocalizedText(ElasticSearchClient.IndexExceptionGroup, "SuggestNoString"));
                 }
-                var sf = bti.ESSuggestFields.FirstOrDefault(t => t.FieldName == ElasticSearchClient.FieldName(!string.IsNullOrWhiteSpace(props.FieldName) ? props.FieldName : propInfo.Name));
                 jsonWriter.WritePropertyName("contexts");
                 jsonWriter.WriteStartArray();
 
@@ -403,6 +403,7 @@
                 jsonWriter.WriteValue(ElasticSearchClient.TypeContext);
                 jsonWriter.WriteEndObject();
 
+                var sf = bti.ESSuggestFields.FirstOrDefault(t => t.FieldName == fieldName);
                 foreach (var ca in sf.ContextSettings)
                 {
                     jsonWriter.WriteStartObject();

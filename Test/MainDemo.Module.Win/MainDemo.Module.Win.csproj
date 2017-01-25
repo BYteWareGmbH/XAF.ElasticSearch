@@ -208,7 +208,7 @@
     <ProjectReference Include="..\MainDemo.Module\MainDemo.Module.csproj">
       <Project>{D7B72244-7C11-414B-ABE5-A3EB78567D93}</Project>
       <Name>MainDemo.Module</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
