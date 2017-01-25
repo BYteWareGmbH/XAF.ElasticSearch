@@ -490,11 +490,11 @@
                                 if (nty != null)
                                 {
                                     var nci = GetBYteWareTypeInfo(nty);
-                                    for (int i = 0; i < nci._SuggestFields.Count; i++)
+                                    for (int i = 0; i < nci.ESSuggestFields.Count; i++)
                                     {
                                         var sf = new SuggestField();
-                                        nci._SuggestFields[i].MapProperties(sf);
-                                        sf.FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, nci._SuggestFields[i].FieldName);
+                                        nci.ESSuggestFields[i].MapProperties(sf);
+                                        sf.FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, nci.ESSuggestFields[i].FieldName);
                                         _SuggestFields.Add(sf);
                                     }
                                 }
