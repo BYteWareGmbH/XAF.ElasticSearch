@@ -9,6 +9,12 @@
     [CLSCompliant(false)]
     public class ModelSuggestContextsReadOnlyCalculator : IModelIsReadOnly
     {
+        /// <summary>
+        /// Should the Child Node be Read Only
+        /// </summary>
+        /// <param name="node">IModelMemberElasticSearchSuggestContexts instance</param>
+        /// <param name="childNode">Child Node to check</param>
+        /// <returns>True if the Elastic search Field Type is completion; False otherwise</returns>
         public bool IsReadOnly(IModelNode node, IModelNode childNode)
         {
             var result = false;
@@ -20,6 +26,12 @@
             return result;
         }
 
+        /// <summary>
+        /// Should the Property be Read Only, not used in this context, because this class is only used for a list
+        /// </summary>
+        /// <param name="node">IModelMemberElasticSearchSuggestContexts instance</param>
+        /// <param name="propertyName">Name of the Propterty to be checked</param>
+        /// <returns>Always returns false</returns>
         public bool IsReadOnly(IModelNode node, string propertyName)
         {
             return false;
