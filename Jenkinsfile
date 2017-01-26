@@ -12,7 +12,7 @@ node {
 		stage 'Build'
 		// Run MSBuild
 		ansiColor('vga') {
-			bat '\"${msbHome}\" /m /clp:ForceNoAlign;PerformanceSummary XAF.ElasticSearch.msbuild'
+			bat msbHome + ' /m /clp:ForceNoAlign;PerformanceSummary XAF.ElasticSearch.msbuild'
 		}
 	} catch (e) {
 		currentBuild.result = "FAILED"
