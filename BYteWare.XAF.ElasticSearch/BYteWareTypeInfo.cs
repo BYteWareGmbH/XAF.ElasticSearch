@@ -100,6 +100,13 @@
             foreach (var byteWareType in TypeDictionary.Values)
             {
                 byteWareType._ModelClass = null;
+                byteWareType._IsESReferenceChecked = false;
+                byteWareType._ESReferences = null;
+                byteWareType._IsContainingTypesChecked = false;
+                byteWareType._ContainingTypes = null;
+                byteWareType._ESIndexes = null;
+                byteWareType._ESTypes = null;
+                byteWareType._SuggestFields = null;
             }
         }
 
@@ -213,7 +220,7 @@
                     {
                         _DefaultPropertyMemberInfoCol = new MemberInfoCollection(ClassInfo, defaultPropertyName, true, false);
                     }
-                   isDefaultPropertyAttributeInit = true;
+                    isDefaultPropertyAttributeInit = true;
                 }
                 return _DefaultPropertyMemberInfoCol;
             }

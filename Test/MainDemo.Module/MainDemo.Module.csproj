@@ -110,6 +110,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Bogus, Version=9.0.2.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Bogus.9.0.2\lib\net40\Bogus.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="DevExpress.Data.v16.2">
       <Private>False</Private>
     </Reference>
@@ -176,6 +180,7 @@
     <Reference Include="DevExpress.Xpo.v16.2">
       <Private>False</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="System">
       <Name>System</Name>
       <Private>False</Private>
@@ -208,11 +213,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BogusContact.cs" />
     <Compile Include="BusinessObjects\Department.cs" />
     <Compile Include="BusinessObjects\ElasticSearchIndex.cs" />
     <Compile Include="BusinessObjects\ElasticSearchIndexRefresh.cs" />
     <Compile Include="BusinessObjects\PortfolioFileData.cs" />
     <Compile Include="BusinessObjects\Position.cs" />
+    <Compile Include="Controllers\BogusController.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controllers\BogusController.Designer.cs">
+      <DependentUpon>BogusController.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\ClearContactTasksController.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -257,6 +269,9 @@
     <Compile Include="Reports\ContactsReport.Designer.cs">
       <DependentUpon>ContactsReport.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Controllers\BogusController.resx">
+      <DependentUpon>BogusController.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controllers\FindBySubjectController.resx">
       <DependentUpon>FindBySubjectController.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -330,6 +345,12 @@
       <Project>{7171a283-10a5-47c0-942e-633680bec541}</Project>
       <Name>BYteWare.XAF.ElasticSearch</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

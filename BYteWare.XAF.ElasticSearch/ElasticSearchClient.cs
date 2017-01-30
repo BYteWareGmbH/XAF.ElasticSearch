@@ -1497,7 +1497,7 @@
                                         }
                                     }
 
-                                    var indexList = objectspace.GetObjects(elasticSearchIndexPersistentType).OfType<IElasticSearchIndex>().ToList();
+                                     var indexList = objectspace.GetObjects(elasticSearchIndexPersistentType).OfType<IElasticSearchIndex>().ToList();
 
                                     // Delete ElasticSearchIndex'es, who are in indexNames but not in indexes
                                     objectspace.Delete(indexList.Where(t => !indexes.Select(IndexName).Contains(t.Name) && (indexNames == null || indexNames.Length == 0 || indexNames.Contains(t.Name))).ToList());
