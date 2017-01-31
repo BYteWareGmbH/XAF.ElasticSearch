@@ -6,6 +6,19 @@
         <Member Name="Text" PropertyEditorType="DevExpress.ExpressApp.HtmlPropertyEditor.Win.HtmlPropertyEditor" />
       </OwnMembers>
     </Class>
+    <Class Name="DevExpress.Persistent.BaseImpl.Person">
+      <OwnMembers>
+        <Member Name="FirstName">
+          <ElasticSearch FieldType="" FieldName="firstname" />
+        </Member>
+        <Member Name="LastName">
+          <ElasticSearch FieldName="lastname" />
+        </Member>
+        <Member Name="MiddleName">
+          <ElasticSearch FieldName="middlename" />
+        </Member>
+      </OwnMembers>
+    </Class>
     <Class Name="MainDemo.Module.BusinessObjects.Contact" FilterPanelPosition="Top" />
   </BOModel>
   <SchemaModules>
