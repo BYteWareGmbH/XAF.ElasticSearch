@@ -24,17 +24,6 @@
         }
 
         /// <summary>
-        /// Don't display a record until a user filter is set
-        /// </summary>
-        [Category("Filter")]
-        [Description("Don't display a record until a user filter is set")]
-        bool OnlyLoadWhenUserFilter
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// List of Filter Field Model settings to search in
         /// </summary>
         [Description("List of Filter Field Model settings to search in")]
