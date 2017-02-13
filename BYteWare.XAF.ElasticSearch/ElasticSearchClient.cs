@@ -1038,7 +1038,7 @@
                     };
                     foreach (XPBaseObject bo in cursor)
                     {
-                        BulkIndex(indexed, bulk, typeInfos, ci, typeLists, bo);
+                        BulkIndex(session, indexed, bulk, typeInfos, ci, typeLists, bo);
                     }
                     typeProgress.Position += 2000;
                 }
@@ -1930,14 +1930,14 @@
             }
         }
 
-        private void BulkIndex(Dictionary<XPClassInfo, HashSet<object>> indexed, StringBuilder bulk, HashSet<BYteWareTypeInfo> typeInfos, BYteWareTypeInfo ci, Dictionary<ContainingType, HashSet<object>> typeLists, XPBaseObject bo)
+        private void BulkIndex(Session session, Dictionary<XPClassInfo, HashSet<object>> indexed, StringBuilder bulk, HashSet<BYteWareTypeInfo> typeInfos, BYteWareTypeInfo ci, Dictionary<ContainingType, HashSet<object>> typeLists, XPBaseObject bo)
         {
-            if (indexed[bo.ClassInfo].Add(bo.Session.GetKeyValue(bo)))
+            if (indexed[bo.ClassInfo].Add(session.GetKeyValue(bo)))
             {
                 bulk.Append(SerializeObjectForBulk(bo, ci));
                 if (bulk.Length >= BulkSize)
                 {
-                    BulkIndex(bulk, bo.Session, typeInfos);
+                    BulkIndex(bulk, session, typeInfos);
                     bulk.Clear();
                 }
                 if (ci.ESReferences != null)
@@ -1947,7 +1947,7 @@
                         var reference = esReference.GetValue(bo) as XPBaseObject;
                         if (reference != null)
                         {
-                            BulkIndex(indexed, bulk, typeInfos, BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType()), typeLists, reference);
+                            BulkIndex(session, indexed, bulk, typeInfos, BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType()), typeLists, reference);
                         }
                     }
                 }
@@ -1961,7 +1961,7 @@
                             keys = new HashSet<object>();
                             typeLists.Add(containingType, keys);
                         }
-                        keys.Add(bo.Session.GetKeyValue(bo));
+                        keys.Add(session.GetKeyValue(bo));
                     }
                 }
             }
@@ -2162,9 +2162,12 @@
                 var typeLists = new Dictionary<ContainingType, HashSet<object>>();
                 var typeInfos = new HashSet<BYteWareTypeInfo>();
                 PrepareTypes(session, typeInfos, ci, typeLists);
-                foreach (XPBaseObject bo in tkl)
+                if (ci != null && ci.IsESIndexed)
                 {
-                    BulkIndex(indexed, bulk, typeInfos, ci, typeLists, bo);
+                    foreach (XPBaseObject bo in tkl)
+                    {
+                        BulkIndex(session, indexed, bulk, typeInfos, ci, typeLists, bo);
+                    }
                 }
                 BulkIndex(bulk, session, typeInfos);
                 foreach (var tl in typeLists.Where(t => t.Value.Any()))
