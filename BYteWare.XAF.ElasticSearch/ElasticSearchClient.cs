@@ -804,34 +804,36 @@
         /// <summary>
         /// Returns a string with the serialized values of bo for usage in a bulk Request
         /// </summary>
+        /// <param name="session">XPO Session for the object</param>
         /// <param name="bo">XPO BusinessClass Instance</param>
         /// <returns>Json string for bulk Request</returns>
-        public string SerializeObjectForBulk(XPBaseObject bo)
+        public string SerializeObjectForBulk(Session session, XPBaseObject bo)
         {
             if (bo == null)
             {
                 throw new ArgumentNullException(nameof(bo));
             }
-            return SerializeObjectForBulk(bo, BYteWareTypeInfo.GetBYteWareTypeInfo(bo.GetType()));
+            return SerializeObjectForBulk(session, bo, BYteWareTypeInfo.GetBYteWareTypeInfo(bo.GetType()));
         }
 
         /// <summary>
         /// Returns a string with the serialized values of bo for usage in a bulk Request
         /// </summary>
+        /// <param name="session">XPO Session for the object</param>
         /// <param name="bo">XPO BusinessClass Instance</param>
         /// <param name="ci">A BYteWareTypeInfo instance of the type of bo</param>
         /// <returns>Json string for bulk Request</returns>
-        public string SerializeObjectForBulk(XPBaseObject bo, BYteWareTypeInfo ci)
+        public string SerializeObjectForBulk(Session session, XPBaseObject bo, BYteWareTypeInfo ci)
         {
-            StringWriter sw = null;
-            try
+            if (bo != null && ci != null && ci.IsESIndexed)
             {
-                var strw = sw = new StringWriter(CultureInfo.InvariantCulture);
-                using (var writer = new JsonTextWriter(sw))
+                StringWriter sw = null;
+                try
                 {
-                    sw = null;
-                    if (bo != null && ci != null && ci.IsESIndexed)
+                    var strw = sw = new StringWriter(CultureInfo.InvariantCulture);
+                    using (var writer = new JsonTextWriter(sw))
                     {
+                        sw = null;
                         writer.WriteStartObject();
                         if (bo.IsDeleted)
                         {
@@ -862,16 +864,20 @@
                             strw.WriteLine(SerializeObject(bo));
                         }
                         writer.Flush();
+                        return strw.ToString();
                     }
-                    return strw.ToString();
+                }
+                finally
+                {
+                    if (sw != null)
+                    {
+                        sw.Dispose();
+                    }
                 }
             }
-            finally
+            else
             {
-                if (sw != null)
-                {
-                    sw.Dispose();
-                }
+                return null;
             }
         }
 
@@ -1778,7 +1784,7 @@
                                         var o = theObject as XPBaseObject;
                                         if (o != null)
                                         {
-                                            sb.Append(SerializeObjectForBulk(o, ci));
+                                            sb.Append(SerializeObjectForBulk(uSession, o, ci));
                                             j++;
                                             if (sb.Length > BulkSize)
                                             {
@@ -1934,7 +1940,7 @@
         {
             if (indexed[bo.ClassInfo].Add(session.GetKeyValue(bo)))
             {
-                bulk.Append(SerializeObjectForBulk(bo, ci));
+                bulk.Append(SerializeObjectForBulk(session, bo, ci));
                 if (bulk.Length >= BulkSize)
                 {
                     BulkIndex(bulk, session, typeInfos);
@@ -2162,12 +2168,9 @@
                 var typeLists = new Dictionary<ContainingType, HashSet<object>>();
                 var typeInfos = new HashSet<BYteWareTypeInfo>();
                 PrepareTypes(session, typeInfos, ci, typeLists);
-                if (ci != null && ci.IsESIndexed)
+                foreach (XPBaseObject bo in tkl)
                 {
-                    foreach (XPBaseObject bo in tkl)
-                    {
-                        BulkIndex(session, indexed, bulk, typeInfos, ci, typeLists, bo);
-                    }
+                    BulkIndex(session, indexed, bulk, typeInfos, ci, typeLists, bo);
                 }
                 BulkIndex(bulk, session, typeInfos);
                 foreach (var tl in typeLists.Where(t => t.Value.Any()))
@@ -2190,7 +2193,7 @@
                 DoMapping(ci, bo.Session);
                 if (propertyChanged)
                 {
-                    bulk.Append(SerializeObjectForBulk(bo, ci));
+                    bulk.Append(SerializeObjectForBulk(bo.Session, bo, ci));
                     typeInfos.Add(ci);
                 }
                 indexed.Add(bo.Session.GetKeyValue(bo));
