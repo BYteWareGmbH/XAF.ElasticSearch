@@ -643,7 +643,7 @@
                 {
                     var sb = new StringBuilder();
                     sb.AppendLine("{");
-                    sb.AppendLine("\"setings\": {");
+                    sb.AppendLine("\"settings\": {");
                     if (!string.IsNullOrWhiteSpace(esIndex.Settings))
                     {
                         sb.AppendLine(esIndex.Settings);
