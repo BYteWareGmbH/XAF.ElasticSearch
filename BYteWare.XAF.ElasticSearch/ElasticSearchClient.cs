@@ -1631,7 +1631,6 @@
                                         Fuzzy = modelSuggestField.Fuzzy,
                                         Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => GetParameterValue(t.QueryParameter))
                                     };
-                                    suggesters.Add(suggester);
                                     foreach (var modelContext in modelSuggestField.Contexts)
                                     {
                                         if (!string.IsNullOrEmpty(modelContext.Value))
