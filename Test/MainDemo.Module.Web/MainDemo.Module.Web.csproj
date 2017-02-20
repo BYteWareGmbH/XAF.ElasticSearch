@@ -124,6 +124,12 @@
     <Reference Include="DevExpress.Web.ASPxPivotGrid.v16.2">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.Office.v16.2.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v16.2.Core">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevExpress.Web.v16.2">
       <Private>False</Private>
     </Reference>
@@ -137,6 +143,9 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.Charts.v16.2.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v16.2.Wizard">
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraCharts.v16.2">

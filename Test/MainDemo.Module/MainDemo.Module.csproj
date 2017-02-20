@@ -110,8 +110,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bogus, Version=9.0.1.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Bogus.9.0.1\lib\net40\Bogus.dll</HintPath>
+    <Reference Include="Bogus, Version=10.0.1.0, Culture=neutral, PublicKeyToken=fa1bb3f3f218129a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Bogus.10.0.1\lib\net40\Bogus.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="DevExpress.Data.v16.2">
@@ -138,6 +138,9 @@
     <Reference Include="DevExpress.Printing.v16.2.Core">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.XtraCharts.v16.2.Wizard">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevExpress.XtraCharts.v16.2">
       <Private>False</Private>
     </Reference>
@@ -148,6 +151,15 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraReports.v16.2.Extensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Sparkline.v16.2.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v16.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v16.2.UI">
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraReports.v16.2">
@@ -180,7 +192,9 @@
     <Reference Include="DevExpress.Xpo.v16.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Name>System</Name>
       <Private>False</Private>

@@ -224,10 +224,16 @@
     <Reference Include="DevExpress.Charts.v16.2.Core">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.XtraCharts.v16.2.Wizard">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevExpress.XtraCharts.v16.2">
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraReports.v16.2.Extensions">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Office.v16.2.Core">
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.RichEdit.v16.2.Core">
@@ -242,10 +248,22 @@
     <Reference Include="DevExpress.XtraPivotGrid.v16.2">
       <Private>False</Private>
     </Reference>
+    <Reference Include="DevExpress.Sparkline.v16.2.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.CodeParser.v16.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Utils.v16.2.UI">
+      <Private>False</Private>
+    </Reference>
     <Reference Include="DevExpress.XtraReports.v16.2">
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraScheduler.v16.2.Core">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.XtraScheduler.v16.2.Reporting.Extensions">
       <Private>False</Private>
     </Reference>
     <Reference Include="DevExpress.XtraScheduler.v16.2">

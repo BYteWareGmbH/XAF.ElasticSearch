@@ -971,7 +971,7 @@
         /// <param name="keyList">List of key values of instances to index</param>
         /// <param name="indexed">List of already indexed instances</param>
         /// <param name="progress">Progress Callback</param>
-        public void IndexList(Session session, XPClassInfo xci, ICollection<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, Action<IWorkerProgress> progress)
+        public void IndexList(Session session, XPClassInfo xci, IEnumerable<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, Action<IWorkerProgress> progress)
         {
             if (indexed == null)
             {
@@ -992,7 +992,7 @@
         /// <param name="progress">Progress Callback</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
         [CLSCompliant(false)]
-        public void IndexList(Session session, XPClassInfo xci, ICollection<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, IMemberInfo memberInfo, Action<IWorkerProgress> progress)
+        public void IndexList(Session session, XPClassInfo xci, IEnumerable<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, IMemberInfo memberInfo, Action<IWorkerProgress> progress)
         {
             if (session == null)
             {
@@ -1011,7 +1011,7 @@
             var typeProgress = new WorkerProgress
             {
                 Name = string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(MessageGroup, "IndexListProgress"), xci.TableName, memberInfo == null ? string.Empty : memberInfo.Name),
-                Maximum = keyList.Count
+                Maximum = keyList.Count()
             };
             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(xci.ClassType);
             var typeLists = new Dictionary<ContainingType, HashSet<object>>();
