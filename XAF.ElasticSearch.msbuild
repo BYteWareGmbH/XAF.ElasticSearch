@@ -19,20 +19,16 @@
   </Target>
 
   <Target Name="NugetPackAndPush" Inputs="@(NugetSpecFiles)" Outputs="@(NugetSpecFiles->'%(filename).nupkg')" DependsOnTargets="RestorePackages">
-    <ItemGroup>
-      <OldNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg"/>
-    </ItemGroup>
-    <Delete Files="@(OldNuGetPackages)" />
+    <Delete Files="@(NugetSpecFiles->'%(filename).nupkg')" />
     <ItemGroup>
       <NugetProjectFiles Include="@(NugetSpecFiles->'%(RelativeDir)%(filename).csproj')" />
-      <NuPkgFiles Include="@(NugetSpecFiles->'%(filename).nupkg')" />
+      <UptodateNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg;"/>
     </ItemGroup>
     <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
     <ItemGroup>
-      <NewNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg"/>
+      <NewNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg;@(UptodateNuGetPackages)"/>
     </ItemGroup>
     <Exec Command="$(NugetExePath) push %(NewNuGetPackages.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package" IgnoreExitCode="true" />
-    <Copy SourceFiles="@(NewNuGetPackages)" DestinationFiles="@(NuPkgFiles)" />
-    <Delete Files="@(NewNuGetPackages)" />
+    <Move SourceFiles="@(NewNuGetPackages)" DestinationFiles="@(NugetSpecFiles->'%(filename).nupkg')" />
   </Target>
 </Project>  
