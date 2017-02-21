@@ -12,6 +12,8 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("BYteWare.XAF.ElasticSearch.Win")]
 [assembly: AssemblyCulture("")]
 
+[assembly: NeutralResourcesLanguage("en")]
+
 // Version information for an assembly consists of the following four values:
 //
 //      Major Version
@@ -21,5 +23,4 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("16.24.2")]
-[assembly: NeutralResourcesLanguage("en")]
+[assembly: AssemblyVersion("16.24.2.*")]
