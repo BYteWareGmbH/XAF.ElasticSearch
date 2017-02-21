@@ -20,6 +20,10 @@
 
   <Target Name="NugetPackAndPush" Inputs="@(NugetSpecFiles)" Outputs="@(NugetSpecFiles->'%(filename).nupkg')" DependsOnTargets="RestorePackages">
     <ItemGroup>
+      <OldNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg"/>
+    </ItemGroup>
+    <Delete Files="@(OldNuGetPackages)" />
+    <ItemGroup>
       <NugetProjectFiles Include="@(NugetSpecFiles->'%(RelativeDir)%(filename).csproj')" />
       <NuPkgFiles Include="@(NugetSpecFiles->'%(filename).nupkg')" />
     </ItemGroup>
