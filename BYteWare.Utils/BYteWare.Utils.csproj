@@ -88,6 +88,7 @@
     <Compile Include="IWorkerProgress.cs" />
     <Compile Include="OrderableListPartitioner.cs" />
     <Compile Include="ReadOnlySet.cs" />
+    <Compile Include="RealReadOnlyCollection.cs" />
     <Compile Include="SafeNativeMethods.cs" />
     <Compile Include="StringCipher.cs" />
     <Compile Include="TimeSpanExtensions.cs" />

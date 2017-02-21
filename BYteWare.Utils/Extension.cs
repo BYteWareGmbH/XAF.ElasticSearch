@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Data;
     using System.Globalization;
     using System.IO;
@@ -1393,6 +1394,17 @@
         public static ReadOnlySet<T> AsReadOnly<T>(this ISet<T> set)
         {
             return new ReadOnlySet<T>(set);
+        }
+
+        /// <summary>
+        /// Returns a read only Collection
+        /// </summary>
+        /// <typeparam name="T">The element Type</typeparam>
+        /// <param name="collection">The collection to return a read only collection for</param>
+        /// <returns>A Read Only collection for collection</returns>
+        public static RealReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
+        {
+            return new RealReadOnlyCollection<T>(collection);
         }
     }
 }

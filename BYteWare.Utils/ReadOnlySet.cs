@@ -11,6 +11,7 @@
     /// Read Only Set Collection
     /// </summary>
     /// <typeparam name="T">Element Type</typeparam>
+    [Serializable]
     public class ReadOnlySet<T> : IReadOnlyCollection<T>, ISet<T>
     {
         private const string NotSupportedReadOnlyException = "Set is a read only set.";
