@@ -1383,5 +1383,16 @@
             }
             return false;
         }
+
+        /// <summary>
+        /// Returns a read only Set
+        /// </summary>
+        /// <typeparam name="T">The element Type</typeparam>
+        /// <param name="set">The set to return a read only set for</param>
+        /// <returns>A Read Only Set for set</returns>
+        public static ReadOnlySet<T> AsReadOnly<T>(this ISet<T> set)
+        {
+            return new ReadOnlySet<T>(set);
+        }
     }
 }

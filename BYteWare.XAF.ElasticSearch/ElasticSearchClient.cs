@@ -971,7 +971,7 @@
         /// <param name="keyList">List of key values of instances to index</param>
         /// <param name="indexed">List of already indexed instances</param>
         /// <param name="progress">Progress Callback</param>
-        public void IndexList(Session session, XPClassInfo xci, IEnumerable<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, Action<IWorkerProgress> progress)
+        public void IndexList(Session session, XPClassInfo xci, IReadOnlyCollection<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, Action<IWorkerProgress> progress)
         {
             if (indexed == null)
             {
@@ -992,7 +992,7 @@
         /// <param name="progress">Progress Callback</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
         [CLSCompliant(false)]
-        public void IndexList(Session session, XPClassInfo xci, IEnumerable<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, IMemberInfo memberInfo, Action<IWorkerProgress> progress)
+        public void IndexList(Session session, XPClassInfo xci, IReadOnlyCollection<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, IMemberInfo memberInfo, Action<IWorkerProgress> progress)
         {
             if (session == null)
             {
@@ -1019,7 +1019,7 @@
             PrepareTypes(session, typeInfos, ci, typeLists);
             try
             {
-                foreach (var keys in keyList.Where(t => memberInfo != null || !indexed[xci].Contains(t)).Chunk(2000))
+                foreach (var keys in keyList.Cast<object>().Where(t => memberInfo != null || !indexed[xci].Contains(t)).Chunk(2000))
                 {
                     progress?.Invoke(typeProgress);
                     CriteriaOperator crit = new InOperator(xci.KeyProperty.Name, keys);
@@ -1067,7 +1067,7 @@
                 {
                     indexed.Add(xpci, new HashSet<object>());
                 }
-                IndexList(session, xpci, tl.Value, indexed, tl.Key.MemberInfo, progress);
+                IndexList(session, xpci, tl.Value.AsReadOnly(), indexed, tl.Key.MemberInfo, progress);
             }
         }
 
@@ -2179,7 +2179,7 @@
                     {
                         indexed.Add(xpci, new HashSet<object>());
                     }
-                    IndexList(session, xpci, tl.Value, indexed, tl.Key.MemberInfo, null);
+                    IndexList(session, xpci, tl.Value.AsReadOnly(), indexed, tl.Key.MemberInfo, null);
                 }
             }
         }
