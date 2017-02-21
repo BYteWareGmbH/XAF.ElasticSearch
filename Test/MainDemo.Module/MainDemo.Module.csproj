@@ -234,6 +234,7 @@
     <Compile Include="BusinessObjects\ObjectPermissionElasticSearch.cs" />
     <Compile Include="BusinessObjects\PortfolioFileData.cs" />
     <Compile Include="BusinessObjects\Position.cs" />
+    <Compile Include="BusinessObjects\UserRole.cs" />
     <Compile Include="Controllers\BogusController.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -9,16 +9,35 @@ using DevExpress.ExpressApp.Xpo;
 using DevExpress.Persistent.BaseImpl;
 using MainDemo.Module.BusinessObjects;
 using MainDemo.Module.Reports;
+using BYteWare.XAF.ElasticSearch;
+using DevExpress.Persistent.BaseImpl.PermissionPolicy;
+using System.Linq;
+using System.Globalization;
 
 namespace MainDemo.Module {
     public sealed partial class MainDemoModule : ModuleBase {
         public MainDemoModule() {
             InitializeComponent();
         }
+
+        public override void Setup(XafApplication application)
+        {
+            base.Setup(application);
+            application.LoggedOn += Application_LoggedOn;
+        }
+
+        private void Application_LoggedOn(object sender, LogonEventArgs e)
+        {
+            var app = sender as XafApplication;
+            var user = app.Security.User as PermissionPolicyUser;
+            ElasticSearchClient.Instance?.AddParameter("ContactContext", string.Join(",", user.Roles.Select(t => string.Format(CultureInfo.InvariantCulture, "\"{0}\"", t.Oid.ToString("N")))));
+        }
+
         public override void CustomizeTypesInfo(ITypesInfo typesInfo) {
             base.CustomizeTypesInfo(typesInfo);
             CalculatedPersistentAliasHelper.CustomizeTypesInfo(typesInfo);
         }
+
         public override IEnumerable<ModuleUpdater> GetModuleUpdaters(IObjectSpace objectSpace, Version versionFromDB) {
             ModuleUpdater updater = new DatabaseUpdate.Updater(objectSpace, versionFromDB);
             PredefinedReportsUpdater predefinedReportsUpdater = new PredefinedReportsUpdater(Application, objectSpace, versionFromDB);

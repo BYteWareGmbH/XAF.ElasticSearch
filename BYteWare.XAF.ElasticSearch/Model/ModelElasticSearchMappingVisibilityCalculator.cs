@@ -30,7 +30,7 @@
                 switch (propertyName)
                 {
                     case nameof(IModelMemberElasticSearchField.WeightFieldMember):
-                        return fieldType == FieldType.completion;
+                        return fieldType == FieldType.completion || fieldType == FieldType.text;
                     case nameof(IModelElasticSearchFieldProperties.Analyzer):
                         return fieldType == FieldType.completion || fieldType == FieldType.text;
                     case nameof(IModelElasticSearchFieldProperties.DocValues):
