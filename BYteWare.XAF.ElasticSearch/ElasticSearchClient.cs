@@ -825,6 +825,10 @@
         /// <returns>Json string for bulk Request</returns>
         public string SerializeObjectForBulk(Session session, XPBaseObject bo, BYteWareTypeInfo ci)
         {
+            if (session == null)
+            {
+                throw new ArgumentNullException(nameof(session));
+            }
             if (bo != null && ci != null && ci.IsESIndexed)
             {
                 StringWriter sw = null;
@@ -854,7 +858,7 @@
                         writer.WritePropertyName("_version");
                         writer.WriteValue(ci.GetVersion(bo));
                         writer.WritePropertyName("_id");
-                        writer.WriteValue(bo.Session.GetKeyValue(bo).ToString());
+                        writer.WriteValue(session.GetKeyValue(bo).ToString());
                         writer.WriteEnd();
 
                         writer.WriteEndObject();
@@ -1019,7 +1023,7 @@
             PrepareTypes(session, typeInfos, ci, typeLists);
             try
             {
-                foreach (var keys in keyList.Cast<object>().Where(t => memberInfo != null || !indexed[xci].Contains(t)).Chunk(2000))
+                foreach (var keys in keyList.Where(t => memberInfo != null || !indexed[xci].Contains(t)).Chunk(2000))
                 {
                     progress?.Invoke(typeProgress);
                     CriteriaOperator crit = new InOperator(xci.KeyProperty.Name, keys);
