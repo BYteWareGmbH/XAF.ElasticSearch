@@ -22,7 +22,7 @@
     <Delete Files="@(NugetSpecFiles->'%(filename).nupkg')" />
     <ItemGroup>
       <NugetProjectFiles Include="@(NugetSpecFiles->'%(RelativeDir)%(filename).csproj')" />
-      <UptodateNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg;"/>
+      <UptodateNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg"/>
     </ItemGroup>
     <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
     <ItemGroup>
