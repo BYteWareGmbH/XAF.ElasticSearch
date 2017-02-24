@@ -45,16 +45,6 @@
         private IModelClass _ModelClass;
 
         /// <summary>
-        /// The Info type to create instances of
-        /// </summary>
-        public static Type InfoType
-        {
-            get;
-            set;
-        }
-        = typeof(BYteWareTypeInfo);
-
-        /// <summary>
         /// Application model settings
         /// </summary>
         [CLSCompliant(false)]
@@ -74,8 +64,14 @@
             BYteWareTypeInfo ci;
             if (!TypeDictionary.TryGetValue(type, out ci))
             {
-                ci = TypeHelper.CreateInstance(InfoType, type) as BYteWareTypeInfo;
-                TypeDictionary.Add(type, ci);
+                lock (TypeDictionary)
+                {
+                    if (!TypeDictionary.TryGetValue(type, out ci))
+                    {
+                        ci = new BYteWareTypeInfo(type);
+                        TypeDictionary.Add(type, ci);
+                    }
+                }
             }
             return ci;
         }
