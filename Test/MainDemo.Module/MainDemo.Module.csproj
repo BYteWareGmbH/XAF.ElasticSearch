@@ -357,6 +357,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\BYteWare.Utils\BYteWare.Utils.csproj">
+      <Project>{A592B97C-279C-48AC-B14E-765FB0543EEB}</Project>
+      <Name>BYteWare.Utils</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\BYteWare.XAF.ElasticSearch\BYteWare.XAF.ElasticSearch.csproj">
       <Project>{7171a283-10a5-47c0-942e-633680bec541}</Project>
       <Name>BYteWare.XAF.ElasticSearch</Name>

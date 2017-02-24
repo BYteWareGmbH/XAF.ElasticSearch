@@ -8,6 +8,7 @@ using DevExpress.Persistent.BaseImpl.PermissionPolicy;
 using System.ComponentModel;
 using System.Linq;
 using DevExpress.ExpressApp;
+using DevExpress.Persistent.Validation;
 
 namespace MainDemo.Module.BusinessObjects
 {
@@ -54,6 +55,7 @@ namespace MainDemo.Module.BusinessObjects
             }
         }
         [ElasticProperty]
+        [RuleRequiredField]
         //[ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContext("suggestcontext", nameof(ContactContextList), "ContactContext")]
         public string NickName
         {
@@ -68,6 +70,7 @@ namespace MainDemo.Module.BusinessObjects
         }
 
         [ElasticProperty]
+        [RuleRequiredField]
         //[ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
         public string SpouseName
         {
@@ -172,6 +175,7 @@ namespace MainDemo.Module.BusinessObjects
         }
 
         [Association]
+        [RuleRequiredField]
         public XPCollection<UserRole> UserRoles
         {
             get
@@ -205,7 +209,7 @@ namespace MainDemo.Module.BusinessObjects
                 return ContactSuggest.Where(x => x.SpouseName == SpouseName).Select(t => t.SpouseName);
             }
         }
-
+        
         /// <summary>
         /// Suggest Contact
         /// </summary>
@@ -217,21 +221,31 @@ namespace MainDemo.Module.BusinessObjects
                 List<Contact> c = new List<Contact>();
                 var currentUser = SecuritySystem.CurrentUser as PermissionPolicyUser;
 
-                var currentroles = currentUser.Roles.Select(x => x.Name);
-                foreach (var item in currentroles)
+                if (currentUser.Roles.Any(x=>x.IsAdministrative))
                 {
-                    var rList = UserRoles.Where(r => r.Name == item);
-                    foreach (var r in rList)
+                    foreach (var item in UserRoles.Select(contact => contact.Contacts))
                     {
-                        c.AddRange(r.Contacts);
+                        c.AddRange(item);
                     }
+                    return c;
                 }
-                return c;
+                else
+                {
+                    foreach (var item in currentUser.Roles)
+                    {
+                        var rList = UserRoles.Where(r => r.Name == item.Name);
+                        foreach (var r in rList)
+                        {
+                            c.AddRange(r.Contacts);
+                        }
+                    }
+                    return c;
+                }
             }
         }
 
-        [Browsable(false)]
         [ElasticProperty(IncludeInAll = false)]
+        [Browsable(false)]
         public IEnumerable<string> ContactContextList
         {
             get

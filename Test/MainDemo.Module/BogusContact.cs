@@ -21,6 +21,7 @@ namespace MainDemo.Module
             var PhoneType = new[] { "Home", "Office", "Private", "Personal" };
              var TitleOfCourtesy = new[] { "Dr", "Miss", "Mr", "Mrs", "Ms" };
             var PositionTitle = new[] { "Head", "Developer", "Manager", "Admin", "Marketing" };
+            var UserRole = new[] { "Administrators", "Users"};
 
             var lorem = new Bogus.DataSets.Lorem();
             var random = new Bogus.Randomizer();
@@ -55,7 +56,7 @@ namespace MainDemo.Module
                     SpouseName = cSpouseName.FindName()
                 },
             };
-
+            this.UserRole = UserRole[rValue.Next(UserRole.Length)];
             var cManager = new Person(locale);
           
             this.Manager = new Contact
@@ -113,6 +114,7 @@ namespace MainDemo.Module
         }
 
         public string Title;
+        public string UserRole;
         public string Office;
         public string Description;
         public CAddress Address;

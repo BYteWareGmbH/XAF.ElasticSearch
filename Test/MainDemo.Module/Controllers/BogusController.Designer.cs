@@ -37,6 +37,7 @@
             this.AddContacts.Category = "Edit";
             this.AddContacts.ConfirmationMessage = "Wollen Sie wirklich Tausende von Testdaten erzeugen?";
             this.AddContacts.Id = "Testdaten hinzufügen";
+            this.AddContacts.TargetObjectsCriteria = "";
             this.AddContacts.TargetObjectType = typeof(MainDemo.Module.BusinessObjects.Contact);
             this.AddContacts.TargetViewType = DevExpress.ExpressApp.ViewType.ListView;
             this.AddContacts.ToolTip = null;

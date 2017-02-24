@@ -16,6 +16,7 @@ using DevExpress.Persistent.Validation;
 using Bogus;
 using MainDemo.Module.BusinessObjects;
 using BYteWare.XAF;
+using DevExpress.Persistent.BaseImpl.PermissionPolicy;
 
 namespace MainDemo.Module.Controllers
 {
@@ -44,7 +45,9 @@ namespace MainDemo.Module.Controllers
             if (ObjectSpace.IsModified)
             {
                 ObjectSpace.CommitChanges();
+                ObjectSpace.Refresh();
             }
+       
             var verCList = new List<Contact>();
             CreateBogusContactData();
             WaitScreen.Instance.Hide();
@@ -75,7 +78,7 @@ namespace MainDemo.Module.Controllers
                     c.Birthday = cObject.Person.CPerson.DateOfBirth;
                     c.SpouseName = cObject.Person.CPerson.SpouseName;
                     c.TitleOfCourtesy = (TitleOfCourtesy)Enum.GetValues(typeof(TitleOfCourtesy)).GetValue(random.Next(Enum.GetValues(typeof(TitleOfCourtesy)).Length));
-
+                  
                     var cDepartment = ObjectSpace.FindObject<Department>(new BinaryOperator("Office", cObject.Office));
                     if (cDepartment == null)
                     {
@@ -98,8 +101,17 @@ namespace MainDemo.Module.Controllers
                     {
                         c.Position = cPosition;
                     }
+                    var uRole = ObjectSpace.FindObject<UserRole>(new BinaryOperator("Name", cObject.UserRole));
+                    if(uRole != null)
+                    {
+                        c.UserRoles.Add(uRole);
+                    }
                 }
-                ObjectSpace.CommitChanges();
+                if (ObjectSpace.IsModified)
+                {
+                    ObjectSpace.CommitChanges();
+                    ObjectSpace.Refresh();
+                }
                 return true;
             }
             catch (Exception ex)
@@ -109,5 +121,4 @@ namespace MainDemo.Module.Controllers
             }
         }
     }
- 
 }

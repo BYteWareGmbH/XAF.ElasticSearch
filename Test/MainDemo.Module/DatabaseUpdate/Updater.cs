@@ -69,7 +69,6 @@ namespace MainDemo.Module.DatabaseUpdate
             // If a role with the Users name doesn't exist in the database, create this role
             UserRole userRole = ObjectSpace.FindObject<UserRole>(new BinaryOperator("Name", "Users"));
 
-
             if (userRole == null)
             {
                 userRole = ObjectSpace.CreateObject<UserRole>();
@@ -85,8 +84,9 @@ namespace MainDemo.Module.DatabaseUpdate
                 userRole.AddTypePermission<PermissionPolicyMemberPermissionsObject>("Write;Delete;Navigate;Create", SecurityPermissionState.Deny);
                 userRole.AddTypePermission<PermissionPolicyObjectPermissionsObject>("Write;Delete;Navigate;Create", SecurityPermissionState.Deny);
 
-                userRole.AddTypePermission<Contact>(SecurityOperations.Read, SecurityPermissionState.Deny);
-                userRole.AddTypePermission<Contact>("Write;Navigate;Create", SecurityPermissionState.Allow);
+                userRole.AddTypePermission<Contact>(SecurityOperations.ReadWriteAccess, SecurityPermissionState.Deny);
+                userRole.AddTypePermission<Contact>("Delete;Navigate;Create", SecurityPermissionState.Allow);
+                userRole.AddObjectPermission<Contact>(SecurityOperations.FullObjectAccess, "[UserRoles][].Count() = 0", SecurityPermissionState.Allow);
                 userRole.AddObjectPermission<Contact>(SecurityOperations.ReadOnlyAccess, "StartsWith(FirstName, 'E')", SecurityPermissionState.Allow);
                 userRole.AddObjectPermission<Contact>(SecurityOperations.FullObjectAccess, "UserRoles[Users[Oid = CurrentUserId()]]", SecurityPermissionState.Allow);
                 //userRole.AddObjectPermission<Contact>(SecurityOperations.ReadWriteAccess, "\"bool\" : {\"must\" : [{\"terms\" : { \"userroles.name\" : ['users']}}]}", SecurityPermissionState.Allow);
