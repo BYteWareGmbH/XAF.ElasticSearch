@@ -1,34 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Project DefaultTargets="NugetPackAndPush" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">  
+<Project DefaultTargets="Nuget" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">  
   <PropertyGroup>
     <NugetExePath>"$(MSBuildProjectDirectory)\NuGet.exe"</NugetExePath>
   </PropertyGroup>
 
   <ItemDefinitionGroup>
-    <NugetSpecFiles>
+    <NugetProjectFiles>
       <IncludeReferencedProjects>-IncludeReferencedProjects</IncludeReferencedProjects>
-    </NugetSpecFiles>
+    </NugetProjectFiles>
   </ItemDefinitionGroup>
-  
+
   <ItemGroup>
-    <NugetSpecFiles Include="**\*.nuspec" />
+    <AssInfoFiles Include="**\AssemblyInfo.cs" />
   </ItemGroup>
 
   <Target Name="RestorePackages">
     <Exec Command="$(NugetExePath) restore &quot;$(MSBuildProjectName).sln&quot;" />
   </Target>
 
-  <Target Name="NugetPackAndPush" Inputs="@(NugetSpecFiles)" Outputs="@(NugetSpecFiles->'%(filename).nupkg')" DependsOnTargets="RestorePackages">
-    <Delete Files="@(NugetSpecFiles->'%(filename).nupkg')" />
+  <Target Name="Nuget" DependsOnTargets="RestorePackages">
     <ItemGroup>
-      <NugetProjectFiles Include="@(NugetSpecFiles->'%(RelativeDir)%(filename).csproj')" />
-      <UptodateNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg;"/>
+      <AssInfoFiles>
+        <NuspecFile>$([System.IO.Path]::GetDirectoryName( $([System.IO.Path]::GetDirectoryName( %(RelativeDir)))))\$([System.IO.Path]::GetFileName( $([System.IO.Path]::GetDirectoryName( $([System.IO.Path]::GetDirectoryName( %(RelativeDir))))))).nuspec</NuspecFile>
+        <NupkgFile>$([System.IO.Path]::GetFileName( $([System.IO.Path]::GetDirectoryName( $([System.IO.Path]::GetDirectoryName( %(RelativeDir))))))).nupkg</NupkgFile>
+      </AssInfoFiles>
     </ItemGroup>
+    <!--Message Text="%(AssInfoFiles.Identity) %(AssInfoFiles.NuspecFile) %(AssInfoFiles.NupkgFile)" Condition=" Exists(%(AssInfoFiles.NuspecFile)) " /-->
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Properties="AssInfoFile=%(AssInfoFiles.Identity);NuspecFile=%(AssInfoFiles.NuspecFile);NupkgFile=%(AssInfoFiles.NupkgFile)" Targets="NugetPackAndPush" Condition=" Exists(%(AssInfoFiles.NuspecFile)) " />
+  </Target>
+  
+  <Target Name="NugetPackAndPush" Inputs="$(AssInfoFile)" Outputs="$(NupkgFile)" >
+    <ItemGroup>
+      <NuspecFiles Include="$(NuspecFile)" />
+      <NugetProjectFiles Include="@(NuspecFiles->'%(RelativeDir)%(filename).csproj')" />
+    </ItemGroup>
+    <Delete Files="$(NupkgFile)" />
     <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
     <ItemGroup>
-      <NewNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg;@(UptodateNuGetPackages)"/>
+      <NewNuGetPackages Include="$([System.IO.Path]::GetFileNameWithoutExtension( $(NupkgFile))).??.*.nupkg" />
     </ItemGroup>
-    <Exec Command="$(NugetExePath) push %(NewNuGetPackages.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package" IgnoreExitCode="true" />
-    <Move SourceFiles="@(NewNuGetPackages)" DestinationFiles="@(NugetSpecFiles->'%(filename).nupkg')" />
+    <Exec Command="$(NugetExePath) push %(NewNuGetPackages.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package" />
+    <Move SourceFiles="%(NewNuGetPackages.Identity)" DestinationFiles="$(NupkgFile)" />
   </Target>
 </Project>  
