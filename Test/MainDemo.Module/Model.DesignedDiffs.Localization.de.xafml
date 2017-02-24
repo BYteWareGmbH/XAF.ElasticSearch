@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="Windows-1252"?>
-<Application Title="MainDemo - Outlook in 60 Minuten!" Subtitle="eXpressApp Framework Demo-Anwendung" ProtectedContentText="Geschützter Inhalt">
+<Application Title="MainDemo - Outlook in 60 Minuten!" ProtectedContentText="Geschützter Inhalt">
   <ActionDesign>
     <Actions>
       <Action Id="Cancel" Caption="Abbrechen" ToolTip="Abbrechen" />

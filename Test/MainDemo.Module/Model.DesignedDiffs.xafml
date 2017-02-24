@@ -1,10 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Application Title="Main Demo" Subtitle="eXpressApp Framework demo application" Company="Developer Express Inc." WebSite="http://www.devexpress.com" Copyright="Copyright (C) 2016 {0:Company} ALL RIGHTS RESERVED" PreferredLanguage="(Default language)">
+<Application Title="Main Demo" Subtitle="eXpressApp Framework Demo-Anwendung" Company="Developer Express Inc." WebSite="http://www.devexpress.com" Copyright="Copyright (C) 2016 {0:Company} ALL RIGHTS RESERVED" PreferredLanguage="(Default language)">
   <ActionDesign>
     <Actions>
       <Action Id="ClearTasksAction" SelectionDependencyType="RequireSingleObject" ConfirmationMessage="Are you sure you want to clear the Tasks list?" ToolTip="Clear the current Contact's Tasks list" Shortcut="Control+Shift+C" />
       <Action Id="SaveAndClose" ValidationContexts="SaveAndClose" />
       <Action Id="Task.MarkCompleted" ValidationContexts="MarkCompleted" />
+      <Action Id="Testdaten hinzufügen" TargetObjectsCriteria="IsCurrentUserInRole('Administrators')" />
     </Actions>
     <ActionToContainerMapping>
       <ActionContainer Id="RecordEdit">
@@ -51,9 +52,9 @@
     </Items>
   </NavigationItems>
   <SchemaModules IsNewNode="True">
-    <SchemaModule Name="SystemModule" Version="13.2.0.0" IsNewNode="True" />
-    <SchemaModule Name="ValidationModule" Version="13.2.0.0" IsNewNode="True" />
-    <SchemaModule Name="ViewVariantsModule" Version="13.2.0.0" IsNewNode="True" />
+    <SchemaModule Name="SystemModule" Version="16.2.4.0" IsNewNode="True" />
+    <SchemaModule Name="ValidationModule" Version="16.2.4.0" IsNewNode="True" />
+    <SchemaModule Name="ViewVariantsModule" Version="16.2.4.0" IsNewNode="True" />
   </SchemaModules>
   <Validation>
     <Rules>
@@ -93,9 +94,9 @@
       <Items>
         <PropertyEditor Id="Department.Office" PropertyName="Department.Office" IsNewNode="True" />
         <PropertyEditor Id="Manager" ToolTip="Select a manager for the current contact from available managers in the selected department" />
+        <PropertyEditor Id="Photo" ImageEditorFixedHeight="270" IsNewNode="True" />
         <PropertyEditor Id="Position" ToolTip="Select a job position for the current contact from available positions in the selected department" />
         <PropertyEditor Id="Tasks" ToolTip="View, assign or remove tasks for the current contact" />
-        <PropertyEditor Id="Photo" ImageEditorFixedHeight="270" IsNewNode="True" />
       </Items>
       <Layout>
         <LayoutGroup Id="Main" RelativeSize="98">
@@ -150,19 +151,6 @@
               <LayoutItem Id="PhoneNumbers" RelativeSize="100" ViewItem="PhoneNumbers" />
             </LayoutGroup>
           </TabbedGroup>
-        </LayoutGroup>
-      </Layout>
-    </DetailView>
-    <DetailView Id="Event_DetailView">
-      <Layout>
-        <LayoutGroup Id="Main">
-          <LayoutGroup Id="SimpleEditors">
-            <LayoutGroup Id="Event">
-              <LayoutGroup Id="Event_col2">
-                <LayoutItem Id="ReminderTime" ViewItem="ReminderTime" SizeConstraintsType="Default" Index="2" IsNewNode="True" />
-              </LayoutGroup>
-            </LayoutGroup>
-          </LayoutGroup>
         </LayoutGroup>
       </Layout>
     </DetailView>
@@ -233,5 +221,18 @@
       </Columns>
     </ListView>
     <ListView Id="Department_ListView" MasterDetailMode="ListViewAndDetailView" />
+    <DetailView Id="Event_DetailView">
+      <Layout>
+        <LayoutGroup Id="Main">
+          <LayoutGroup Id="SimpleEditors">
+            <LayoutGroup Id="Event">
+              <LayoutGroup Id="Event_col2">
+                <LayoutItem Id="ReminderTime" ViewItem="ReminderTime" SizeConstraintsType="Default" Index="2" IsNewNode="True" />
+              </LayoutGroup>
+            </LayoutGroup>
+          </LayoutGroup>
+        </LayoutGroup>
+      </Layout>
+    </DetailView>
   </Views>
 </Application>
