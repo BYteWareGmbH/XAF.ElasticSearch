@@ -37,7 +37,7 @@
     <Delete Files="$(NupkgFile)" />
     <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
     <ItemGroup>
-      <NewNuGetPackages Include="$([System.IO.Path]::GetFileNameWithoutExtension( $(NupkgFile))).??.*.nupkg" IgnoreExitCode="true" />
+      <NewNuGetPackages Include="$([System.IO.Path]::GetFileNameWithoutExtension( $(NupkgFile))).??.*.nupkg" />
     </ItemGroup>
     <Exec Command="$(NugetExePath) push %(NewNuGetPackages.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package" />
     <Move SourceFiles="%(NewNuGetPackages.Identity)" DestinationFiles="$(NupkgFile)" />
