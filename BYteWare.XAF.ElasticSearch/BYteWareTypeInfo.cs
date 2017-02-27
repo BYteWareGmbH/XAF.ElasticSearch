@@ -737,7 +737,8 @@
                 if (etype == FieldType.object_type || etype == FieldType.nested)
                 {
                     var nty = GetUnderlyingType(pi.PropertyType);
-                    var nestFields = ESFields(wildcards);
+                    var bti = GetBYteWareTypeInfo(nty);
+                    var nestFields = bti.ESFields(wildcards);
                     foreach (var field in nestFields)
                     {
                         yield return string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, field);
