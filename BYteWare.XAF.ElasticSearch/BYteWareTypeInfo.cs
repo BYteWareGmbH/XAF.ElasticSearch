@@ -569,7 +569,7 @@
             get
             {
                 var esModelClass = ModelClass as IModelClassElasticSearch;
-                return (esModelClass == null && ESAttribute != null) || esModelClass.ElasticSearchIndex != null;
+                return esModelClass == null ? ESAttribute != null : esModelClass.ElasticSearchIndex != null;
             }
         }
 
@@ -581,7 +581,7 @@
         public bool IsMemberESIndexed(string member)
         {
             var modelESMember = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
-            return (modelESMember == null && (ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticPropertyAttribute)) ?? false)) || !string.IsNullOrWhiteSpace(modelESMember.ElasticSearch.FieldName);
+            return modelESMember == null ? ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticPropertyAttribute)) ?? false : !string.IsNullOrWhiteSpace(modelESMember.ElasticSearch.FieldName);
         }
 
         /// <summary>
@@ -592,7 +592,7 @@
         public bool IsMemberESContaining(string member)
         {
             var modelESMember = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
-            return (modelESMember == null && (ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticContainingAttribute)) ?? false)) || modelESMember.Containing;
+            return modelESMember == null ? ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticContainingAttribute)) ?? false : modelESMember.Containing;
         }
 
         /// <summary>
@@ -740,7 +740,7 @@
             return Type.Name;
         }
 
-        private IEnumerable<string> ElasticSearchFieldsInternal(PropertyInfo pi, string propertyName, FieldType etype, bool wildcards)
+        private static IEnumerable<string> ElasticSearchFieldsInternal(PropertyInfo pi, string propertyName, FieldType etype, bool wildcards)
         {
             if (etype != FieldType.completion)
             {
