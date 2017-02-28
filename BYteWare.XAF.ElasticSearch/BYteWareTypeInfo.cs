@@ -241,7 +241,7 @@
                 if (!_IsESReferenceChecked)
                 {
                     _IsESReferenceChecked = true;
-                    if (ClassInfo != null && ((Model == null && Type.MembersWith<ElasticPropertyAttribute>(MemberTypes.All, Flags.AllMembers).Any()) || (ModelClass?.AllMembers.OfType<IModelMemberElasticSearch>().Any(t => !string.IsNullOrWhiteSpace(t.ElasticSearch?.FieldName)) ?? false)))
+                    if (ClassInfo != null && Type.Members(MemberTypes.All, Flags.AllMembers).Any(t => IsMemberESIndexed(t.Name)))
                     {
                         foreach (var op in ClassInfo.ObjectProperties)
                         {
@@ -410,7 +410,8 @@
                         {
                             yield return item;
                         }
-                        var multiFields = Model != null ? (props as IModelMemberElasticSearchField)?.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                        var modelESField = props as IModelMemberElasticSearchField;
+                        var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                         foreach (var ga in multiFields.GroupBy(t => t.FieldName))
                         {
                             var a = ga.First();
@@ -444,6 +445,7 @@
                         var fieldName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? pi.Name : props.FieldName);
                         if (props != null && !props.OptOut)
                         {
+                            var modelESField = props as IModelMemberElasticSearchField;
                             if (fieldType == FieldType.completion)
                             {
                                 var sf = new SuggestField
@@ -456,16 +458,16 @@
                                 {
                                     sf.WeightField = TypeInfo.FindMember(props.WeightField);
                                 }
-                                if (Model != null)
+                                if (modelESField != null)
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>((props as IModelElasticSearchFieldProperties)?.SuggestContexts).AsReadOnly();
+                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(modelESField.SuggestContexts).AsReadOnly();
                                 }
                                 else
                                 {
                                     sf.ContextSettings = new List<IElasticSearchSuggestContext>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>()).AsReadOnly();
                                 }
                             }
-                            var multiFields = Model != null ? (props as IModelMemberElasticSearchField)?.Fields : Attribute.GetCustomAttributes(pi, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                            var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(pi, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                             foreach (var multiField in multiFields.Where(t => t.FieldType == FieldType.completion))
                             {
                                 var sf = new SuggestField
@@ -478,9 +480,10 @@
                                 {
                                     sf.WeightField = TypeInfo.FindMember(props.WeightField);
                                 }
-                                if (Model != null)
+                                var modelMultiField = props as IModelElasticSearchFieldProperties;
+                                if (modelMultiField != null)
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>((multiField as IModelElasticSearchFieldProperties)?.SuggestContexts).AsReadOnly();
+                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(modelMultiField.SuggestContexts).AsReadOnly();
                                 }
                                 else
                                 {
@@ -553,7 +556,7 @@
         {
             get
             {
-                return ((Model == null && ESAttribute != null) || (ModelClass as IModelClassElasticSearch)?.ElasticSearchIndex != null) || ESReferences != null || ContainingTypes != null;
+                return IsESIndexed || ESReferences != null || ContainingTypes != null;
             }
         }
 
@@ -565,7 +568,8 @@
         {
             get
             {
-                return (Model == null && ESAttribute != null) || (ModelClass as IModelClassElasticSearch)?.ElasticSearchIndex != null;
+                var esModelClass = ModelClass as IModelClassElasticSearch;
+                return (esModelClass == null && ESAttribute != null) || esModelClass.ElasticSearchIndex != null;
             }
         }
 
@@ -576,7 +580,8 @@
         /// <returns>True if the member is indexed in an ElasticSearch index; otherwise False</returns>
         public bool IsMemberESIndexed(string member)
         {
-            return (Model == null && (ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticPropertyAttribute)) ?? false)) || !string.IsNullOrWhiteSpace((ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch)?.ElasticSearch.FieldName);
+            var modelESMember = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
+            return (modelESMember == null && (ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticPropertyAttribute)) ?? false)) || !string.IsNullOrWhiteSpace(modelESMember.ElasticSearch.FieldName);
         }
 
         /// <summary>
@@ -586,7 +591,8 @@
         /// <returns>True if the member is marked as contained in an ElasticSearch index; otherwise False</returns>
         public bool IsMemberESContaining(string member)
         {
-            return (Model == null && (ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticContainingAttribute)) ?? false)) || (ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch).Containing;
+            var modelESMember = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
+            return (modelESMember == null && (ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticContainingAttribute)) ?? false)) || modelESMember.Containing;
         }
 
         /// <summary>
@@ -597,7 +603,8 @@
         {
             get
             {
-                return Model == null ? ESAttribute?.IndexName : (ModelClass as IModelClassElasticSearch)?.ElasticSearchIndex?.Name;
+                var esModelClass = ModelClass as IModelClassElasticSearch;
+                return esModelClass == null ? ESAttribute?.IndexName : esModelClass.ElasticSearchIndex?.Name;
             }
         }
 
@@ -609,7 +616,8 @@
         {
             get
             {
-                var tname = Model == null ? ESAttribute?.TypeName : (ModelClass as IModelClassElasticSearch)?.TypeName;
+                var esModelClass = ModelClass as IModelClassElasticSearch;
+                var tname = esModelClass == null ? ESAttribute?.TypeName : esModelClass.TypeName;
                 return string.IsNullOrEmpty(tname) ? Type.Name : tname;
             }
         }
@@ -622,7 +630,8 @@
         {
             get
             {
-                return Model == null ? ESAttribute?.SourceFieldDisabled : (ModelClass as IModelClassElasticSearch)?.SourceFieldDisabled;
+                var esModelClass = ModelClass as IModelClassElasticSearch;
+                return esModelClass == null ? ESAttribute?.SourceFieldDisabled : esModelClass.SourceFieldDisabled;
             }
         }
 
@@ -691,13 +700,14 @@
         /// <returns>ElasticSearch Field Properties</returns>
         public IElasticProperties ESProperties(string member)
         {
-            if (Model == null)
+            var modelESField = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
+            if (modelESField == null)
             {
                 return ClassInfo?.FindMember(member)?.FindAttributeInfo(typeof(ElasticPropertyAttribute)) as IElasticProperties;
             }
             else
             {
-                var props = (ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch)?.ElasticSearch;
+                var props = modelESField.ElasticSearch;
                 return !string.IsNullOrWhiteSpace(props?.FieldName) ? props : null;
             }
         }
