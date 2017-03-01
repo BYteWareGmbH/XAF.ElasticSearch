@@ -319,29 +319,32 @@
         {
             get
             {
-                if (IsESIndexed && _ESIndexes == null)
+                if (_ESIndexes == null)
                 {
                     _ESIndexes = new List<string>();
                     _ESTypes = new List<string>();
-                    foreach (var descendant in TypeInfo.DescendantsAndSelf(t => t.Descendants))
+                    if (IsESIndexed)
                     {
-                        var descci = GetBYteWareTypeInfo(descendant.Type);
-                        if (!descci.ElasticIndexError && descci.ESIndexName.IsNotNullOrWhiteSpace() && descci.ESTypeName.IsNotNullOrWhiteSpace())
+                        foreach (var descendant in TypeInfo.DescendantsAndSelf(t => t.Descendants))
                         {
-                            if (!_ESIndexes.Contains(descci.ESIndexName))
+                            var descci = GetBYteWareTypeInfo(descendant.Type);
+                            if (!descci.ElasticIndexError && descci.ESIndexName.IsNotNullOrWhiteSpace() && descci.ESTypeName.IsNotNullOrWhiteSpace())
                             {
-                                _ESIndexes.Add(descci.ESIndexName);
+                                if (!_ESIndexes.Contains(descci.ESIndexName))
+                                {
+                                    _ESIndexes.Add(descci.ESIndexName);
+                                }
+                                if (!_ESTypes.Contains(descci.ESTypeName))
+                                {
+                                    _ESTypes.Add(descci.ESTypeName);
+                                }
                             }
-                            if (!_ESTypes.Contains(descci.ESTypeName))
+                            else
                             {
-                                _ESTypes.Add(descci.ESTypeName);
+                                _ESIndexes.Clear();
+                                _ESTypes.Clear();
+                                break;
                             }
-                        }
-                        else
-                        {
-                            _ESIndexes.Clear();
-                            _ESTypes.Clear();
-                            break;
                         }
                     }
                 }
@@ -356,7 +359,7 @@
         {
             get
             {
-                if (IsESIndexed && ESIndexes != null)
+                if (ESIndexes != null)
                 {
                     return _ESTypes.AsReadOnly();
                 }

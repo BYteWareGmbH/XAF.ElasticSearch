@@ -49,7 +49,7 @@
             }
             application.LoggingOff += Application_LoggingOff;
             application.Disposed += Application_Disposed;
-            application.SetupComplete += Application_SetupComplete;
+            application.SettingUp += Application_SettingUp;
             application.ModelChanged += Application_ModelChanged;
         }
 
@@ -213,7 +213,7 @@
             return null;
         }
 
-        private void Application_SetupComplete(object sender, EventArgs e)
+        private void Application_SettingUp(object sender, EventArgs e)
         {
             var app = (XafApplication)sender;
             var et = ElasticSearchIndexPersistentType ?? FindIndexType();

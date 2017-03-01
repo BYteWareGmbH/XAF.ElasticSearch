@@ -936,19 +936,26 @@
             {
                 throw new ArgumentNullException(nameof(ci));
             }
-            if (!ci.ElasticIndexError && !ElasticSearchMapping(ci))
+            var mapping = false;
+            if (!ci.ElasticIndexError)
             {
-                if (session != null)
+                try
                 {
-                    ci.ElasticIndexError = true;
-                    if (ci.IsESIndexed && !string.IsNullOrWhiteSpace(ci.ESIndexName))
+                    mapping = ElasticSearchMapping(ci);
+                }
+                finally
+                {
+                    if (!mapping && session != null)
                     {
-                        IndexChange(ci.ESIndexName, session, false);
+                        ci.ElasticIndexError = true;
+                        if (ci.IsESIndexed && !string.IsNullOrWhiteSpace(ci.ESIndexName))
+                        {
+                            IndexChange(ci.ESIndexName, session, false);
+                        }
                     }
                 }
-                return false;
             }
-            return true;
+            return mapping;
         }
 
         /// <summary>
@@ -1743,9 +1750,17 @@
                     {
                         var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(ti.Type);
                         ci.IsESMapped = false;
-                        if (!DoMapping(ci, index.Session))
+                        try
                         {
-                            throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "PutMappingError"), ti.Name));
+                            if (!DoMapping(ci, index.Session))
+                            {
+                                throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "PutMappingError"), ti.Name));
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            Tracing.Tracer.LogError(ex);
+                            throw;
                         }
                     }
                     IndexChangeCore(index.Name, index.Session, true);
@@ -1921,7 +1936,14 @@
         {
             if (typeInfos.Add(ci))
             {
-                DoMapping(ci, session);
+                try
+                {
+                    DoMapping(ci, session);
+                }
+                catch (ElasticIndexException ex)
+                {
+                    Tracing.Tracer.LogError(ex);
+                }
                 if (ci.ContainingTypes != null)
                 {
                     foreach (var containingType in ci.ContainingTypes)
@@ -2078,6 +2100,10 @@
                             if (!res.HttpStatusCode.HasValue || res.HttpStatusCode.Value != 200)
                             {
                                 res = ec.IndicesCreate<VoidResponse>(indexName, ci.ESIndexSettings);
+                                if (!res.Success)
+                                {
+                                    throw new ElasticIndexException(res.DebugInformation + Environment.NewLine + res.ServerError?.ToString());
+                                }
                             }
                             var typeName = TypeName(ci.ESTypeName);
                             res = ec.IndicesExistsType<VoidResponse>(indexName, typeName);
@@ -2085,6 +2111,10 @@
                             {
                                 var tmw = new TypeMappingWriter(this, ci, 0, true);
                                 res = ec.IndicesPutMapping<VoidResponse>(indexName, typeName, tmw.Map());
+                                if (!res.Success)
+                                {
+                                    throw new ElasticIndexException(res.DebugInformation + Environment.NewLine + res.ServerError?.ToString());
+                                }
                             }
                             return res.Success;
                         }
@@ -2193,7 +2223,14 @@
             if (bo != null)
             {
                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(bo.GetType());
-                DoMapping(ci, bo.Session);
+                try
+                {
+                    DoMapping(ci, bo.Session);
+                }
+                catch (ElasticIndexException ex)
+                {
+                    Tracing.Tracer.LogError(ex);
+                }
                 if (propertyChanged)
                 {
                     bulk.Append(SerializeObjectForBulk(bo.Session, bo, ci));
