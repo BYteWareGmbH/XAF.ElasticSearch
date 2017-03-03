@@ -1978,7 +1978,12 @@
                         var reference = esReference.GetValue(bo) as XPBaseObject;
                         if (reference != null)
                         {
-                            BulkIndex(session, indexed, bulk, typeInfos, BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType()), typeLists, reference);
+                            var bti = BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType());
+                            if (!indexed.ContainsKey(bti.ClassInfo))
+                            {
+                                indexed.Add(bti.ClassInfo, new HashSet<object>());
+                            }
+                            BulkIndex(session, indexed, bulk, typeInfos, bti, typeLists, reference);
                         }
                     }
                 }
