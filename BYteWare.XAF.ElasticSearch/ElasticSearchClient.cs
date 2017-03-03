@@ -2201,7 +2201,10 @@
             foreach (var tkl in changes.ModifiedObjects.GroupBy(t => t.ClassInfo))
             {
                 var bulk = new StringBuilder();
-                indexed.Add(tkl.Key, new HashSet<object>());
+                if (!indexed.ContainsKey(tkl.Key))
+                {
+                    indexed.Add(tkl.Key, new HashSet<object>());
+                }
                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(tkl.Key.ClassType);
                 var typeLists = new Dictionary<ContainingType, HashSet<object>>();
                 var typeInfos = new HashSet<BYteWareTypeInfo>();
