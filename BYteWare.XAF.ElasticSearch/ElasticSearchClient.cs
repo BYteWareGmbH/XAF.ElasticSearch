@@ -1212,10 +1212,11 @@
         /// </summary>
         /// <param name="ci">A BYteWareTypeInfo instance of the type where the query should be issued for</param>
         /// <param name="searchText">The text to search for</param>
+        /// <param name="fields">A semicolon separated List of Elasticsearch Field Names to search in</param>
         /// <param name="results">Amount of results to return at maximum</param>
         /// <param name="filter">Restrict the results to this filter string</param>
         /// <returns>A HitsMetaData instance with the results of the query</returns>
-        public HitsMetaData Search(BYteWareTypeInfo ci, string searchText, int results, string filter)
+        public HitsMetaData Search(BYteWareTypeInfo ci, string searchText, string fields, int results, string filter)
         {
             if (ci == null)
             {
@@ -1224,7 +1225,7 @@
             bool fuzzy;
             bool wildcard;
             searchText = PrepareSearchText(searchText, out fuzzy, out wildcard);
-            return Search(ci.ESIndexes, ci.ESTypes, SearchBody(searchText, results, fuzzy, wildcard, filter, ci.ESSecurityFilter, null));
+            return Search(ci.ESIndexes, ci.ESTypes, SearchBody(searchText, results, fuzzy, wildcard, filter, ci.ESSecurityFilter, null, fields, false));
         }
 
         /// <summary>
@@ -1255,7 +1256,7 @@
         [CLSCompliant(false)]
         public string SearchBody(string searchText, int results, bool fuzzy, bool wildcard, string filter, string securityFilter, IModelElasticSearchFieldsItem modelItem)
         {
-            return SearchBody(searchText, results, fuzzy, wildcard, filter, securityFilter, modelItem, false);
+            return SearchBody(searchText, results, fuzzy, wildcard, filter, securityFilter, modelItem, null, false);
         }
 
         /// <summary>
@@ -1270,152 +1271,7 @@
         [CLSCompliant(false)]
         public string SearchBody(string searchText, bool fuzzy, bool wildcard, string filter, bool validate)
         {
-            return SearchBody(searchText, 200, fuzzy, wildcard, filter, null, null, validate);
-        }
-
-        /// <summary>
-        /// Returns a query string in ElasticSearch Query DSL for the given parameters to use with the Search method
-        /// </summary>
-        /// <param name="searchText">The text to search for</param>
-        /// <param name="results">Amount of results to return at maximum</param>
-        /// <param name="fuzzy">Should the search be fuzzy</param>
-        /// <param name="wildcard">Should the search support wildcards in the searchText</param>
-        /// <param name="filter">Restrict the results to this filter string</param>
-        /// <param name="securityFilter">Filter string defined through the Security System</param>
-        /// <param name="modelItem">XAF Model Settings for the search</param>
-        /// <param name="validate">True if the there should be only a check for correct syntax of the query</param>
-        /// <returns>A query string in ElasticSearch Query DSL</returns>
-        [CLSCompliant(false)]
-        public string SearchBody(string searchText, int results, bool fuzzy, bool wildcard, string filter, string securityFilter, IModelElasticSearchFieldsItem modelItem, bool validate)
-        {
-            if (searchText == null)
-            {
-                throw new ArgumentNullException(nameof(searchText));
-            }
-            var queryType = ElasticQueryType.best_fields;
-            var minimumShouldMatch = DefaultMinimumShouldMatch;
-            var tieBreaker = 0.3;
-            if (modelItem != null)
-            {
-                queryType = modelItem.QueryType;
-                minimumShouldMatch = modelItem.MinimumShouldMatch;
-                tieBreaker = modelItem.TieBreaker;
-            }
-            StringWriter sw = null;
-            try
-            {
-                var strw = sw = new StringWriter(CultureInfo.InvariantCulture);
-                using (var writer = new JsonTextWriter(sw))
-                {
-                    sw = null;
-                    writer.WriteStartObject();
-                    if (!validate)
-                    {
-                        writer.WritePropertyName("size");
-                        writer.WriteValue(results);
-                        writer.WritePropertyName("stored_fields");
-                        writer.WriteStartArray();
-                        writer.WriteEndArray();
-                    }
-                    writer.WritePropertyName("query");
-                    writer.WriteStartObject();
-                    var filtered = !string.IsNullOrWhiteSpace(filter) || !string.IsNullOrWhiteSpace(securityFilter);
-                    if (filtered)
-                    {
-                        writer.WritePropertyName("bool");
-                        writer.WriteStartObject();
-                        writer.WritePropertyName("must");
-                        writer.WriteStartObject();
-                    }
-                    if (wildcard)
-                    {
-                        if (searchText.Count(t => t == '"') % 2 != 0)
-                        {
-                            searchText += '"';
-                        }
-                        writer.WritePropertyName("query_string");
-                        writer.WriteStartObject();
-                        WriteFields(writer, modelItem);
-                        writer.WritePropertyName("query");
-                        writer.WriteValue(searchText);
-                        writer.WritePropertyName("analyze_wildcard");
-                        writer.WriteValue("true");
-                        writer.WritePropertyName("minimum_should_match");
-                        writer.WriteValue(minimumShouldMatch);
-                        writer.WritePropertyName("lenient");
-                        writer.WriteValue("true");
-                        if (queryType == ElasticQueryType.phrase || queryType == ElasticQueryType.phrase_prefix)
-                        {
-                            writer.WritePropertyName("auto_generate_phrase_queries");
-                            writer.WriteValue("true");
-                        }
-                        writer.WriteEnd();
-                    }
-                    else
-                    {
-                        if (searchText.Contains('"'))
-                        {
-                            searchText = searchText.Replace("\"", string.Empty);
-                            if (queryType != ElasticQueryType.phrase || queryType != ElasticQueryType.phrase_prefix)
-                            {
-                                queryType = fuzzy ? ElasticQueryType.phrase_prefix : ElasticQueryType.phrase;
-                            }
-                        }
-                        writer.WritePropertyName("multi_match");
-                        writer.WriteStartObject();
-                        WriteFields(writer, modelItem);
-                        writer.WritePropertyName("type");
-                        writer.WriteValue(Enum.GetName(typeof(ElasticQueryType), queryType));
-                        writer.WritePropertyName("query");
-                        writer.WriteValue(searchText);
-                        writer.WritePropertyName("minimum_should_match");
-                        writer.WriteValue(minimumShouldMatch);
-                        writer.WritePropertyName("tie_breaker");
-                        writer.WriteValue(tieBreaker);
-                        writer.WritePropertyName("lenient");
-                        writer.WriteValue("true");
-                        if (fuzzy && (queryType == ElasticQueryType.best_fields || queryType == ElasticQueryType.most_fields))
-                        {
-                            writer.WritePropertyName("fuzziness");
-                            writer.WriteValue("AUTO");
-                            writer.WritePropertyName("max_expansions");
-                            writer.WriteValue(50);
-                        }
-                        writer.WriteEnd();
-                    }
-                    if (filtered)
-                    {
-                        writer.WriteEnd();
-                        writer.WritePropertyName(nameof(filter));
-                        writer.WriteStartArray();
-                        if (!string.IsNullOrWhiteSpace(filter))
-                        {
-                            writer.WriteStartObject();
-                            writer.WriteRaw(ReplaceParameters(filter));
-                            writer.WriteEnd();
-                        }
-                        if (!string.IsNullOrWhiteSpace(securityFilter))
-                        {
-                            writer.WriteStartObject();
-                            writer.WriteRaw(ReplaceParameters(securityFilter));
-                            writer.WriteEnd();
-                        }
-                        writer.WriteEndArray();
-                        writer.WriteEnd();
-                    }
-                    writer.WriteEnd();
-                    writer.WriteEndObject();
-                    writer.Flush();
-                    return strw.ToString();
-                }
-            }
-            finally
-            {
-                if (sw != null)
-                {
-                    sw.Dispose();
-                }
-            }
+            return SearchBody(searchText, 200, fuzzy, wildcard, filter, null, null, null, validate);
         }
 
         /// <summary>
@@ -1986,7 +1842,7 @@
             }
         }
 
-        private static void WriteFields(JsonTextWriter writer, IModelElasticSearchFieldsItem modelItem)
+        private static void WriteFields(JsonTextWriter writer, IModelElasticSearchFieldsItem modelItem, string esFields)
         {
             writer.WritePropertyName("fields");
             writer.WriteStartArray();
@@ -2000,11 +1856,164 @@
                     fieldWritten = true;
                 }
             }
+            if (!string.IsNullOrWhiteSpace(esFields))
+            {
+                foreach (var field in esFields.Split(';'))
+                {
+                    writer.WriteValue(field);
+                    fieldWritten = true;
+                }
+            }
             if (!fieldWritten)
             {
                 writer.WriteValue("_all");
             }
             writer.WriteEndArray();
+        }
+
+        /// <summary>
+        /// Returns a query string in ElasticSearch Query DSL for the given parameters to use with the Search method
+        /// </summary>
+        /// <param name="searchText">The text to search for</param>
+        /// <param name="results">Amount of results to return at maximum</param>
+        /// <param name="fuzzy">Should the search be fuzzy</param>
+        /// <param name="wildcard">Should the search support wildcards in the searchText</param>
+        /// <param name="filter">Restrict the results to this filter string</param>
+        /// <param name="securityFilter">Filter string defined through the Security System</param>
+        /// <param name="modelItem">XAF Model Settings for the search</param>
+        /// <param name="fields">A semicolon separated List of Elasticsearch Field Names to search in</param>
+        /// <param name="validate">True if the there should be only a check for correct syntax of the query</param>
+        /// <returns>A query string in ElasticSearch Query DSL</returns>
+        private string SearchBody(string searchText, int results, bool fuzzy, bool wildcard, string filter, string securityFilter, IModelElasticSearchFieldsItem modelItem, string fields, bool validate)
+        {
+            if (searchText == null)
+            {
+                throw new ArgumentNullException(nameof(searchText));
+            }
+            var queryType = ElasticQueryType.best_fields;
+            var minimumShouldMatch = DefaultMinimumShouldMatch;
+            var tieBreaker = 0.3;
+            if (modelItem != null)
+            {
+                queryType = modelItem.QueryType;
+                minimumShouldMatch = modelItem.MinimumShouldMatch;
+                tieBreaker = modelItem.TieBreaker;
+            }
+            StringWriter sw = null;
+            try
+            {
+                var strw = sw = new StringWriter(CultureInfo.InvariantCulture);
+                using (var writer = new JsonTextWriter(sw))
+                {
+                    sw = null;
+                    writer.WriteStartObject();
+                    if (!validate)
+                    {
+                        writer.WritePropertyName("size");
+                        writer.WriteValue(results);
+                        writer.WritePropertyName("stored_fields");
+                        writer.WriteStartArray();
+                        writer.WriteEndArray();
+                    }
+                    writer.WritePropertyName("query");
+                    writer.WriteStartObject();
+                    var filtered = !string.IsNullOrWhiteSpace(filter) || !string.IsNullOrWhiteSpace(securityFilter);
+                    if (filtered)
+                    {
+                        writer.WritePropertyName("bool");
+                        writer.WriteStartObject();
+                        writer.WritePropertyName("must");
+                        writer.WriteStartObject();
+                    }
+                    if (wildcard)
+                    {
+                        if (searchText.Count(t => t == '"') % 2 != 0)
+                        {
+                            searchText += '"';
+                        }
+                        writer.WritePropertyName("query_string");
+                        writer.WriteStartObject();
+                        WriteFields(writer, modelItem, fields);
+                        writer.WritePropertyName("query");
+                        writer.WriteValue(searchText);
+                        writer.WritePropertyName("analyze_wildcard");
+                        writer.WriteValue("true");
+                        writer.WritePropertyName("minimum_should_match");
+                        writer.WriteValue(minimumShouldMatch);
+                        writer.WritePropertyName("lenient");
+                        writer.WriteValue("true");
+                        if (queryType == ElasticQueryType.phrase || queryType == ElasticQueryType.phrase_prefix)
+                        {
+                            writer.WritePropertyName("auto_generate_phrase_queries");
+                            writer.WriteValue("true");
+                        }
+                        writer.WriteEnd();
+                    }
+                    else
+                    {
+                        if (searchText.Contains('"'))
+                        {
+                            searchText = searchText.Replace("\"", string.Empty);
+                            if (queryType != ElasticQueryType.phrase || queryType != ElasticQueryType.phrase_prefix)
+                            {
+                                queryType = fuzzy ? ElasticQueryType.phrase_prefix : ElasticQueryType.phrase;
+                            }
+                        }
+                        writer.WritePropertyName("multi_match");
+                        writer.WriteStartObject();
+                        WriteFields(writer, modelItem, fields);
+                        writer.WritePropertyName("type");
+                        writer.WriteValue(Enum.GetName(typeof(ElasticQueryType), queryType));
+                        writer.WritePropertyName("query");
+                        writer.WriteValue(searchText);
+                        writer.WritePropertyName("minimum_should_match");
+                        writer.WriteValue(minimumShouldMatch);
+                        writer.WritePropertyName("tie_breaker");
+                        writer.WriteValue(tieBreaker);
+                        writer.WritePropertyName("lenient");
+                        writer.WriteValue("true");
+                        if (fuzzy && (queryType == ElasticQueryType.best_fields || queryType == ElasticQueryType.most_fields))
+                        {
+                            writer.WritePropertyName("fuzziness");
+                            writer.WriteValue("AUTO");
+                            writer.WritePropertyName("max_expansions");
+                            writer.WriteValue(50);
+                        }
+                        writer.WriteEnd();
+                    }
+                    if (filtered)
+                    {
+                        writer.WriteEnd();
+                        writer.WritePropertyName(nameof(filter));
+                        writer.WriteStartArray();
+                        if (!string.IsNullOrWhiteSpace(filter))
+                        {
+                            writer.WriteStartObject();
+                            writer.WriteRaw(ReplaceParameters(filter));
+                            writer.WriteEnd();
+                        }
+                        if (!string.IsNullOrWhiteSpace(securityFilter))
+                        {
+                            writer.WriteStartObject();
+                            writer.WriteRaw(ReplaceParameters(securityFilter));
+                            writer.WriteEnd();
+                        }
+                        writer.WriteEndArray();
+                        writer.WriteEnd();
+                    }
+                    writer.WriteEnd();
+                    writer.WriteEndObject();
+                    writer.Flush();
+                    return strw.ToString();
+                }
+            }
+            finally
+            {
+                if (sw != null)
+                {
+                    sw.Dispose();
+                }
+            }
         }
 
         private void PrepareTypes(Session session, HashSet<BYteWareTypeInfo> typeInfos, BYteWareTypeInfo ci, Dictionary<ContainingType, HashSet<object>> typeLists)
