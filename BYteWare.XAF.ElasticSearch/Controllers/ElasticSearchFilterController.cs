@@ -274,45 +274,9 @@
                     if (!ci.ElasticIndexError)
                     {
                         var searchText = args.ParameterCurrentValue == null ? string.Empty : args.ParameterCurrentValue.ToString();
-                        var fuzzy = searchText.Contains('~');
-                        var wildcard = searchText.Contains('*') || searchText.Contains('?') || searchText.Contains('!');
-                        if (fuzzy && !wildcard)
-                        {
-                            searchText = searchText.Replace("~", string.Empty);
-                        }
-                        else if (wildcard)
-                        {
-                            searchText = searchText.Replace(" AND ", " and ");
-                            searchText = searchText.Replace(" OR ", " or ");
-                            searchText = searchText.Replace(" NOT ", " not ");
-                            var sb = new StringBuilder();
-                            foreach (var c in searchText)
-                            {
-                                char[] specialChars =
-                                {
-                                     '+',
-                                     '-',
-                                     '&',
-                                     '|',
-                                     '(',
-                                     ')',
-                                     '{',
-                                     '}',
-                                     '[',
-                                     ']',
-                                     '^',
-                                     ':',
-                                     '\\',
-                                     '/'
-                                };
-                                if (specialChars.Contains(c))
-                                {
-                                    sb.Append('\\');
-                                }
-                                sb.Append(c);
-                            }
-                            searchText = sb.ToString();
-                        }
+                        bool fuzzy;
+                        bool wildcard;
+                        searchText = ElasticSearchClient.PrepareSearchText(searchText, out fuzzy, out wildcard);
                         var filter = string.Empty;
                         if (SetFilterAction.Active && SetFilterAction.SelectedItem != null && SetFilterAction.SelectedItem.Model != null)
                         {

@@ -540,6 +540,61 @@
         }
 
         /// <summary>
+        /// Prepare the search text to send it to ElasticSearch
+        /// </summary>
+        /// <param name="searchText">Text to search for</param>
+        /// <param name="fuzzy">Was a fuzzy search requested</param>
+        /// <param name="wildcard">Was a wildcard search requested</param>
+        /// <returns>Special characters and words escaped search text</returns>
+        public static string PrepareSearchText(string searchText, out bool fuzzy, out bool wildcard)
+        {
+            if (searchText == null)
+            {
+                throw new ArgumentNullException(nameof(searchText));
+            }
+            fuzzy = searchText.Contains('~');
+            wildcard = searchText.Contains('*') || searchText.Contains('?') || searchText.Contains('!');
+            if (fuzzy && !wildcard)
+            {
+                searchText = searchText.Replace("~", string.Empty);
+            }
+            else if (wildcard)
+            {
+                searchText = searchText.Replace(" AND ", " and ");
+                searchText = searchText.Replace(" OR ", " or ");
+                searchText = searchText.Replace(" NOT ", " not ");
+                var sb = new StringBuilder();
+                foreach (var c in searchText)
+                {
+                    char[] specialChars =
+                    {
+                                     '+',
+                                     '-',
+                                     '&',
+                                     '|',
+                                     '(',
+                                     ')',
+                                     '{',
+                                     '}',
+                                     '[',
+                                     ']',
+                                     '^',
+                                     ':',
+                                     '\\',
+                                     '/'
+                                };
+                    if (specialChars.Contains(c))
+                    {
+                        sb.Append('\\');
+                    }
+                    sb.Append(c);
+                }
+                searchText = sb.ToString();
+            }
+            return searchText;
+        }
+
+        /// <summary>
         /// Initalizes a new instance of the <see cref="ElasticSearchClient"/> class.
         /// </summary>
         /// <param name="indexPersistentType">BusinessClass Type to store the state of ElasticSearch indexes</param>
@@ -1150,6 +1205,26 @@
                 }
             }
             return hits;
+        }
+
+        /// <summary>
+        /// Search for instances of type described by ci
+        /// </summary>
+        /// <param name="ci">A BYteWareTypeInfo instance of the type where the query should be issued for</param>
+        /// <param name="searchText">The text to search for</param>
+        /// <param name="results">Amount of results to return at maximum</param>
+        /// <param name="filter">Restrict the results to this filter string</param>
+        /// <returns>A HitsMetaData instance with the results of the query</returns>
+        public HitsMetaData Search(BYteWareTypeInfo ci, string searchText, int results, string filter)
+        {
+            if (ci == null)
+            {
+                throw new ArgumentNullException(nameof(ci));
+            }
+            bool fuzzy;
+            bool wildcard;
+            searchText = PrepareSearchText(searchText, out fuzzy, out wildcard);
+            return Search(ci.ESIndexes, ci.ESTypes, SearchBody(searchText, results, fuzzy, wildcard, filter, ci.ESSecurityFilter, null));
         }
 
         /// <summary>
