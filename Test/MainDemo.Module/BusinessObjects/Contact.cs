@@ -54,7 +54,7 @@ namespace MainDemo.Module.BusinessObjects
                 SetPropertyValue("Manager", ref manager, value);
             }
         }
-        [ElasticProperty(Type = FieldType.text, DefaultSuggestField = true)]
+        [ElasticProperty]
         [RuleRequiredField]
         //[ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContext("suggestcontext", nameof(ContactContextList), "ContactContext")]
         public string NickName
@@ -69,7 +69,7 @@ namespace MainDemo.Module.BusinessObjects
             }
         }
 
-        [ElasticProperty(Type = FieldType.text, DefaultSuggestField = true)]
+        [ElasticProperty]
         [RuleRequiredField]
         //[ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
         public string SpouseName

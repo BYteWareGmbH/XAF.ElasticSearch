@@ -88,5 +88,17 @@
             get;
             set;
         }
+
+        /// <summary>
+        /// ElasticSearch analysis analyzer definitions delimited by comma
+        /// </summary>
+        [Category(nameof(ElasticSearch))]
+        [Description("ElasticSearch analysis normalizer definitions delimited by comma")]
+        [Editor(Constants.MultilineStringEditorType, typeof(UITypeEditor))]
+        string Normalizer
+        {
+            get;
+            set;
+        }
     }
 }

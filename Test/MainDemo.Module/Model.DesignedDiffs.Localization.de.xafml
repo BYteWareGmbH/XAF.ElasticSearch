@@ -135,7 +135,6 @@
       <OwnMembers>
         <Member Name="Anniversary" Caption="Jahrestag" />
         <Member Name="Department" Caption="Abteilung" />
-        <Member Name="NickName" Caption="Spitzname" />
         <Member Name="Notes" Caption="Notizen" />
         <Member Name="SpouseName" Caption="Name des Partners" />
         <Member Name="Tasks" Caption="Aufgaben" />

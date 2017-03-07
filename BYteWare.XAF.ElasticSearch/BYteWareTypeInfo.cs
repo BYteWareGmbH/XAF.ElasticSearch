@@ -647,25 +647,35 @@
             get
             {
                 var esIndex = (ModelClass as IModelClassElasticSearch)?.ElasticSearchIndex;
-                if (esIndex != null && (!string.IsNullOrWhiteSpace(esIndex.Settings) || !string.IsNullOrWhiteSpace(esIndex.Analyzers)))
+                if (esIndex != null)
                 {
                     var sb = new StringBuilder();
                     sb.AppendLine("{");
                     sb.AppendLine("\"settings\": {");
+
                     if (!string.IsNullOrWhiteSpace(esIndex.Settings))
                     {
                         sb.AppendLine(esIndex.Settings);
-                        if (!string.IsNullOrWhiteSpace(esIndex.Analyzers))
-                        {
-                            sb.AppendLine(",");
-                        }
+                        sb.AppendLine(",");
                     }
+                    sb.AppendLine("\"analysis\": {");
+
+                    sb.AppendLine("\"normalizer\": {");
+                    if (!string.IsNullOrWhiteSpace(esIndex.Normalizer))
+                    {
+                        sb.AppendLine(esIndex.Normalizer);
+                        sb.AppendLine(",");
+                    }
+                    sb.AppendLine("\"lowercase_normalizer\": {\"type\": \"custom\", \"filter\": [\"lowercase\"] }");
+                    sb.AppendLine("}");
+
                     if (!string.IsNullOrWhiteSpace(esIndex.Analyzers))
                     {
-                        sb.AppendLine("\"analysis\": {");
+                        sb.AppendLine(",");
                         sb.AppendLine("\"analyzer\": [");
                         sb.AppendLine(esIndex.Analyzers);
                         sb.AppendLine("]");
+
                         if (!string.IsNullOrWhiteSpace(esIndex.Tokenizers))
                         {
                             sb.AppendLine(",");
@@ -687,10 +697,11 @@
                             sb.AppendLine(esIndex.TokenFilters);
                             sb.AppendLine("]");
                         }
-                        sb.AppendLine("}");
                     }
                     sb.AppendLine("}");
                     sb.AppendLine("}");
+                    sb.AppendLine("}");
+                    return sb.ToString();
                 }
                 return null;
             }

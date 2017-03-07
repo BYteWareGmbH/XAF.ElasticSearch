@@ -130,6 +130,15 @@
         }
 
         /// <summary>
+        /// Text, Completion Type: The Normalizer which should be used for analyzed string fields, both at index-time and at search-time (unless overridden by the search_analyzer). Defaults to the default index analyzer, or the standard analyzer.
+        /// </summary>
+        public string Normalizer
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Mapping field-level query time boosting. Accepts a floating point number, defaults to 1.0.
         /// </summary>
         public double Boost

@@ -33,6 +33,8 @@
                         return fieldType == FieldType.completion || fieldType == FieldType.text;
                     case nameof(IModelElasticSearchFieldProperties.Analyzer):
                         return fieldType == FieldType.completion || fieldType == FieldType.text;
+                    case nameof(IModelElasticSearchFieldProperties.Normalizer):
+                        return fieldType == FieldType.keyword;
                     case nameof(IModelElasticSearchFieldProperties.DocValues):
                         return !(fieldType == FieldType.completion || fieldType == FieldType.text);
                     case nameof(IModelElasticSearchFieldProperties.EagerGlobalOrdinals):

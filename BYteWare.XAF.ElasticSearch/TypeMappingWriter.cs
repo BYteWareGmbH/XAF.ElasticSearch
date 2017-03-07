@@ -208,7 +208,6 @@
                         jsonWriter.WritePropertyName("type");
 #pragma warning restore CC0021 // Use nameof
                         jsonWriter.WriteValue(type);
-
                         // jsonWriter.WriteEnd();
                     }
                     else
@@ -257,6 +256,18 @@
             var fieldProps = props as IElasticProperties;
             jsonWriter.WritePropertyName("type");
             jsonWriter.WriteValue(type);
+
+            if (!string.IsNullOrEmpty(props.Normalizer))
+            {
+                jsonWriter.WritePropertyName("normalizer");
+                jsonWriter.WriteValue(props.Normalizer);
+            }
+            else if (type == ElasticSearchClient.GetElasticSearchTypeFromFieldType(FieldType.keyword))
+            {
+                jsonWriter.WritePropertyName("normalizer");
+                jsonWriter.WriteValue("lowercase_normalizer");
+            }
+
             if (!string.IsNullOrEmpty(props.Analyzer))
             {
                 jsonWriter.WritePropertyName("analyzer");
