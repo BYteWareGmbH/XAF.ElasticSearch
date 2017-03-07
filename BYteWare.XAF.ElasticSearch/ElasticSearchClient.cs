@@ -1963,7 +1963,13 @@
 
         private void BulkIndex(Session session, Dictionary<XPClassInfo, HashSet<object>> indexed, StringBuilder bulk, HashSet<BYteWareTypeInfo> typeInfos, BYteWareTypeInfo ci, Dictionary<ContainingType, HashSet<object>> typeLists, XPBaseObject bo)
         {
-            if (indexed[bo.ClassInfo].Add(session.GetKeyValue(bo)))
+            HashSet<object> indexedKeys;
+            if (!indexed.TryGetValue(bo.ClassInfo, out indexedKeys))
+            {
+                indexedKeys = new HashSet<object>();
+                indexed.Add(bo.ClassInfo, indexedKeys);
+            }
+            if (indexedKeys.Add(session.GetKeyValue(bo)))
             {
                 bulk.Append(SerializeObjectForBulk(session, bo, ci));
                 if (bulk.Length >= BulkSize)
@@ -1978,12 +1984,7 @@
                         var reference = esReference.GetValue(bo) as XPBaseObject;
                         if (reference != null)
                         {
-                            var bti = BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType());
-                            if (!indexed.ContainsKey(bti.ClassInfo))
-                            {
-                                indexed.Add(bti.ClassInfo, new HashSet<object>());
-                            }
-                            BulkIndex(session, indexed, bulk, typeInfos, bti, typeLists, reference);
+                            BulkIndex(session, indexed, bulk, typeInfos, BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType()), typeLists, reference);
                         }
                     }
                 }
@@ -2201,10 +2202,6 @@
             foreach (var tkl in changes.ModifiedObjects.GroupBy(t => t.ClassInfo))
             {
                 var bulk = new StringBuilder();
-                if (!indexed.ContainsKey(tkl.Key))
-                {
-                    indexed.Add(tkl.Key, new HashSet<object>());
-                }
                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(tkl.Key.ClassType);
                 var typeLists = new Dictionary<ContainingType, HashSet<object>>();
                 var typeInfos = new HashSet<BYteWareTypeInfo>();

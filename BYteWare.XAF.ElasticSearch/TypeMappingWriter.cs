@@ -208,7 +208,6 @@
                         jsonWriter.WritePropertyName("type");
 #pragma warning restore CC0021 // Use nameof
                         jsonWriter.WriteValue(type);
-                        // jsonWriter.WriteEnd();
                     }
                     else
                     {
