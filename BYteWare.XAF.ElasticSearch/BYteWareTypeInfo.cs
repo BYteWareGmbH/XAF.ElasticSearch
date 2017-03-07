@@ -672,30 +672,30 @@
                     if (!string.IsNullOrWhiteSpace(esIndex.Analyzers))
                     {
                         sb.AppendLine(",");
-                        sb.AppendLine("\"analyzer\": [");
+                        sb.AppendLine("\"analyzer\": {");
                         sb.AppendLine(esIndex.Analyzers);
-                        sb.AppendLine("]");
+                        sb.AppendLine("}");
 
                         if (!string.IsNullOrWhiteSpace(esIndex.Tokenizers))
                         {
                             sb.AppendLine(",");
-                            sb.AppendLine("\"tokenizer\": [");
+                            sb.AppendLine("\"tokenizer\": {");
                             sb.AppendLine(esIndex.Tokenizers);
-                            sb.AppendLine("]");
+                            sb.AppendLine("}");
                         }
                         if (!string.IsNullOrWhiteSpace(esIndex.CharFilters))
                         {
                             sb.AppendLine(",");
-                            sb.AppendLine("\"char_filter\": [");
+                            sb.AppendLine("\"char_filter\": {");
                             sb.AppendLine(esIndex.CharFilters);
-                            sb.AppendLine("]");
+                            sb.AppendLine("}");
                         }
                         if (!string.IsNullOrWhiteSpace(esIndex.TokenFilters))
                         {
                             sb.AppendLine(",");
-                            sb.AppendLine("\"filter\": [");
+                            sb.AppendLine("\"filter\": {");
                             sb.AppendLine(esIndex.TokenFilters);
-                            sb.AppendLine("]");
+                            sb.AppendLine("}");
                         }
                     }
                     sb.AppendLine("}");
