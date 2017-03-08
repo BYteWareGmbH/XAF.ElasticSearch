@@ -400,33 +400,30 @@
         /// <returns>Enumeration of all ElasticSearch Field Names</returns>
         public IEnumerable<string> ESFields(bool wildcards)
         {
-            if (IsESIndexed)
+            foreach (var p in GetTopPropertyInfos)
             {
-                foreach (var p in GetTopPropertyInfos)
+                var props = ESProperties(p.Name);
+                var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? p.Name : props.FieldName);
+                if (props != null && !props.OptOut)
                 {
-                    var props = ESProperties(p.Name);
-                    var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? p.Name : props.FieldName);
-                    if (props != null && !props.OptOut)
+                    var etype = props.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType);
+                    foreach (var item in ElasticSearchFieldsInternal(p, propertyName, etype, wildcards))
                     {
-                        var etype = props.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType);
-                        foreach (var item in ElasticSearchFieldsInternal(p, propertyName, etype, wildcards))
+                        yield return item;
+                    }
+                    var modelESField = props as IModelMemberElasticSearchField;
+                    var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                    foreach (var ga in multiFields.GroupBy(t => t.FieldName))
+                    {
+                        var a = ga.First();
+                        foreach (var item in ElasticSearchFieldsInternal(p, a.FieldName.ToLowerInvariant(), a.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType), wildcards))
                         {
-                            yield return item;
-                        }
-                        var modelESField = props as IModelMemberElasticSearchField;
-                        var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
-                        foreach (var ga in multiFields.GroupBy(t => t.FieldName))
-                        {
-                            var a = ga.First();
-                            foreach (var item in ElasticSearchFieldsInternal(p, a.FieldName.ToLowerInvariant(), a.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType), wildcards))
-                            {
-                                yield return string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, item);
-                            }
+                            yield return string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, item);
                         }
                     }
                 }
-                yield return "_all";
             }
+            yield return "_all";
         }
 
         /// <summary>
