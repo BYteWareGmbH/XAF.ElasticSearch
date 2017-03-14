@@ -276,6 +276,10 @@
                         var searchText = args.ParameterCurrentValue == null ? string.Empty : args.ParameterCurrentValue.ToString();
                         bool fuzzy;
                         bool wildcard;
+                        if (!string.IsNullOrEmpty(searchText))
+                        {
+                            searchText = "*";
+                        }
                         searchText = ElasticSearchClient.PrepareSearchText(searchText, out fuzzy, out wildcard);
                         var filter = string.Empty;
                         if (SetFilterAction.Active && SetFilterAction.SelectedItem != null && SetFilterAction.SelectedItem.Model != null)
