@@ -84,6 +84,7 @@
                 tempControl.ButtonClick += ControlButtonClick;
 
                 tempControl.KeyDown += ControlKeyDown;
+                tempControl.Leave += ControlKeyLeave;
 
                 tempControl.Tag = EasyTestTagHelper.FormatTestAction(Action.Caption);
                 tempControl.Name = "Control_" + Guid.NewGuid();
@@ -101,6 +102,12 @@
                 }
             }
             return control;
+        }
+
+        private void ControlKeyLeave(object sender, EventArgs e)
+        {
+            Action.Value = ((ButtonEdit)sender).Text;
+            Control.Text = ((ButtonEdit)sender).Text;
         }
 
         private void ControlKeyDown(object sender, KeyEventArgs e)
