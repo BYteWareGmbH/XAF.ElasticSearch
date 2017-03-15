@@ -35,11 +35,14 @@
       <NugetProjectFiles Include="@(NuspecFiles->'%(RelativeDir)%(filename).csproj')" />
     </ItemGroup>
     <Delete Files="$(NupkgFile)" />
-    <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
+    <Exec Command="$(NugetExePath) pack %(NugetProjectFiles.Identity) -Symbols -Build %(NugetProjectFiles.IncludeReferencedProjects) -NonInteractive -Prop Configuration=Release" />
     <ItemGroup>
-      <NewNuGetPackages Include="$([System.IO.Path]::GetFileNameWithoutExtension( $(NupkgFile))).??.*.nupkg" />
+      <NewNuGetPackages Include="$([System.IO.Path]::GetFileNameWithoutExtension( $(NupkgFile))).??.*.nupkg" Exclude="**\*.symbols.nupkg" />
+      <NewNuGetSymbolPackages Include="$([System.IO.Path]::GetFileNameWithoutExtension( $(NupkgFile))).??.*.symbols.nupkg" />
     </ItemGroup>
     <Exec Command="$(NugetExePath) push %(NewNuGetPackages.Identity) -NonInteractive -Source https://www.nuget.org/api/v2/package" />
+    <Exec Command="$(NugetExePath) push %(NewNuGetSymbolPackages.Identity) -NonInteractive -Source https://nuget.bytewa.re/nuget/BYteWare" />
     <Move SourceFiles="%(NewNuGetPackages.Identity)" DestinationFiles="$(NupkgFile)" />
+    <Delete Files="@(NewNuGetSymbolPackages)" />
   </Target>
 </Project>  
