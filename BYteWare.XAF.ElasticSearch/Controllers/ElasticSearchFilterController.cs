@@ -276,7 +276,7 @@
                         var searchText = args.ParameterCurrentValue == null ? string.Empty : args.ParameterCurrentValue.ToString();
                         bool fuzzy;
                         bool wildcard;
-                        if (!string.IsNullOrEmpty(searchText))
+                        if (string.IsNullOrEmpty(searchText))
                         {
                             searchText = "*";
                         }
