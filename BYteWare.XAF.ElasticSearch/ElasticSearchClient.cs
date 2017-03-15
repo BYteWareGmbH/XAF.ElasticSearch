@@ -1681,6 +1681,7 @@
                     {
                         var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(ti.Type);
                         ci.IsESMapped = false;
+                        ci.ElasticIndexError = false;
                         try
                         {
                             if (!DoMapping(ci, index.Session))

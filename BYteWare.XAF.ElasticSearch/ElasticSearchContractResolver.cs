@@ -5,6 +5,7 @@
     using Newtonsoft.Json;
     using Newtonsoft.Json.Serialization;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
@@ -78,7 +79,14 @@
             var defType = ElasticSearchClient.GetFieldTypeFromType(member.Type());
             if (defType == FieldType.text || defType == FieldType.keyword)
             {
-                jp.ShouldSerialize = t => !string.IsNullOrEmpty(member.Get(t)?.ToString());
+                if (typeof(IEnumerable).IsAssignableFrom(member.Type()))
+                {
+                    jp.ShouldSerialize = t => (member.Get(t) as IEnumerable)?.Cast<object>().Any() ?? false;
+                }
+                else
+                {
+                    jp.ShouldSerialize = t => !string.IsNullOrEmpty(member.Get(t)?.ToString());
+                }
             }
             if (!string.IsNullOrEmpty(props.WeightField))
             {
