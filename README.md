@@ -4,4 +4,4 @@ Just add the module, create classes that implement the IElasticSearchIndex and I
 
 For further help just take a look at the included MainDemo under the Test folder (copied from the DevExpress MainDemo example).
 
-You need a DevExpress Universal license and version 16.2.3 of it installed. A demo version can be downloaded from the DevExpress website.
+You need a DevExpress Universal license and version 16.2.4 of it installed. A demo version can be downloaded from the DevExpress website.
