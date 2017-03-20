@@ -1039,11 +1039,6 @@
         /// <param name="progress">Progress Callback</param>
         public void IndexList(Session session, XPClassInfo xci, IReadOnlyCollection<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, Action<IWorkerProgress> progress)
         {
-            if (indexed == null)
-            {
-                indexed = new Dictionary<XPClassInfo, HashSet<object>>();
-                indexed.Add(xci, new HashSet<object>());
-            }
             IndexList(session, xci, keyList, indexed, null, progress);
         }
 
@@ -1071,6 +1066,9 @@
             if (indexed == null)
             {
                 indexed = new Dictionary<XPClassInfo, HashSet<object>>();
+            }
+            if (!indexed.ContainsKey(xci))
+            {
                 indexed.Add(xci, new HashSet<object>());
             }
             var bulk = new StringBuilder();
@@ -1128,12 +1126,7 @@
             }
             foreach (var tl in typeLists.Where(t => t.Value.Any()))
             {
-                var xpci = session.GetClassInfo(tl.Key.BYteWareType.Type);
-                if (!indexed.ContainsKey(xpci))
-                {
-                    indexed.Add(xpci, new HashSet<object>());
-                }
-                IndexList(session, xpci, tl.Value.AsReadOnly(), indexed, tl.Key.MemberInfo, progress);
+                IndexList(session, tl.Key.BYteWareType.ClassInfo, tl.Value.AsReadOnly(), indexed, tl.Key.MemberInfo, progress);
             }
         }
 
@@ -2298,12 +2291,7 @@
                 BulkIndex(bulk, session, typeInfos);
                 foreach (var tl in typeLists.Where(t => t.Value.Any()))
                 {
-                    var xpci = session.GetClassInfo(tl.Key.BYteWareType.Type);
-                    if (!indexed.ContainsKey(xpci))
-                    {
-                        indexed.Add(xpci, new HashSet<object>());
-                    }
-                    IndexList(session, xpci, tl.Value.AsReadOnly(), indexed, tl.Key.MemberInfo, null);
+                    IndexList(session, tl.Key.BYteWareType.ClassInfo, tl.Value.AsReadOnly(), indexed, tl.Key.MemberInfo, null);
                 }
             }
         }
