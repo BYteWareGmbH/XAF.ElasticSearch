@@ -1,5 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
+  <ActionDesign>
+    <ActionToContainerMapping>
+      <ActionContainer Id="FullTextSearch">
+        <ActionLink ActionId="FullTextSearch" Index="0" />
+        <ActionLink ActionId="FilterFields" Index="1" />
+      </ActionContainer>
+    </ActionToContainerMapping>
+  </ActionDesign>
   <Localization>
     <LocalizationGroup Name="Exceptions">
       <LocalizationGroup Name="ElasticIndexException" IsNewNode="True">
@@ -31,6 +39,6 @@
     </LocalizationGroup>
   </Localization>
   <SchemaModules>
-    <SchemaModule Name="SystemModule" Version="16.2.3.0" IsNewNode="True" />
+    <SchemaModule Name="SystemModule" Version="16.2.4.0" IsNewNode="True" />
   </SchemaModules>
 </Application>

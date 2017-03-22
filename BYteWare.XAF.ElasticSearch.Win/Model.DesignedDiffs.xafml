@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Application>
+  <ActionDesign>
+    <ActionToContainerMapping>
+      <ActionContainer Id="FilterPanel">
+        <ActionLink ActionId="FilterPanelSearchEdit" Index="0" />
+        <ActionLink ActionId="FilterPanelFuzzySearch" Index="1" />
+        <ActionLink ActionId="FilterPanelFilterFields" Index="2" />
+      </ActionContainer>
+    </ActionToContainerMapping>
+  </ActionDesign>
   <BOModel>
     <Class Name="DevExpress.ExpressApp.SystemModule.AboutInfo">
       <OwnMembers>
@@ -10,6 +19,6 @@
     </Class>
   </BOModel>
   <SchemaModules>
-    <SchemaModule Name="SystemModule" Version="16.2.3.0" IsNewNode="True" />
+    <SchemaModule Name="SystemModule" Version="16.2.4.0" IsNewNode="True" />
   </SchemaModules>
 </Application>
