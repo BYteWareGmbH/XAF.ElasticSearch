@@ -918,12 +918,12 @@
                         writer.WriteEnd();
 
                         writer.WriteEndObject();
+                        writer.Flush();
                         strw.WriteLine();
                         if (!bo.IsDeleted)
                         {
                             strw.WriteLine(SerializeObject(bo));
                         }
-                        writer.Flush();
                         return strw.ToString();
                     }
                 }
@@ -1535,9 +1535,9 @@
                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(typeInfo.Type);
                 if (!ci.ElasticIndexError)
                 {
-                    var suggesters = new List<Suggester>();
                     if (ci.ESSuggestFields != null)
                     {
+                        var suggesters = new List<Suggester>();
                         if (modelItem == null)
                         {
                             foreach (var field in ci.ESSuggestFields.Where(t => t.Default))
