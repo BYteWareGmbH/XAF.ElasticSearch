@@ -652,8 +652,9 @@
                     {
                         elasticClient = new ElasticLowLevelClient(new ConnectionConfiguration(new SniffingConnectionPool(ElasticSearchNodes)));
                     }
-                    catch (ElasticsearchClientException)
+                    catch (ElasticsearchClientException e)
                     {
+                        Tracing.Tracer.LogError(e);
                         elasticClient = null;
                     }
                 }
@@ -1306,7 +1307,7 @@
                     }
                     else
                     {
-                        res.Add(explanations.ServerError.ToString());
+                        res.Add(explanations.ServerError?.ToString());
                     }
                 }
                 catch (JsonReaderException e)
@@ -1593,6 +1594,7 @@
                                 writer.WriteRawValue(SuggestCompletion(text, suggester.Field, suggester.Results, suggester.Fuzzy, suggester.Contexts));
                             }
                             writer.WriteEndObject();
+                            writer.Flush();
                             ElasticsearchResponse<SuggestResponse> response;
                             if (UseAsync)
                             {
@@ -1602,17 +1604,42 @@
                             {
                                 response = DoSuggestSync(ci, sw.ToString());
                             }
-                            if (response != null && response.Success && response.Body != null)
+                            if (response != null)
                             {
-                                var suggestions = new HashSet<string>();
-                                foreach (var suggestion in response.Body.Suggestions)
+                                if (response.Success && response.Body != null)
                                 {
-                                    foreach (var suggest in suggestion.Value)
+                                    var suggestions = new HashSet<string>();
+                                    foreach (var suggestion in response.Body.Suggestions)
                                     {
-                                        suggestions.UnionWith(suggest.Options.Select(t => t.Text));
+                                        foreach (var suggest in suggestion.Value)
+                                        {
+                                            suggestions.UnionWith(suggest.Options.Select(t => t.Text));
+                                        }
+                                    }
+                                    return suggestions;
+                                }
+                                else
+                                {
+                                    Tracing.Tracer.LogError("Suggest Error StatusCode: {0}", response.HttpStatusCode);
+                                    if (response.ServerError != null)
+                                    {
+                                        Tracing.Tracer.LogValue(nameof(response.ServerError), response.ServerError);
+                                        Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
+                                    }
+                                    else if (!string.IsNullOrWhiteSpace(response.DebugInformation))
+                                    {
+                                        Tracing.Tracer.LogValue(nameof(response.DebugInformation), response.DebugInformation);
+                                    }
+                                    else
+                                    {
+                                        Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
                                     }
                                 }
-                                return suggestions;
+                            }
+                            else
+                            {
+                                Tracing.Tracer.LogError("Suggest Response is null");
+                                Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
                             }
                         }
                     }
@@ -2395,16 +2422,31 @@
                 {
                     var res = await ElasticLowLevelClient.BulkAsync<DynamicResponse>(json).ConfigureAwait(false);
                     success = res.Success && !res.Body["errors"];
+                    if (!res.Success)
+                    {
+                        Tracing.Tracer.LogError("Bulk Async Error StatusCode: {0}", res.HttpStatusCode);
+                        if (res.ServerError != null)
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.ServerError), res.ServerError);
+                        }
+                        else
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.DebugInformation), res.DebugInformation);
+                        }
+                    }
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             if (!success)
             {
@@ -2424,16 +2466,31 @@
                 {
                     var res = ElasticLowLevelClient.Bulk<DynamicResponse>(json);
                     success = res.Success && !res.Body["errors"];
+                    if (!res.Success)
+                    {
+                        Tracing.Tracer.LogError("Bulk Error StatusCode: {0}", res.HttpStatusCode);
+                        if (res.ServerError != null)
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.ServerError), res.ServerError);
+                        }
+                        else
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.DebugInformation), res.DebugInformation);
+                        }
+                    }
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             if (!success)
             {
@@ -2459,16 +2516,32 @@
                 {
                     var res = await ElasticLowLevelClient.IndexAsync<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), json, i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
                     success = res.Success;
+                    if (!res.Success)
+                    {
+                        Tracing.Tracer.LogError("Index Async Error StatusCode: {0}", res.HttpStatusCode);
+                        if (res.ServerError != null)
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.ServerError), res.ServerError);
+                            Tracing.Tracer.LogValue("Json", json);
+                        }
+                        else
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.DebugInformation), res.DebugInformation);
+                        }
+                    }
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             if (!success && !ci.ElasticIndexError)
             {
@@ -2489,16 +2562,32 @@
                 {
                     var res = ElasticLowLevelClient.Index<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), json, i => i.VersionType(VersionType.ExternalGte).Version(version));
                     success = res.Success;
+                    if (!res.Success)
+                    {
+                        Tracing.Tracer.LogError("Index Error StatusCode: {0}", res.HttpStatusCode);
+                        if (res.ServerError != null)
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.ServerError), res.ServerError);
+                            Tracing.Tracer.LogValue("Json", json);
+                        }
+                        else
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.DebugInformation), res.DebugInformation);
+                        }
+                    }
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             if (!success && !ci.ElasticIndexError)
             {
@@ -2516,16 +2605,31 @@
                 {
                     var res = await ElasticLowLevelClient.DeleteAsync<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), i => i.VersionType(VersionType.ExternalGte).Version(version)).ConfigureAwait(false);
                     success = res.Success;
+                    if (!res.Success)
+                    {
+                        Tracing.Tracer.LogError("Index Delete Async Error StatusCode: {0}", res.HttpStatusCode);
+                        if (res.ServerError != null)
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.ServerError), res.ServerError);
+                        }
+                        else
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.DebugInformation), res.DebugInformation);
+                        }
+                    }
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             if (!success && !ci.ElasticIndexError)
             {
@@ -2546,16 +2650,31 @@
                 {
                     var res = ElasticLowLevelClient.Delete<VoidResponse>(IndexName(ci.ESIndexName), TypeName(ci.ESTypeName), bo.Session.GetKeyValue(bo).ToString(), i => i.VersionType(VersionType.ExternalGte).Version(version));
                     success = res.Success;
+                    if (!res.Success)
+                    {
+                        Tracing.Tracer.LogError("Index Delete Error StatusCode: {0}", res.HttpStatusCode);
+                        if (res.ServerError != null)
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.ServerError), res.ServerError);
+                        }
+                        else
+                        {
+                            Tracing.Tracer.LogValue(nameof(res.DebugInformation), res.DebugInformation);
+                        }
+                    }
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             if (!success && !ci.ElasticIndexError)
             {
@@ -2574,17 +2693,21 @@
                     response = ElasticLowLevelClient.Suggest<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse));
                 }
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             return response;
         }
@@ -2598,17 +2721,21 @@
                     return await ElasticLowLevelClient.SuggestAsync<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse)).ConfigureAwait(false);
                 }
             }
-            catch (JsonReaderException)
+            catch (JsonReaderException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (WebException)
+            catch (WebException e)
             {
+                Tracing.Tracer.LogError(e);
             }
-            catch (ElasticsearchClientException)
+            catch (ElasticsearchClientException e)
             {
+                Tracing.Tracer.LogError(e);
             }
             return null;
         }
