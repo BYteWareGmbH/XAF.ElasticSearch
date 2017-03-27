@@ -480,14 +480,14 @@
                                 {
                                     sf.WeightField = TypeInfo.FindMember(props.WeightField);
                                 }
-                                var modelMultiField = props as IModelElasticSearchFieldProperties;
+                                var modelMultiField = multiField as IModelElasticSearchFieldProperties;
                                 if (modelMultiField != null)
                                 {
                                     sf.ContextSettings = new List<IElasticSearchSuggestContext>(modelMultiField.SuggestContexts).AsReadOnly();
                                 }
                                 else
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => t.FieldName == multiField.FieldName)).AsReadOnly();
+                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase))).AsReadOnly();
                                 }
                             }
                             if (fieldType == FieldType.object_type || fieldType == FieldType.nested)
