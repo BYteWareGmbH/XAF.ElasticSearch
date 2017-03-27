@@ -185,7 +185,7 @@ namespace MainDemo.Module.BusinessObjects
         }
 
         [VisibleInListView(false), VisibleInDetailView(false)]
-        [ElasticProperty(Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContext("suggestcontext", nameof(ContactContextList), "ContactContext")]
+        [ElasticProperty(Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContext("suggest", nameof(ContactContextList), "ContactContext")]
         public IEnumerable<string> NickNameSuggest
         {
             get
