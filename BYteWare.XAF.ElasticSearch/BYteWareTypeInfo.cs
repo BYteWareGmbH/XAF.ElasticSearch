@@ -43,6 +43,7 @@
         private bool _IsSecurityFilterChecked;
         private string _ESSecurityFilter;
         private IModelClass _ModelClass;
+        private List<SuggestContextPathFieldInfo> _ContextPathInfos;
 
         /// <summary>
         /// Application model settings
@@ -429,6 +430,7 @@
         /// <summary>
         /// List of ElasticSearch suggest field informations
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Suggestions are complicated")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(XAF))]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         public ReadOnlyCollection<SuggestField> ESSuggestFields
@@ -438,6 +440,7 @@
                 if (_SuggestFields == null)
                 {
                     _SuggestFields = new List<SuggestField>();
+                    _ContextPathInfos = new List<SuggestContextPathFieldInfo>();
                     foreach (var pi in GetTopPropertyInfos)
                     {
                         var props = ESProperties(pi.Name);
@@ -460,12 +463,13 @@
                                 }
                                 if (modelESField != null)
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(modelESField.SuggestContexts).AsReadOnly();
+                                    sf.ContextSettings = new List<SuggestContextInfo>(modelESField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
                                 }
                                 else
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>()).AsReadOnly();
+                                    sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>().Select(CreateContextInfo)).AsReadOnly();
                                 }
+                                AddSuggestContextPathFieldInfo(sf, this, string.Empty);
                             }
                             var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(pi, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                             foreach (var multiField in multiFields.Where(t => t.FieldType == FieldType.completion))
@@ -483,12 +487,13 @@
                                 var modelMultiField = multiField as IModelElasticSearchFieldProperties;
                                 if (modelMultiField != null)
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(modelMultiField.SuggestContexts).AsReadOnly();
+                                    sf.ContextSettings = new List<SuggestContextInfo>(modelMultiField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
                                 }
                                 else
                                 {
-                                    sf.ContextSettings = new List<IElasticSearchSuggestContext>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase))).AsReadOnly();
+                                    sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase)).Select(CreateContextInfo)).AsReadOnly();
                                 }
+                                AddSuggestContextPathFieldInfo(sf, this, string.Empty);
                             }
                             if (fieldType == FieldType.object_type || fieldType == FieldType.nested)
                             {
@@ -502,6 +507,20 @@
                                         nci.ESSuggestFields[i].MapProperties(sf);
                                         sf.FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, nci.ESSuggestFields[i].FieldName);
                                         _SuggestFields.Add(sf);
+                                        foreach (var cpi in nci.ESSuggestContextPathFields)
+                                        {
+                                            AddSuggestContextPathFieldInfo(sf, nci, nci.ESTypeName + ".");
+                                            if (cpi.MemberInfo == null && !string.IsNullOrEmpty(cpi.PathMemberName))
+                                            {
+                                                var mi = ClassInfo.FindMember(cpi.PathMemberName);
+                                                if (mi != null)
+                                                {
+                                                    cpi.ESFieldName = ElasticSearchClient.FieldName(cpi.PathMemberName);
+                                                    cpi.MemberInfo = mi;
+                                                    cpi.IsIndexed = IsMemberESIndexed(cpi.PathMemberName);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -509,6 +528,21 @@
                     }
                 }
                 return _SuggestFields.AsReadOnly();
+            }
+        }
+
+        /// <summary>
+        /// Returns an enumeration of all distinct suggest context path field names
+        /// </summary>
+        public IEnumerable<SuggestContextPathFieldInfo> ESSuggestContextPathFields
+        {
+            get
+            {
+                if (ESSuggestFields != null)
+                {
+                    return _ContextPathInfos;
+                }
+                return null;
             }
         }
 
@@ -773,6 +807,34 @@
                 {
                     yield return propertyName;
                 }
+            }
+        }
+
+        private static SuggestContextInfo CreateContextInfo(IElasticSearchSuggestContext source)
+        {
+            var sci = new SuggestContextInfo();
+            source.MapProperties(sci);
+            return sci;
+        }
+
+        private void AddSuggestContextPathFieldInfo(SuggestField sf, BYteWareTypeInfo typeInfo, string typeName)
+        {
+            foreach (var context in sf.ContextSettings)
+            {
+                var mi = typeInfo.ClassInfo.FindMember(context.PathField);
+                var cpi = _ContextPathInfos.FirstOrDefault(i => i.PathMemberName.Equals(context.PathField) && i.MemberInfo == mi);
+                if (cpi == null)
+                {
+                    cpi = new SuggestContextPathFieldInfo
+                    {
+                        PathMemberName = context.PathField,
+                        ESFieldName = ElasticSearchClient.FieldName(string.Format(CultureInfo.InvariantCulture, "{0}{1}", typeName, context.PathField)),
+                        MemberInfo = mi,
+                        IsIndexed = typeInfo.IsMemberESIndexed(context.PathField),
+                    };
+                    _ContextPathInfos.Add(cpi);
+                }
+                context.ContextPathFieldInfo = cpi;
             }
         }
     }

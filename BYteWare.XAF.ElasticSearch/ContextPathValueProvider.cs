@@ -1,24 +1,28 @@
 ﻿namespace BYteWare.XAF.ElasticSearch
 {
     using BYteWare.Utils.Extension;
+    using DevExpress.Xpo.Metadata;
     using Newtonsoft.Json.Serialization;
     using System;
+    using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
 
     /// <summary>
     /// Json.Net Value Provider to supply the type name for the Suggest Type context
     /// </summary>
-    internal class TypeNameValueProvider : IValueProvider
+    internal class ContextPathValueProvider : IValueProvider
     {
-        private readonly string[] _Types;
+        private readonly XPMemberInfo _Member;
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="TypeNameValueProvider"/> class.
+        /// Initalizes a new instance of the <see cref="ContextPathValueProvider"/> class.
         /// </summary>
-        /// <param name="typeName">Type Name to return</param>
-        public TypeNameValueProvider(string typeName)
+        /// <param name="pathFieldInfo">Path Field Informations</param>
+        public ContextPathValueProvider(SuggestContextPathFieldInfo pathFieldInfo)
         {
-            _Types = new string[] { typeName };
+            _Member = pathFieldInfo.MemberInfo;
         }
 
         /// <summary>
@@ -28,7 +32,17 @@
         /// <returns>The value.</returns>
         public object GetValue(object target)
         {
-            return _Types;
+            if (_Member != null)
+            {
+                var v = _Member.GetValue(target);
+                var e = v as IEnumerable;
+                if (e != null)
+                {
+                    return e.Cast<object>().Select(o => o?.ToString()).Where(s => !string.IsNullOrEmpty(s));
+                }
+                return new string[] { v.ToString() };
+            }
+            return null;
         }
 
         /// <summary>

@@ -7,6 +7,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Reflection;
 
@@ -15,15 +16,11 @@
     /// </summary>
     public class ElasticSearchContractResolver : DefaultContractResolver
     {
-        private readonly ElasticSearchClient elasticSearchClient;
-
         /// <summary>
         /// Initalizes a new instance of the <see cref="ElasticSearchContractResolver"/> class.
         /// </summary>
-        /// <param name="ec">ElasticSearchClient instance</param>
-        public ElasticSearchContractResolver(ElasticSearchClient ec) : base()
+        public ElasticSearchContractResolver() : base()
         {
-            elasticSearchClient = ec;
         }
 
         /// <inheritdoc/>
@@ -31,18 +28,30 @@
         {
             var props = base.CreateProperties(type, memberSerialization);
             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(type);
-            if (ci.ESSuggestFields.Any())
+            foreach (var pathField in ci.ESSuggestContextPathFields.Where(cpi => ci.ClassInfo.Members.Contains(cpi.MemberInfo) && !cpi.IsIndexed))
             {
-                props.Add(new JsonProperty
+                var jp = new JsonProperty
                 {
-                    PropertyName = ElasticSearchClient.TypeContext,
-                    PropertyType = typeof(string[]),
+                    PropertyName = pathField.ESFieldName,
+                    PropertyType = typeof(IEnumerable<string>),
                     DeclaringType = type,
-                    ValueProvider = new TypeNameValueProvider(elasticSearchClient.TypeName(ci.ESTypeName)),
+                    ValueProvider = new ContextPathValueProvider(pathField),
                     AttributeProvider = new EmptyAttributeProvider(),
                     Readable = true,
-                    Writable = false
-                });
+                    Writable = false,
+                };
+                if (pathField.MemberInfo != null)
+                {
+                    if (typeof(IEnumerable).IsAssignableFrom(pathField.MemberInfo.MemberType))
+                    {
+                        jp.ShouldSerialize = t => (pathField.MemberInfo.GetValue(t) as IEnumerable)?.Cast<object>().Select(o => o?.ToString()).Any(s => !string.IsNullOrEmpty(s)) ?? false;
+                    }
+                    else
+                    {
+                        jp.ShouldSerialize = t => !string.IsNullOrEmpty(pathField.MemberInfo.GetValue(t)?.ToString());
+                    }
+                }
+                props.Add(jp);
             }
             return props;
         }
@@ -77,6 +86,8 @@
             var props = bti.ESProperties(member.Name);
             jp.PropertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? member.Name : props.FieldName);
             var defType = ElasticSearchClient.GetFieldTypeFromType(member.Type());
+
+            // Omit empty values, because Suggest Fields will raise errors otherwise
             if (defType == FieldType.text || defType == FieldType.keyword)
             {
                 if (typeof(IEnumerable).IsAssignableFrom(member.Type()))

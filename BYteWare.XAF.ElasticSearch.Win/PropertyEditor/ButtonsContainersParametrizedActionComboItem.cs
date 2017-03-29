@@ -106,8 +106,9 @@
 
         private void ControlKeyLeave(object sender, EventArgs e)
         {
-            Action.Value = ((ButtonEdit)sender).Text;
-            Control.Text = ((ButtonEdit)sender).Text;
+            var be = (ButtonEdit)sender;
+            Action.Value = be.Text;
+            Control.Text = be.Text;
         }
 
         private void ControlKeyDown(object sender, KeyEventArgs e)

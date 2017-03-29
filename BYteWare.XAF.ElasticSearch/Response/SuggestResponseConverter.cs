@@ -20,13 +20,11 @@
         {
             var response = new SuggestResponse();
             var jsonObject = JObject.Load(reader);
-            foreach (var prop in jsonObject.Properties())
+            response.Shards = jsonObject.Property("_shards")?.Value.ToObject<ShardsMetaData>();
+            var suggest = jsonObject.Property("suggest")?.Value as JObject;
+            if (suggest != null)
             {
-                if (prop.Name == "_shards")
-                {
-                    response.Shards = prop.Value.ToObject<ShardsMetaData>();
-                }
-                else
+                foreach (var prop in suggest.Properties())
                 {
                     response.Suggestions.Add(prop.Name, prop.Value.ToObject<Suggest[]>());
                 }

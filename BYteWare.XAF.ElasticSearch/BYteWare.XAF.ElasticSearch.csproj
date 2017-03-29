@@ -186,11 +186,13 @@
     <Compile Include="Response\SuggestOption.cs" />
     <Compile Include="Response\SuggestResponse.cs" />
     <Compile Include="Response\SuggestResponseConverter.cs" />
+    <Compile Include="SuggestContextInfo.cs" />
+    <Compile Include="SuggestContextPathFieldInfo.cs" />
     <Compile Include="SuggestField.cs" />
     <Compile Include="SuggestWeightFieldValueProvider.cs" />
     <Compile Include="TaskExtensions.cs" />
     <Compile Include="TypeMappingWriter.cs" />
-    <Compile Include="TypeNamesValueProvider.cs" />
+    <Compile Include="ContextPathValueProvider.cs" />
     <Compile Include="WaitScreen.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -219,8 +221,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\packages\codecracker.CSharp.1.0.1\analyzers\dotnet\cs\CodeCracker.Common.dll" />
-    <Analyzer Include="..\packages\codecracker.CSharp.1.0.1\analyzers\dotnet\cs\CodeCracker.CSharp.dll" />
+    <Analyzer Include="..\packages\codecracker.CSharp.1.0.3\analyzers\dotnet\cs\CodeCracker.Common.dll" />
+    <Analyzer Include="..\packages\codecracker.CSharp.1.0.3\analyzers\dotnet\cs\CodeCracker.CSharp.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\Newtonsoft.Json.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\packages\StyleCop.Analyzers.1.0.0\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />

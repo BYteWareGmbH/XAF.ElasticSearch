@@ -56,7 +56,7 @@ namespace MainDemo.Module.BusinessObjects
         }
         [ElasticProperty]
         [RuleRequiredField]
-        //[ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContext("suggestcontext", nameof(ContactContextList), "ContactContext")]
+        [ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
         public string NickName
         {
             get
@@ -71,7 +71,7 @@ namespace MainDemo.Module.BusinessObjects
 
         [ElasticProperty]
         [RuleRequiredField]
-        //[ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
+        [ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
         public string SpouseName
         {
             get
@@ -184,77 +184,16 @@ namespace MainDemo.Module.BusinessObjects
             }
         }
 
-        [VisibleInListView(false), VisibleInDetailView(false)]
-        [ElasticProperty]
-        [ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
-        public IEnumerable<string> NickNameSuggest
-        {
-            get
-            {
-                if (ContactSuggest == null)
-                    return null;
-                return ContactSuggest.Where(x => x.NickName == NickName).Select(t => t.NickName);
-            }
-        }
-
-        [VisibleInListView(false), VisibleInDetailView(false)]
-        [ElasticProperty]
-        [ElasticMultiField("suggest", Type = FieldType.completion, DefaultSuggestField = true), ElasticSuggestContextMultiField("suggest", "suggestcontext", nameof(ContactContextList), "ContactContext")]
-        public IEnumerable<string> SpouseNameSuggest
-        {
-            get
-            {
-                if (ContactSuggest == null)
-                    return null;
-                return ContactSuggest.Where(x => x.SpouseName == SpouseName).Select(t => t.SpouseName);
-            }
-        }
-        
-        /// <summary>
-        /// Suggest Contact
-        /// </summary>
-        [Browsable(false)]
-        public virtual IEnumerable<Contact> ContactSuggest
-        {
-            get
-            {
-                List<Contact> c = new List<Contact>();
-                var currentUser = SecuritySystem.CurrentUser as PermissionPolicyUser;
-
-                if (currentUser.Roles.Any(x=>x.IsAdministrative))
-                {
-                    foreach (var item in UserRoles.Select(contact => contact.Contacts))
-                    {
-                        c.AddRange(item);
-                    }
-                    return c;
-                }
-                else
-                {
-                    foreach (var item in currentUser.Roles)
-                    {
-                        var rList = UserRoles.Where(r => r.Name == item.Name);
-                        foreach (var r in rList)
-                        {
-                            c.AddRange(r.Contacts);
-                        }
-                    }
-                    return c;
-                }
-            }
-        }
-
-        [ElasticProperty(IncludeInAll = false)]
         [Browsable(false)]
         public IEnumerable<string> ContactContextList
         {
             get
             {
-                var currentUser = SecuritySystem.CurrentUser as PermissionPolicyUser;
                 return UserRoles.Select(u => u.Oid.ToString("N"));
             }
         }
     }
+
     public enum TitleOfCourtesy
     {
         Dr,

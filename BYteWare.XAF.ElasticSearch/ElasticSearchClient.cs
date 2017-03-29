@@ -35,6 +35,7 @@
     using System.Net.Sockets;
     using System.Reflection;
     using System.Text;
+    using System.Text.RegularExpressions;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -47,11 +48,6 @@
         /// Default Value for MinimumShouldMatch
         /// </summary>
         public const string DefaultMinimumShouldMatch = "3<66%";
-
-        /// <summary>
-        /// Name for the Suggester Context for Types
-        /// </summary>
-        public const string TypeContext = "type_context";
 
         /// <summary>
         /// Name of the Localization Group in the Model for Messages
@@ -717,7 +713,7 @@
                     jsonSerializerSettings = new JsonSerializerSettings
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        ContractResolver = new ElasticSearchContractResolver(this),
+                        ContractResolver = new ElasticSearchContractResolver(),
                         NullValueHandling = NullValueHandling.Ignore
                     };
                     jsonSerializerSettings.Converters.Add(new StringEnumConverter());
@@ -1533,114 +1529,113 @@
             if (!string.IsNullOrEmpty(text) && typeInfo != null)
             {
                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(typeInfo.Type);
-                if (!ci.ElasticIndexError)
+                if (!ci.ElasticIndexError && ci.ESSuggestFields != null)
                 {
-                    if (ci.ESSuggestFields != null)
+                    var suggesters = new List<Suggester>();
+                    if (modelItem == null)
                     {
-                        var suggesters = new List<Suggester>();
-                        if (modelItem == null)
+                        foreach (var field in ci.ESSuggestFields.Where(t => t.Default))
                         {
-                            foreach (var field in ci.ESSuggestFields.Where(t => t.Default))
+                            var suggester = new Suggester
+                            {
+                                Field = field.FieldName,
+                                Results = 7,
+                                Fuzzy = true,
+                                Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => SuggestContextValue(GetParameterValue(t.QueryParameter))),
+                            };
+                            suggesters.Add(suggester);
+                        }
+                    }
+                    else
+                    {
+                        foreach (var modelSuggestField in modelItem.SuggestFields)
+                        {
+                            var field = ci.ESSuggestFields.FirstOrDefault(t => t.FieldName == modelSuggestField.ElasticSearchSuggestField);
+                            if (field != null)
                             {
                                 var suggester = new Suggester
                                 {
                                     Field = field.FieldName,
-                                    Results = 7,
-                                    Fuzzy = true,
-                                    Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => GetParameterValue(t.QueryParameter))
+                                    Results = modelSuggestField.Results,
+                                    Fuzzy = modelSuggestField.Fuzzy,
+                                    Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => SuggestContextValue(GetParameterValue(t.QueryParameter))),
                                 };
-                                suggester.Contexts[TypeContext] = "[\"" + string.Join("\",\"", ci.ESTypes.Select(TypeName)) + "\"]";
+                                foreach (var modelContext in modelSuggestField.Contexts)
+                                {
+                                    var sci = field.ContextSettings.First(cs => cs.ContextName == modelContext.Name);
+                                    if (!string.IsNullOrEmpty(modelContext.Value))
+                                    {
+                                        suggester.Contexts[modelContext.Name] = SuggestContextValue(modelContext.Value);
+                                    }
+                                    if (!string.IsNullOrEmpty(modelContext.Parameter))
+                                    {
+                                        suggester.Contexts[modelContext.Name] = SuggestContextValue(GetParameterValue(modelContext.Parameter));
+                                    }
+                                }
                                 suggesters.Add(suggester);
+                            }
+                        }
+                    }
+                    if (suggesters.Any())
+                    {
+                        var sw = new StringWriter();
+                        var writer = new JsonTextWriter(sw);
+                        writer.WriteStartObject();
+                        writer.WritePropertyName("suggest");
+                        writer.WriteStartObject();
+                        foreach (var suggester in suggesters)
+                        {
+                            writer.WritePropertyName(suggester.Field);
+                            writer.WriteRawValue(SuggestCompletion(text, suggester.Field, suggester.Results, suggester.Fuzzy, suggester.Contexts));
+                        }
+                        writer.WriteEndObject();
+                        writer.WriteEndObject();
+                        writer.Flush();
+                        ElasticsearchResponse<SuggestResponse> response;
+                        if (UseAsync)
+                        {
+                            response = await DoSuggestAsync(ci, sw.ToString()).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            response = DoSuggestSync(ci, sw.ToString());
+                        }
+                        if (response != null)
+                        {
+                            if (response.Success && response.Body != null)
+                            {
+                                var suggestions = new HashSet<string>();
+                                foreach (var suggestion in response.Body.Suggestions)
+                                {
+                                    foreach (var suggest in suggestion.Value)
+                                    {
+                                        suggestions.UnionWith(suggest.Options.Select(t => t.Text));
+                                    }
+                                }
+                                return suggestions;
+                            }
+                            else
+                            {
+                                Tracing.Tracer.LogError("Suggest Error StatusCode: {0}", response.HttpStatusCode);
+                                if (response.ServerError != null)
+                                {
+                                    Tracing.Tracer.LogValue(nameof(response.ServerError), response.ServerError);
+                                    Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
+                                }
+                                else if (!string.IsNullOrWhiteSpace(response.DebugInformation))
+                                {
+                                    Tracing.Tracer.LogValue(nameof(response.DebugInformation), response.DebugInformation);
+                                }
+                                else
+                                {
+                                    Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
+                                }
                             }
                         }
                         else
                         {
-                            foreach (var modelSuggestField in modelItem.SuggestFields)
-                            {
-                                var field = ci.ESSuggestFields.FirstOrDefault(t => t.FieldName == modelSuggestField.ElasticSearchSuggestField);
-                                if (field != null)
-                                {
-                                    var suggester = new Suggester
-                                    {
-                                        Field = field.FieldName,
-                                        Results = modelSuggestField.Results,
-                                        Fuzzy = modelSuggestField.Fuzzy,
-                                        Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => GetParameterValue(t.QueryParameter))
-                                    };
-                                    foreach (var modelContext in modelSuggestField.Contexts)
-                                    {
-                                        if (!string.IsNullOrEmpty(modelContext.Value))
-                                        {
-                                            suggester.Contexts[modelContext.Name] = modelContext.Value;
-                                        }
-                                        if (!string.IsNullOrEmpty(modelContext.Parameter))
-                                        {
-                                            suggester.Contexts[modelContext.Name] = GetParameterValue(modelContext.Parameter);
-                                        }
-                                    }
-                                    suggester.Contexts[TypeContext] = "[\"" + string.Join("\",\"", ci.ESTypes.Select(TypeName)) + "\"]";
-                                    suggesters.Add(suggester);
-                                }
-                            }
-                        }
-                        if (suggesters.Any())
-                        {
-                            var sw = new StringWriter();
-                            var writer = new JsonTextWriter(sw);
-                            writer.WriteStartObject();
-                            foreach (var suggester in suggesters)
-                            {
-                                writer.WritePropertyName(suggester.Field);
-                                writer.WriteRawValue(SuggestCompletion(text, suggester.Field, suggester.Results, suggester.Fuzzy, suggester.Contexts));
-                            }
-                            writer.WriteEndObject();
-                            writer.Flush();
-                            ElasticsearchResponse<SuggestResponse> response;
-                            if (UseAsync)
-                            {
-                                response = await DoSuggestAsync(ci, sw.ToString()).ConfigureAwait(false);
-                            }
-                            else
-                            {
-                                response = DoSuggestSync(ci, sw.ToString());
-                            }
-                            if (response != null)
-                            {
-                                if (response.Success && response.Body != null)
-                                {
-                                    var suggestions = new HashSet<string>();
-                                    foreach (var suggestion in response.Body.Suggestions)
-                                    {
-                                        foreach (var suggest in suggestion.Value)
-                                        {
-                                            suggestions.UnionWith(suggest.Options.Select(t => t.Text));
-                                        }
-                                    }
-                                    return suggestions;
-                                }
-                                else
-                                {
-                                    Tracing.Tracer.LogError("Suggest Error StatusCode: {0}", response.HttpStatusCode);
-                                    if (response.ServerError != null)
-                                    {
-                                        Tracing.Tracer.LogValue(nameof(response.ServerError), response.ServerError);
-                                        Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
-                                    }
-                                    else if (!string.IsNullOrWhiteSpace(response.DebugInformation))
-                                    {
-                                        Tracing.Tracer.LogValue(nameof(response.DebugInformation), response.DebugInformation);
-                                    }
-                                    else
-                                    {
-                                        Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                Tracing.Tracer.LogError("Suggest Response is null");
-                                Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
-                            }
+                            Tracing.Tracer.LogError("Suggest Response is null");
+                            Tracing.Tracer.LogValue("Suggest Query", sw.ToString());
                         }
                     }
                 }
@@ -1890,6 +1885,28 @@
                 writer.WriteValue("_all");
             }
             writer.WriteEndArray();
+        }
+
+        private static IEnumerable<string> SplitValues(string input)
+        {
+            var csvSplit = new Regex("((?<=\")[^\"]*(?=\"(,|$)+)|(?<=,|^)[^,\"]*(?=,|$))", RegexOptions.Compiled);
+            foreach (Match match in csvSplit.Matches(input))
+            {
+                yield return match.Value;
+            }
+        }
+
+        private static string SuggestContextValue(string value)
+        {
+            var sb = new StringBuilder();
+            sb.Append("[");
+            foreach (var item in SplitValues(value).Where(s => !string.IsNullOrEmpty(s)))
+            {
+                sb.AppendFormat(CultureInfo.InvariantCulture, "\"{0}\",", item);
+            }
+            sb.Length--;
+            sb.Append("]");
+            return sb.ToString();
         }
 
         /// <summary>
@@ -2690,7 +2707,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    response = ElasticLowLevelClient.Suggest<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse));
+                    response = ElasticLowLevelClient.Search<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), string.Join(",", ci.ESTypes.Select(TypeName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse));
                 }
             }
             catch (JsonReaderException e)
@@ -2718,7 +2735,7 @@
             {
                 if (ElasticLowLevelClient != null)
                 {
-                    return await ElasticLowLevelClient.SuggestAsync<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse)).ConfigureAwait(false);
+                    return await ElasticLowLevelClient.SearchAsync<SuggestResponse>(string.Join(",", ci.ESIndexes.Select(IndexName)), string.Join(",", ci.ESTypes.Select(TypeName)), request, t => t.DeserializationOverride(DeserializeSuggestResponse)).ConfigureAwait(false);
                 }
             }
             catch (JsonReaderException e)

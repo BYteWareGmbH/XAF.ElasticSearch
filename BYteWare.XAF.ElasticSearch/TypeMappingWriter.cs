@@ -102,6 +102,10 @@
                             jsonWriter.WriteStartObject();
                             {
                                 WriteProperties(jsonWriter);
+                                foreach (var pathField in byteWareTypeInfo.ESSuggestContextPathFields.Where(pi => byteWareTypeInfo.ClassInfo.Members.Contains(pi.MemberInfo) && !pi.IsIndexed))
+                                {
+                                    WritePathField(jsonWriter, pathField);
+                                }
                             }
                             jsonWriter.WriteEnd();
                         }
@@ -185,6 +189,8 @@
         /// Writes into jsonWriter mapping settings for all to be indexed properties
         /// </summary>
         /// <param name="jsonWriter">A JsonWriter instance</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "LinQ is not complicated")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "LinQ is not complicated")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(ElasticSearch))]
         internal void WriteProperties(JsonWriter jsonWriter)
         {
@@ -241,10 +247,31 @@
 
                         jsonWriter.WritePropertyName("properties");
                         nestedProperties.WriteTo(jsonWriter);
+                        foreach (var pathField in byteWareTypeInfo.ESSuggestContextPathFields.Where(pi => dbti.ClassInfo.Members.Contains(pi.MemberInfo)))
+                        {
+                            WritePathField(jsonWriter, pathField);
+                        }
                     }
                 }
                 jsonWriter.WriteEnd();
             }
+        }
+
+        private static void WritePathField(JsonWriter jsonWriter, SuggestContextPathFieldInfo pathField)
+        {
+            jsonWriter.WritePropertyName(pathField.ESFieldName);
+            jsonWriter.WriteStartObject();
+#pragma warning disable CC0021 // Use nameof
+            jsonWriter.WritePropertyName("type");
+#pragma warning restore CC0021 // Use nameof
+            jsonWriter.WriteValue(ElasticSearchClient.GetElasticSearchTypeFromFieldType(FieldType.text));
+            /*jsonWriter.WritePropertyName("index");
+            jsonWriter.WriteValue(false);
+            jsonWriter.WritePropertyName("store");
+            jsonWriter.WriteValue(false);*/
+            jsonWriter.WritePropertyName("include_in_all");
+            jsonWriter.WriteValue(false);
+            jsonWriter.WriteEnd();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
@@ -409,39 +436,32 @@
                 {
                     throw new ElasticIndexException(CaptionHelper.GetLocalizedText(ElasticSearchClient.IndexExceptionGroup, "SuggestNoString"));
                 }
-                jsonWriter.WritePropertyName("contexts");
-                jsonWriter.WriteStartArray();
-
-                jsonWriter.WriteStartObject();
-                jsonWriter.WritePropertyName("name");
-                jsonWriter.WriteValue(ElasticSearchClient.TypeContext);
-                jsonWriter.WritePropertyName("type");
-                jsonWriter.WriteValue(Enum.GetName(typeof(SuggestContextType), SuggestContextType.category));
-                jsonWriter.WritePropertyName("path");
-                jsonWriter.WriteValue(ElasticSearchClient.TypeContext);
-                jsonWriter.WriteEndObject();
-
-                var sf = bti.ESSuggestFields.FirstOrDefault(t => t.FieldName == fieldName);
-                foreach (var ca in sf.ContextSettings)
+                var sf = bti.ESSuggestFields.First(t => t.FieldName == fieldName);
+                if (sf.ContextSettings.Any())
                 {
-                    jsonWriter.WriteStartObject();
-                    jsonWriter.WritePropertyName("name");
-                    jsonWriter.WriteValue(ca.ContextName);
-                    jsonWriter.WritePropertyName("type");
-                    jsonWriter.WriteValue(Enum.GetName(typeof(SuggestContextType), ca.ContextType));
-                    if (!string.IsNullOrEmpty(ca.PathField))
+                    jsonWriter.WritePropertyName("contexts");
+                    jsonWriter.WriteStartArray();
+                    foreach (var ca in sf.ContextSettings)
                     {
-                        jsonWriter.WritePropertyName("path");
-                        jsonWriter.WriteValue(ca.PathField.ToLowerInvariant());
+                        jsonWriter.WriteStartObject();
+                        jsonWriter.WritePropertyName("name");
+                        jsonWriter.WriteValue(ca.ContextName);
+                        jsonWriter.WritePropertyName("type");
+                        jsonWriter.WriteValue(Enum.GetName(typeof(SuggestContextType), ca.ContextType));
+                        if (ca.ContextPathFieldInfo != null)
+                        {
+                            jsonWriter.WritePropertyName("path");
+                            jsonWriter.WriteValue(ca.ContextPathFieldInfo.ESFieldName);
+                        }
+                        if (!string.IsNullOrEmpty(ca.Precision))
+                        {
+                            jsonWriter.WritePropertyName("precision");
+                            jsonWriter.WriteValue(ca.Precision);
+                        }
+                        jsonWriter.WriteEndObject();
                     }
-                    if (!string.IsNullOrEmpty(ca.Precision))
-                    {
-                        jsonWriter.WritePropertyName("precision");
-                        jsonWriter.WriteValue(ca.Precision);
-                    }
-                    jsonWriter.WriteEndObject();
+                    jsonWriter.WriteEndArray();
                 }
-                jsonWriter.WriteEndArray();
             }
 #pragma warning restore CC0021 // Use nameof
         }

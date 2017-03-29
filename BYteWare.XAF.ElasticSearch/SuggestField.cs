@@ -44,7 +44,7 @@
         /// <summary>
         /// List of settings to define the context values for filtering suggestions
         /// </summary>
-        public ReadOnlyCollection<IElasticSearchSuggestContext> ContextSettings
+        public ReadOnlyCollection<SuggestContextInfo> ContextSettings
         {
             get;
             internal set;

@@ -30,7 +30,7 @@ namespace MainDemo.Module {
         {
             var app = sender as XafApplication;
             var user = app.Security.User as PermissionPolicyUser;
-            ElasticSearchClient.Instance?.AddParameter("ContactContext", "[" + string.Join(",", user.Roles.Select(t => string.Format(CultureInfo.InvariantCulture, "\"{0}\"", t.Oid.ToString("N")))) + "]");
+            ElasticSearchClient.Instance.AddParameter("ContactContext", string.Join(",", user.Roles.Select(t => t.Oid.ToString("N"))));
         }
 
         public override void CustomizeTypesInfo(ITypesInfo typesInfo) {
