@@ -29,6 +29,8 @@
     public class BYteWareTypeInfo
     {
         private static readonly Dictionary<Type, BYteWareTypeInfo> TypeDictionary = new Dictionary<Type, BYteWareTypeInfo>();
+
+        private readonly object SyncRoot = new object();
         private MemberInfoCollection _DefaultPropertyMemberInfoCol;
         private bool _SearchedElasticSearchAttribute;
         private ElasticSearchAttribute _ElasticSearchAttribute;
@@ -84,8 +86,11 @@
         {
             foreach (var byteWareType in TypeDictionary.Values)
             {
-                byteWareType._IsSecurityFilterChecked = false;
-                byteWareType._ESSecurityFilter = null;
+                lock (byteWareType.SyncRoot)
+                {
+                    byteWareType._IsSecurityFilterChecked = false;
+                    byteWareType._ESSecurityFilter = null;
+                }
             }
         }
 
@@ -96,14 +101,18 @@
         {
             foreach (var byteWareType in TypeDictionary.Values)
             {
-                byteWareType._ModelClass = null;
-                byteWareType._IsESReferenceChecked = false;
-                byteWareType._ESReferences = null;
-                byteWareType._IsContainingTypesChecked = false;
-                byteWareType._ContainingTypes = null;
-                byteWareType._ESIndexes = null;
-                byteWareType._ESTypes = null;
-                byteWareType._SuggestFields = null;
+                lock (byteWareType.SyncRoot)
+                {
+                    byteWareType._ModelClass = null;
+                    byteWareType._IsESReferenceChecked = false;
+                    byteWareType._ESReferences = null;
+                    byteWareType._IsContainingTypesChecked = false;
+                    byteWareType._ContainingTypes = null;
+                    byteWareType._ESIndexes = null;
+                    byteWareType._ESTypes = null;
+                    byteWareType._ContextPathInfos = null;
+                    byteWareType._SuggestFields = null;
+                }
             }
         }
 
@@ -199,25 +208,31 @@
             {
                 if (!isDefaultPropertyAttributeInit)
                 {
-                    var defaultPropertyName = string.Empty;
-                    var xafDefaultPropertyAttribute = TypeInfo.FindAttribute<XafDefaultPropertyAttribute>();
-                    if (xafDefaultPropertyAttribute != null)
+                    lock (SyncRoot)
                     {
-                        defaultPropertyName = xafDefaultPropertyAttribute.Name;
-                    }
-                    else
-                    {
-                        var defaultPropertyAttribute = ClassInfo.FindAttributeInfo(typeof(DefaultPropertyAttribute)) as DefaultPropertyAttribute;
-                        if (defaultPropertyAttribute != null)
+                        if (!isDefaultPropertyAttributeInit)
                         {
-                            defaultPropertyName = defaultPropertyAttribute.Name;
+                            var defaultPropertyName = string.Empty;
+                            var xafDefaultPropertyAttribute = TypeInfo.FindAttribute<XafDefaultPropertyAttribute>();
+                            if (xafDefaultPropertyAttribute != null)
+                            {
+                                defaultPropertyName = xafDefaultPropertyAttribute.Name;
+                            }
+                            else
+                            {
+                                var defaultPropertyAttribute = ClassInfo.FindAttributeInfo(typeof(DefaultPropertyAttribute)) as DefaultPropertyAttribute;
+                                if (defaultPropertyAttribute != null)
+                                {
+                                    defaultPropertyName = defaultPropertyAttribute.Name;
+                                }
+                            }
+                            if (!string.IsNullOrEmpty(defaultPropertyName))
+                            {
+                                _DefaultPropertyMemberInfoCol = new MemberInfoCollection(ClassInfo, defaultPropertyName, true, false);
+                            }
+                            isDefaultPropertyAttributeInit = true;
                         }
                     }
-                    if (!string.IsNullOrEmpty(defaultPropertyName))
-                    {
-                        _DefaultPropertyMemberInfoCol = new MemberInfoCollection(ClassInfo, defaultPropertyName, true, false);
-                    }
-                    isDefaultPropertyAttributeInit = true;
                 }
                 return _DefaultPropertyMemberInfoCol;
             }
@@ -241,24 +256,30 @@
             {
                 if (!_IsESReferenceChecked)
                 {
-                    _IsESReferenceChecked = true;
-                    if (ClassInfo != null && Type.Members(MemberTypes.All, Flags.AllMembers).Any(t => IsMemberESIndexed(t.Name)))
+                    lock (SyncRoot)
                     {
-                        foreach (var op in ClassInfo.ObjectProperties)
+                        if (!_IsESReferenceChecked)
                         {
-                            var mi = op as XPMemberInfo;
-                            if (mi != null && mi.IsAssociation)
+                            if (ClassInfo != null && Type.Members(MemberTypes.All, Flags.AllMembers).Any(t => IsMemberESIndexed(t.Name)))
                             {
-                                var asmi = mi.GetAssociatedMember();
-                                if (asmi != null && asmi.IsAggregated && GetBYteWareTypeInfo(asmi.Owner.ClassType).IsMemberESIndexed(asmi.Name))
+                                foreach (var op in ClassInfo.ObjectProperties)
                                 {
-                                    if (_ESReferences == null)
+                                    var mi = op as XPMemberInfo;
+                                    if (mi != null && mi.IsAssociation)
                                     {
-                                        _ESReferences = new List<XPMemberInfo>();
+                                        var asmi = mi.GetAssociatedMember();
+                                        if (asmi != null && asmi.IsAggregated && GetBYteWareTypeInfo(asmi.Owner.ClassType).IsMemberESIndexed(asmi.Name))
+                                        {
+                                            if (_ESReferences == null)
+                                            {
+                                                _ESReferences = new List<XPMemberInfo>();
+                                            }
+                                            _ESReferences.Add(mi);
+                                        }
                                     }
-                                    _ESReferences.Add(mi);
                                 }
                             }
+                            _IsESReferenceChecked = true;
                         }
                     }
                 }
@@ -276,36 +297,42 @@
             {
                 if (!_IsContainingTypesChecked)
                 {
-                    _IsContainingTypesChecked = true;
-                    foreach (var ti in XafTypesInfo.Instance.PersistentTypes
-                        .Where(t => !t.IsAbstract && !t.IsInterface && t.IsPersistent))
+                    lock (SyncRoot)
                     {
-                        var ici = GetBYteWareTypeInfo(ti.Type);
-                        if (ici.IsESIndexed)
+                        if (!_IsContainingTypesChecked)
                         {
-                            foreach (var mi in ti.Members.Where(m => ((m.ListElementType != null && m.ListElementType.IsAssignableFrom(Type) && m.IsAssociation) || (m.IsPersistent && m.MemberType.IsAssignableFrom(Type))) && (ici.IsMemberESIndexed(m.Name) || ici.IsMemberESContaining(m.Name))))
+                            foreach (var ti in XafTypesInfo.Instance.PersistentTypes
+                                .Where(t => !t.IsAbstract && !t.IsInterface && t.IsPersistent))
                             {
-                                if (_ContainingTypes == null)
+                                var ici = GetBYteWareTypeInfo(ti.Type);
+                                if (ici.IsESIndexed)
                                 {
-                                    _ContainingTypes = new List<ContainingType>();
+                                    foreach (var mi in ti.Members.Where(m => ((m.ListElementType != null && m.ListElementType.IsAssignableFrom(Type) && m.IsAssociation) || (m.IsPersistent && m.MemberType.IsAssignableFrom(Type))) && (ici.IsMemberESIndexed(m.Name) || ici.IsMemberESContaining(m.Name))))
+                                    {
+                                        if (_ContainingTypes == null)
+                                        {
+                                            _ContainingTypes = new List<ContainingType>();
+                                        }
+                                        _ContainingTypes.Add(new ContainingType
+                                        {
+                                            BYteWareType = ici,
+                                            MemberInfo = mi,
+                                            HasContainingSetting = ici.IsMemberESContaining(mi.Name)
+                                        });
+                                    }
                                 }
-                                _ContainingTypes.Add(new ContainingType
-                                {
-                                    BYteWareType = ici,
-                                    MemberInfo = mi,
-                                    HasContainingSetting = ici.IsMemberESContaining(mi.Name)
-                                });
                             }
-                        }
-                    }
-                    if (_ContainingTypes != null)
-                    {
-                        for (int i = _ContainingTypes.Count - 1; i >= 0; i--)
-                        {
-                            if (_ContainingTypes.Any(t => t != _ContainingTypes[i] && t.MemberInfo.Name == _ContainingTypes[i].MemberInfo.Name && t.BYteWareType.Type.IsAssignableFrom(_ContainingTypes[i].BYteWareType.Type)))
+                            if (_ContainingTypes != null)
                             {
-                                _ContainingTypes.RemoveAt(i);
+                                for (int i = _ContainingTypes.Count - 1; i >= 0; i--)
+                                {
+                                    if (_ContainingTypes.Any(t => t != _ContainingTypes[i] && t.MemberInfo.Name == _ContainingTypes[i].MemberInfo.Name && t.BYteWareType.Type.IsAssignableFrom(_ContainingTypes[i].BYteWareType.Type)))
+                                    {
+                                        _ContainingTypes.RemoveAt(i);
+                                    }
+                                }
                             }
+                            _IsContainingTypesChecked = true;
                         }
                     }
                 }
@@ -322,30 +349,38 @@
             {
                 if (_ESIndexes == null)
                 {
-                    _ESIndexes = new List<string>();
-                    _ESTypes = new List<string>();
-                    if (IsESIndexed)
+                    lock (SyncRoot)
                     {
-                        foreach (var descendant in TypeInfo.DescendantsAndSelf(t => t.Descendants))
+                        if (_ESIndexes == null)
                         {
-                            var descci = GetBYteWareTypeInfo(descendant.Type);
-                            if (!descci.ElasticIndexError && descci.ESIndexName.IsNotNullOrWhiteSpace() && descci.ESTypeName.IsNotNullOrWhiteSpace())
+                            var esIndexes = new List<string>();
+                            var esTypes = new List<string>();
+                            if (IsESIndexed)
                             {
-                                if (!_ESIndexes.Contains(descci.ESIndexName))
+                                foreach (var descendant in TypeInfo.DescendantsAndSelf(t => t.Descendants))
                                 {
-                                    _ESIndexes.Add(descci.ESIndexName);
-                                }
-                                if (!_ESTypes.Contains(descci.ESTypeName))
-                                {
-                                    _ESTypes.Add(descci.ESTypeName);
+                                    var descci = GetBYteWareTypeInfo(descendant.Type);
+                                    if (!descci.ElasticIndexError && descci.ESIndexName.IsNotNullOrWhiteSpace() && descci.ESTypeName.IsNotNullOrWhiteSpace())
+                                    {
+                                        if (!esIndexes.Contains(descci.ESIndexName))
+                                        {
+                                            esIndexes.Add(descci.ESIndexName);
+                                        }
+                                        if (!esTypes.Contains(descci.ESTypeName))
+                                        {
+                                            esTypes.Add(descci.ESTypeName);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        esIndexes.Clear();
+                                        esTypes.Clear();
+                                        break;
+                                    }
                                 }
                             }
-                            else
-                            {
-                                _ESIndexes.Clear();
-                                _ESTypes.Clear();
-                                break;
-                            }
+                            _ESTypes = esTypes;
+                            _ESIndexes = esIndexes;
                         }
                     }
                 }
@@ -439,91 +474,98 @@
             {
                 if (_SuggestFields == null)
                 {
-                    _SuggestFields = new List<SuggestField>();
-                    _ContextPathInfos = new List<SuggestContextPathFieldInfo>();
-                    foreach (var pi in GetTopPropertyInfos)
+                    lock (SyncRoot)
                     {
-                        var props = ESProperties(pi.Name);
-                        var fieldType = props?.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(pi.PropertyType);
-                        var fieldName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? pi.Name : props.FieldName);
-                        if (props != null && !props.OptOut)
+                        if (_SuggestFields == null)
                         {
-                            var modelESField = props as IModelMemberElasticSearchField;
-                            if (fieldType == FieldType.completion)
+                            var suggestFields = new List<SuggestField>();
+                            _ContextPathInfos = new List<SuggestContextPathFieldInfo>();
+                            foreach (var pi in GetTopPropertyInfos)
                             {
-                                var sf = new SuggestField
+                                var props = ESProperties(pi.Name);
+                                var fieldType = props?.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(pi.PropertyType);
+                                var fieldName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? pi.Name : props.FieldName);
+                                if (props != null && !props.OptOut)
                                 {
-                                    FieldName = fieldName
-                                };
-                                _SuggestFields.Add(sf);
-                                sf.Default = props.DefaultSuggestField;
-                                if (!string.IsNullOrEmpty(props.WeightField))
-                                {
-                                    sf.WeightField = TypeInfo.FindMember(props.WeightField);
-                                }
-                                if (modelESField != null)
-                                {
-                                    sf.ContextSettings = new List<SuggestContextInfo>(modelESField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
-                                }
-                                else
-                                {
-                                    sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>().Select(CreateContextInfo)).AsReadOnly();
-                                }
-                                AddSuggestContextPathFieldInfo(sf, this, string.Empty);
-                            }
-                            var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(pi, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
-                            foreach (var multiField in multiFields.Where(t => t.FieldType == FieldType.completion))
-                            {
-                                var sf = new SuggestField
-                                {
-                                    FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, multiField.FieldName.ToLowerInvariant())
-                                };
-                                _SuggestFields.Add(sf);
-                                sf.Default = multiField.DefaultSuggestField;
-                                if (!string.IsNullOrEmpty(props.WeightField))
-                                {
-                                    sf.WeightField = TypeInfo.FindMember(props.WeightField);
-                                }
-                                var modelMultiField = multiField as IModelElasticSearchFieldProperties;
-                                if (modelMultiField != null)
-                                {
-                                    sf.ContextSettings = new List<SuggestContextInfo>(modelMultiField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
-                                }
-                                else
-                                {
-                                    sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase)).Select(CreateContextInfo)).AsReadOnly();
-                                }
-                                AddSuggestContextPathFieldInfo(sf, this, string.Empty);
-                            }
-                            if (fieldType == FieldType.object_type || fieldType == FieldType.nested)
-                            {
-                                var nty = GetUnderlyingType(pi.PropertyType);
-                                if (nty != null)
-                                {
-                                    var nci = GetBYteWareTypeInfo(nty);
-                                    for (int i = 0; i < nci.ESSuggestFields.Count; i++)
+                                    var modelESField = props as IModelMemberElasticSearchField;
+                                    if (fieldType == FieldType.completion)
                                     {
-                                        var sf = new SuggestField();
-                                        nci.ESSuggestFields[i].MapProperties(sf);
-                                        sf.FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, nci.ESSuggestFields[i].FieldName);
-                                        _SuggestFields.Add(sf);
-                                        foreach (var cpi in nci.ESSuggestContextPathFields)
+                                        var sf = new SuggestField
                                         {
-                                            AddSuggestContextPathFieldInfo(sf, nci, nci.ESTypeName + ".");
-                                            if (cpi.MemberInfo == null && !string.IsNullOrEmpty(cpi.PathMemberName))
+                                            FieldName = fieldName
+                                        };
+                                        suggestFields.Add(sf);
+                                        sf.Default = props.DefaultSuggestField;
+                                        if (!string.IsNullOrEmpty(props.WeightField))
+                                        {
+                                            sf.WeightField = TypeInfo.FindMember(props.WeightField);
+                                        }
+                                        if (modelESField != null)
+                                        {
+                                            sf.ContextSettings = new List<SuggestContextInfo>(modelESField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
+                                        }
+                                        else
+                                        {
+                                            sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>().Select(CreateContextInfo)).AsReadOnly();
+                                        }
+                                        AddSuggestContextPathFieldInfo(sf, this, string.Empty);
+                                    }
+                                    var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(pi, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                                    foreach (var multiField in multiFields.Where(t => t.FieldType == FieldType.completion))
+                                    {
+                                        var sf = new SuggestField
+                                        {
+                                            FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, multiField.FieldName.ToLowerInvariant())
+                                        };
+                                        suggestFields.Add(sf);
+                                        sf.Default = multiField.DefaultSuggestField;
+                                        if (!string.IsNullOrEmpty(props.WeightField))
+                                        {
+                                            sf.WeightField = TypeInfo.FindMember(props.WeightField);
+                                        }
+                                        var modelMultiField = multiField as IModelElasticSearchFieldProperties;
+                                        if (modelMultiField != null)
+                                        {
+                                            sf.ContextSettings = new List<SuggestContextInfo>(modelMultiField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
+                                        }
+                                        else
+                                        {
+                                            sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase)).Select(CreateContextInfo)).AsReadOnly();
+                                        }
+                                        AddSuggestContextPathFieldInfo(sf, this, string.Empty);
+                                    }
+                                    if (fieldType == FieldType.object_type || fieldType == FieldType.nested)
+                                    {
+                                        var nty = GetUnderlyingType(pi.PropertyType);
+                                        if (nty != null)
+                                        {
+                                            var nci = GetBYteWareTypeInfo(nty);
+                                            for (int i = 0; i < nci.ESSuggestFields.Count; i++)
                                             {
-                                                var mi = ClassInfo.FindMember(cpi.PathMemberName);
-                                                if (mi != null)
+                                                var sf = new SuggestField();
+                                                nci.ESSuggestFields[i].MapProperties(sf);
+                                                sf.FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, nci.ESSuggestFields[i].FieldName);
+                                                suggestFields.Add(sf);
+                                                foreach (var cpi in nci.ESSuggestContextPathFields)
                                                 {
-                                                    cpi.ESFieldName = ElasticSearchClient.FieldName(cpi.PathMemberName);
-                                                    cpi.MemberInfo = mi;
-                                                    cpi.IsIndexed = IsMemberESIndexed(cpi.PathMemberName);
+                                                    AddSuggestContextPathFieldInfo(sf, nci, nci.ESTypeName + ".");
+                                                    if (cpi.MemberInfo == null && !string.IsNullOrEmpty(cpi.PathMemberName))
+                                                    {
+                                                        var mi = ClassInfo.FindMember(cpi.PathMemberName);
+                                                        if (mi != null)
+                                                        {
+                                                            cpi.ESFieldName = ElasticSearchClient.FieldName(cpi.PathMemberName);
+                                                            cpi.MemberInfo = mi;
+                                                            cpi.IsIndexed = IsMemberESIndexed(cpi.PathMemberName);
+                                                        }
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
+                            _SuggestFields = suggestFields;
                         }
                     }
                 }
@@ -555,8 +597,14 @@
             {
                 if (!_IsSecurityFilterChecked && SecuritySystem.Instance?.User != null)
                 {
-                    _ESSecurityFilter = ElasticSearchClient.SecurityFilter(SecuritySystem.Instance.User, Type);
-                    _IsSecurityFilterChecked = true;
+                    lock (SyncRoot)
+                    {
+                        if (!_IsSecurityFilterChecked)
+                        {
+                            _ESSecurityFilter = ElasticSearchClient.SecurityFilter(SecuritySystem.Instance.User, Type);
+                            _IsSecurityFilterChecked = true;
+                        }
+                    }
                 }
                 return _ESSecurityFilter;
             }
@@ -571,11 +619,17 @@
             {
                 if (_ElasticSearchAttribute == null && !_SearchedElasticSearchAttribute)
                 {
-                    _SearchedElasticSearchAttribute = true;
-                    var attrs = Type.GetCustomAttributes(typeof(ElasticSearchAttribute), true);
-                    if (attrs.Length > 0)
+                    lock (SyncRoot)
                     {
-                        _ElasticSearchAttribute = attrs[0] as ElasticSearchAttribute;
+                        if (!_SearchedElasticSearchAttribute)
+                        {
+                            var attrs = Type.GetCustomAttributes(typeof(ElasticSearchAttribute), true);
+                            if (attrs.Length > 0)
+                            {
+                                _ElasticSearchAttribute = attrs[0] as ElasticSearchAttribute;
+                            }
+                            _SearchedElasticSearchAttribute = true;
+                        }
                     }
                 }
                 return _ElasticSearchAttribute;
