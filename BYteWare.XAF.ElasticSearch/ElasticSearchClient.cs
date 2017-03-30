@@ -687,7 +687,7 @@
         {
             string s;
             parameters.TryGetValue(parameter, out s);
-            return s;
+            return ParameterContent(s);
         }
 
         /// <summary>
@@ -1227,7 +1227,7 @@
         {
             foreach (var param in parameters)
             {
-                filter = filter.Replace(string.Format(CultureInfo.InvariantCulture, @"'@{0}'", param.Key), param.Value);
+                filter = filter.Replace(string.Format(CultureInfo.InvariantCulture, @"'@{0}'", param.Key), ParameterContent(param.Value));
             }
             return filter;
         }
@@ -1541,7 +1541,7 @@
                                 Field = field.FieldName,
                                 Results = 7,
                                 Fuzzy = true,
-                                Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => SuggestContextValue(GetParameterValue(t.QueryParameter))),
+                                Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => GetParameterValue(t.QueryParameter)),
                             };
                             suggesters.Add(suggester);
                         }
@@ -1558,18 +1558,18 @@
                                     Field = field.FieldName,
                                     Results = modelSuggestField.Results,
                                     Fuzzy = modelSuggestField.Fuzzy,
-                                    Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => SuggestContextValue(GetParameterValue(t.QueryParameter))),
+                                    Contexts = field.ContextSettings.ToDictionary(t => t.ContextName, t => GetParameterValue(t.QueryParameter)),
                                 };
                                 foreach (var modelContext in modelSuggestField.Contexts)
                                 {
                                     var sci = field.ContextSettings.First(cs => cs.ContextName == modelContext.Name);
                                     if (!string.IsNullOrEmpty(modelContext.Value))
                                     {
-                                        suggester.Contexts[modelContext.Name] = SuggestContextValue(modelContext.Value);
+                                        suggester.Contexts[modelContext.Name] = ParameterContent(modelContext.Value);
                                     }
                                     if (!string.IsNullOrEmpty(modelContext.Parameter))
                                     {
-                                        suggester.Contexts[modelContext.Name] = SuggestContextValue(GetParameterValue(modelContext.Parameter));
+                                        suggester.Contexts[modelContext.Name] = GetParameterValue(modelContext.Parameter);
                                     }
                                 }
                                 suggesters.Add(suggester);
@@ -1896,7 +1896,7 @@
             }
         }
 
-        private static string SuggestContextValue(string value)
+        private static string ParameterContent(string value)
         {
             var sb = new StringBuilder();
             sb.Append("[");
