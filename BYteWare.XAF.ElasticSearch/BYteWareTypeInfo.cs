@@ -508,7 +508,7 @@
                                         {
                                             sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>().Select(CreateContextInfo)).AsReadOnly();
                                         }
-                                        AddSuggestContextPathFieldInfo(sf, this, string.Empty);
+                                        AddSuggestContextPathFieldInfo(sf);
                                     }
                                     var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(pi, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                                     foreach (var multiField in multiFields.Where(t => t.FieldType == FieldType.completion))
@@ -532,7 +532,7 @@
                                         {
                                             sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase)).Select(CreateContextInfo)).AsReadOnly();
                                         }
-                                        AddSuggestContextPathFieldInfo(sf, this, string.Empty);
+                                        AddSuggestContextPathFieldInfo(sf);
                                     }
                                     if (fieldType == FieldType.object_type || fieldType == FieldType.nested)
                                     {
@@ -546,20 +546,41 @@
                                                 nci.ESSuggestFields[i].MapProperties(sf);
                                                 sf.FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, nci.ESSuggestFields[i].FieldName);
                                                 suggestFields.Add(sf);
-                                                foreach (var cpi in nci.ESSuggestContextPathFields)
+                                                var contexts = new List<SuggestContextInfo>();
+                                                foreach (var context in nci.ESSuggestFields[i].ContextSettings)
                                                 {
-                                                    AddSuggestContextPathFieldInfo(sf, nci, nci.ESTypeName + ".");
-                                                    if (cpi.MemberInfo == null && !string.IsNullOrEmpty(cpi.PathMemberName))
+                                                    var ncontext = CreateContextInfo(context);
+                                                    if (context.ContextPathFieldInfo != null)
                                                     {
-                                                        var mi = ClassInfo.FindMember(cpi.PathMemberName);
-                                                        if (mi != null)
+                                                        var mi = context.ContextPathFieldInfo.MemberInfo;
+                                                        var pathFieldName = context.ContextPathFieldInfo.ESFieldName;
+                                                        var isIndexed = context.ContextPathFieldInfo.IsIndexed;
+                                                        if (mi == null)
                                                         {
-                                                            cpi.ESFieldName = ElasticSearchClient.FieldName(cpi.PathMemberName);
-                                                            cpi.MemberInfo = mi;
-                                                            cpi.IsIndexed = IsMemberESIndexed(cpi.PathMemberName);
+                                                            mi = ClassInfo.FindMember(context.PathField);
+                                                            isIndexed = IsMemberESIndexed(context.PathField);
                                                         }
+                                                        else
+                                                        {
+                                                            pathFieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, context.ContextPathFieldInfo.ESFieldName);
+                                                        }
+                                                        var cpi = _ContextPathInfos.FirstOrDefault(npi => npi.ESFieldName.Equals(pathFieldName) && npi.MemberInfo == mi);
+                                                        if (cpi == null)
+                                                        {
+                                                            cpi = new SuggestContextPathFieldInfo
+                                                            {
+                                                                PathMemberName = context.PathField,
+                                                                ESFieldName = pathFieldName,
+                                                                MemberInfo = mi,
+                                                                IsIndexed = isIndexed,
+                                                            };
+                                                            _ContextPathInfos.Add(cpi);
+                                                        }
+                                                        ncontext.ContextPathFieldInfo = cpi;
                                                     }
+                                                    contexts.Add(ncontext);
                                                 }
+                                                sf.ContextSettings = contexts.AsReadOnly();
                                             }
                                         }
                                     }
@@ -871,20 +892,20 @@
             return sci;
         }
 
-        private void AddSuggestContextPathFieldInfo(SuggestField sf, BYteWareTypeInfo typeInfo, string typeName)
+        private void AddSuggestContextPathFieldInfo(SuggestField sf)
         {
-            foreach (var context in sf.ContextSettings)
+            foreach (var context in sf.ContextSettings.Where(cs => !string.IsNullOrWhiteSpace(cs.PathField)))
             {
-                var mi = typeInfo.ClassInfo.FindMember(context.PathField);
+                var mi = ClassInfo.FindMember(context.PathField);
                 var cpi = _ContextPathInfos.FirstOrDefault(i => i.PathMemberName.Equals(context.PathField) && i.MemberInfo == mi);
                 if (cpi == null)
                 {
                     cpi = new SuggestContextPathFieldInfo
                     {
                         PathMemberName = context.PathField,
-                        ESFieldName = ElasticSearchClient.FieldName(string.Format(CultureInfo.InvariantCulture, "{0}{1}", typeName, context.PathField)),
+                        ESFieldName = ElasticSearchClient.FieldName(context.PathField),
                         MemberInfo = mi,
-                        IsIndexed = typeInfo.IsMemberESIndexed(context.PathField),
+                        IsIndexed = IsMemberESIndexed(context.PathField),
                     };
                     _ContextPathInfos.Add(cpi);
                 }
