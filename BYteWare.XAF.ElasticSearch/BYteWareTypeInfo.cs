@@ -436,30 +436,7 @@
         /// <returns>Enumeration of all ElasticSearch Field Names</returns>
         public IEnumerable<string> ESFields(bool wildcards)
         {
-            foreach (var p in GetTopPropertyInfos)
-            {
-                var props = ESProperties(p.Name);
-                var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? p.Name : props.FieldName);
-                if (props != null && !props.OptOut)
-                {
-                    var etype = props.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType);
-                    foreach (var item in ElasticSearchFieldsInternal(p, propertyName, etype, wildcards))
-                    {
-                        yield return item;
-                    }
-                    var modelESField = props as IModelMemberElasticSearchField;
-                    var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
-                    foreach (var ga in multiFields.GroupBy(t => t.FieldName))
-                    {
-                        var a = ga.First();
-                        foreach (var item in ElasticSearchFieldsInternal(p, a.FieldName.ToLowerInvariant(), a.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType), wildcards))
-                        {
-                            yield return string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, item);
-                        }
-                    }
-                }
-            }
-            yield return "_all";
+            return ESFieldsInternal(wildcards).Concat(new[] { "_all" });
         }
 
         /// <summary>
@@ -868,7 +845,7 @@
                 {
                     var nty = GetUnderlyingType(pi.PropertyType);
                     var bti = GetBYteWareTypeInfo(nty);
-                    var nestFields = bti.ESFields(wildcards);
+                    var nestFields = bti.ESFieldsInternal(wildcards);
                     foreach (var field in nestFields)
                     {
                         yield return string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, field);
@@ -890,6 +867,33 @@
             var sci = new SuggestContextInfo();
             source.MapProperties(sci);
             return sci;
+        }
+
+        private IEnumerable<string> ESFieldsInternal(bool wildcards)
+        {
+            foreach (var p in GetTopPropertyInfos)
+            {
+                var props = ESProperties(p.Name);
+                var propertyName = ElasticSearchClient.FieldName(string.IsNullOrEmpty(props?.FieldName) ? p.Name : props.FieldName);
+                if (props != null && !props.OptOut)
+                {
+                    var etype = props.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType);
+                    foreach (var item in ElasticSearchFieldsInternal(p, propertyName, etype, wildcards))
+                    {
+                        yield return item;
+                    }
+                    var modelESField = props as IModelMemberElasticSearchField;
+                    var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                    foreach (var ga in multiFields.GroupBy(t => t.FieldName))
+                    {
+                        var a = ga.First();
+                        foreach (var item in ElasticSearchFieldsInternal(p, a.FieldName.ToLowerInvariant(), a.FieldType ?? ElasticSearchClient.GetFieldTypeFromType(p.PropertyType), wildcards))
+                        {
+                            yield return string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, item);
+                        }
+                    }
+                }
+            }
         }
 
         private void AddSuggestContextPathFieldInfo(SuggestField sf)
