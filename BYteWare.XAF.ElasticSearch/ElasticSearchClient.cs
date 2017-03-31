@@ -1292,11 +1292,13 @@
                         dynamic response = explanations.Body;
                         if (!response["valid"])
                         {
-                            foreach (var explanation in response.explanations)
+#pragma warning disable CC0021 // Use nameof
+                            foreach (var explanation in response["explanations"])
+#pragma warning restore CC0021 // Use nameof
                             {
-                                if (!explanation.valid)
+                                if (!explanation["valid"])
                                 {
-                                    res.Add(string.Format("{0}: {1}", explanation.index, explanation.error));
+                                    res.Add(string.Format("{0}: {1}", explanation["index"], explanation["error"]));
                                 }
                             }
                         }
