@@ -1290,7 +1290,7 @@
                     if (explanations.Success)
                     {
                         dynamic response = explanations.Body;
-                        if (!response.valid)
+                        if (!response["valid"])
                         {
                             foreach (var explanation in response.explanations)
                             {
