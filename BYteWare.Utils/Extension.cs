@@ -1412,7 +1412,7 @@
         /// </summary>
         /// <param name="tp">The Type</param>
         /// <returns>Default Value for Type tp</returns>
-        public static object GetDefaultValue(Type tp)
+        public static object GetDefaultValue(this Type tp)
         {
             if (tp == null)
             {
