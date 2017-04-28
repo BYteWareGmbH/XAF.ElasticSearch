@@ -1406,5 +1406,24 @@
         {
             return new RealReadOnlyCollection<T>(collection);
         }
+
+        /// <summary>
+        /// Returns the default value fot the Type tp
+        /// </summary>
+        /// <param name="tp">The Type</param>
+        /// <returns>Default Value for Type tp</returns>
+        public static object GetDefaultValue(Type tp)
+        {
+            if (tp == null)
+            {
+                throw new ArgumentNullException(nameof(tp));
+            }
+            if (tp.IsValueType)
+            {
+                return Activator.CreateInstance(tp);
+            }
+
+            return null;
+        }
     }
 }
