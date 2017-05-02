@@ -75,6 +75,24 @@
         }
 
         /// <summary>
+        /// Gets the value associated with the specified keys.
+        /// </summary>
+        /// <param name="key1">First level key</param>
+        /// <param name="key2">Second level key</param>
+        /// <param name="value">Contains the value associated with the specified keys, if the keys are found; otherwise, the default value for the type of the value parameter.</param>
+        /// <returns>true if the Dictionary contains an element with the specified keys; otherwise, false.</returns>
+        public bool TryGetValue(TKey1 key1, TKey2 key2, out TValue value)
+        {
+            Dictionary<TKey2, TValue> sdic;
+            if (!TryGetValue(key1, out sdic))
+            {
+                return sdic.TryGetValue(key2, out value);
+            }
+            value = default(TValue);
+            return false;
+        }
+
+        /// <summary>
         /// Gets an enumeration of all values in the Dictionary
         /// </summary>
         public new IEnumerable<TValue> Values
