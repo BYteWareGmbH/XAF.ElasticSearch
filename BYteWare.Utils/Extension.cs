@@ -1425,5 +1425,87 @@
 
             return null;
         }
+
+        /// <summary>
+        /// Returns a two key level Dictionary
+        /// </summary>
+        /// <typeparam name="TElement">Type for the elements of the enumeration</typeparam>
+        /// <typeparam name="TKey1">Type for the first key level</typeparam>
+        /// <typeparam name="TKey2">Type for the second key level</typeparam>
+        /// <typeparam name="TValue">Type for the elements</typeparam>
+        /// <param name="items">Source Enumration</param>
+        /// <param name="key1">Selector Function for the first key level</param>
+        /// <param name="key2">Selector Function for the second key level</param>
+        /// <param name="value">Selector Function for the values of the Dictionary</param>
+        /// <returns>Dual Key Dictionary</returns>
+        public static DualKeyDictionary<TKey1, TKey2, TValue> ToDualKeyDictionary<TElement, TKey1, TKey2, TValue>(this IEnumerable<TElement> items, Func<TElement, TKey1> key1, Func<TElement, TKey2> key2, Func<TElement, TValue> value)
+        {
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+            if (key1 == null)
+            {
+                throw new ArgumentNullException(nameof(key1));
+            }
+            if (key2 == null)
+            {
+                throw new ArgumentNullException(nameof(key2));
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            var dict = new DualKeyDictionary<TKey1, TKey2, TValue>();
+            foreach (TElement i in items)
+            {
+                dict.Add(key1(i), key2(i), value(i));
+            }
+            return dict;
+        }
+
+        /// <summary>
+        /// Returns a three key level Dictionary
+        /// </summary>
+        /// <typeparam name="TElement">Type for the elements of the enumeration</typeparam>
+        /// <typeparam name="TKey1">Type for the first key level</typeparam>
+        /// <typeparam name="TKey2">Type for the second key level</typeparam>
+        /// <typeparam name="TKey3">Type for the third key level</typeparam>
+        /// <typeparam name="TValue">Type for the elements</typeparam>
+        /// <param name="items">Source Enumration</param>
+        /// <param name="key1">Selector Function for the first key level</param>
+        /// <param name="key2">Selector Function for the second key level</param>
+        /// <param name="key3">Selector Function for the third key level</param>
+        /// <param name="value">Selector Function for the values of the Dictionary</param>
+        /// <returns>Triple Key Dictionary</returns>
+        public static TripleKeyDictionary<TKey1, TKey2, TKey3, TValue> ToTripleKeyDictionary<TElement, TKey1, TKey2, TKey3, TValue>(this IEnumerable<TElement> items, Func<TElement, TKey1> key1, Func<TElement, TKey2> key2, Func<TElement, TKey3> key3, Func<TElement, TValue> value)
+        {
+            if (items == null)
+            {
+                throw new ArgumentNullException(nameof(items));
+            }
+            if (key1 == null)
+            {
+                throw new ArgumentNullException(nameof(key1));
+            }
+            if (key2 == null)
+            {
+                throw new ArgumentNullException(nameof(key2));
+            }
+            if (key3 == null)
+            {
+                throw new ArgumentNullException(nameof(key3));
+            }
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }
+            var dict = new TripleKeyDictionary<TKey1, TKey2, TKey3, TValue>();
+            foreach (TElement i in items)
+            {
+                dict.Add(key1(i), key2(i), key3(i), value(i));
+            }
+            return dict;
+        }
     }
 }

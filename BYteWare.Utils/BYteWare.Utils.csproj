@@ -94,6 +94,8 @@
     <Compile Include="TimeSpanExtensions.cs" />
     <Compile Include="TimeSpanFormatter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="DualKeyDictionary.cs" />
+    <Compile Include="TripleKeyDictionary.cs" />
     <Compile Include="WorkerProgress.cs" />
   </ItemGroup>
   <ItemGroup>

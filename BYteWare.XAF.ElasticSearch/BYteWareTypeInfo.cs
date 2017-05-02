@@ -117,10 +117,10 @@
         }
 
         /// <summary>
-        /// Returns the element type for arrays or IEnumerables, the base type of a Nullable otherwise type
+        /// Returns the element type for arrays or IEnumerables, the base type of a Nullable type otherwise
         /// </summary>
         /// <param name="type">Type to examine</param>
-        /// <returns>element type for arrays or IEnumerables, the base type of a Nullable otherwise type</returns>
+        /// <returns>element type for arrays or IEnumerables, the base type of a Nullable type otherwise</returns>
         public static Type GetUnderlyingType(Type type)
         {
             if (type == null)
