@@ -67,7 +67,7 @@
         public bool ContainsKey(TKey1 key1, TKey2 key2)
         {
             Dictionary<TKey2, TValue> sdic;
-            if (!TryGetValue(key1, out sdic))
+            if (TryGetValue(key1, out sdic))
             {
                 return sdic.ContainsKey(key2);
             }
@@ -84,7 +84,7 @@
         public bool TryGetValue(TKey1 key1, TKey2 key2, out TValue value)
         {
             Dictionary<TKey2, TValue> sdic;
-            if (!TryGetValue(key1, out sdic))
+            if (TryGetValue(key1, out sdic))
             {
                 return sdic.TryGetValue(key2, out value);
             }

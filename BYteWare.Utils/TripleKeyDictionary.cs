@@ -71,7 +71,7 @@
         public bool ContainsKey(TKey1 key1, TKey2 key2, TKey3 key3)
         {
             DualKeyDictionary<TKey2, TKey3, TValue> sdic;
-            if (!TryGetValue(key1, out sdic))
+            if (TryGetValue(key1, out sdic))
             {
                 return sdic.ContainsKey(key2, key3);
             }
@@ -89,7 +89,7 @@
         public bool TryGetValue(TKey1 key1, TKey2 key2, TKey3 key3, out TValue value)
         {
             DualKeyDictionary<TKey2, TKey3, TValue> sdic;
-            if (!TryGetValue(key1, out sdic))
+            if (TryGetValue(key1, out sdic))
             {
                 return sdic.TryGetValue(key2, key3, out value);
             }
