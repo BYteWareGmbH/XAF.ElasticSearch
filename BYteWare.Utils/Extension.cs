@@ -1408,7 +1408,7 @@
         }
 
         /// <summary>
-        /// Returns the default value fot the Type tp
+        /// Returns the default value for the Type tp
         /// </summary>
         /// <param name="tp">The Type</param>
         /// <returns>Default Value for Type tp</returns>
@@ -1424,6 +1424,36 @@
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Returns if the value for the Type tp is the default value
+        /// </summary>
+        /// <param name="tp">The Type</param>
+        /// <param name="value">The Value</param>
+        /// <returns>True if value euqals the default value of Type tp; otherwise False</returns>
+        public static bool IsDefaultValue(this Type tp, object value)
+        {
+            if (tp == null)
+            {
+                throw new ArgumentNullException(nameof(tp));
+            }
+            if (tp.IsValueType)
+            {
+                return Equals(value, Activator.CreateInstance(tp));
+            }
+            return value == null;
+        }
+
+        /// <summary>
+        /// Returns if the value for the Type tp is the default value
+        /// </summary>
+        /// <typeparam name="T">The Type</typeparam>
+        /// <param name="value">The Value</param>
+        /// <returns>True if value euqals the default value of Type tp; otherwise False</returns>
+        public static bool IsDefaultValue<T>(this T value)
+        {
+            return EqualityComparer<T>.Default.Equals(value, default(T));
         }
 
         /// <summary>
