@@ -39,7 +39,7 @@
                     sdic = new DualKeyDictionary<TKey2, TKey3, TValue>();
                     this[key1] = sdic;
                 }
-                sdic[key2][key3] = value;
+                sdic[key2, key3] = value;
             }
         }
 
