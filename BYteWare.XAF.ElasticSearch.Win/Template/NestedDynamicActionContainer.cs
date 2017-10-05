@@ -1,19 +1,31 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Win.Template
 {
     using DevExpress.ExpressApp.Templates;
+    using DevExpress.ExpressApp.Win.SystemModule;
     using DevExpress.ExpressApp.Win.Templates;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using DevExpress.XtraBars;
 
     /// <summary>
     /// Nested Frame Template with support for dynamically added Action Containers
     /// </summary>
     [CLSCompliant(false)]
-    public class NestedDynamicActionContainer : NestedFrameTemplate, IDynamicContainersTemplate
+    public class NestedDynamicActionContainer : NestedFrameTemplate, IDynamicContainersTemplate, IContextMenuHolder
     {
         private ActionContainersManager actionsContainers;
+        private readonly DevExpress.XtraBars.PopupMenu contextMenu;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NestedDynamicActionContainer"/> class.
+        /// </summary>
+        public NestedDynamicActionContainer() : base()
+        {
+            contextMenu = new DevExpress.XtraBars.PopupMenu(BarManager);
+            contextMenu.Name = nameof(contextMenu);
+        }
 
         /// <summary>
         /// Returns the Action Container Manager
@@ -28,6 +40,17 @@
                     actionsContainers = actionsContainersField.GetValue(this) as ActionContainersManager;
                 }
                 return actionsContainers;
+            }
+        }
+
+        /// <summary>
+        /// Ruft das dem Steuerelement zugeordnete Kontextmenü ab oder legt dieses fest.
+        /// </summary>
+        PopupMenu IContextMenuHolder.ContextMenu
+        {
+            get
+            {
+                return contextMenu;
             }
         }
 

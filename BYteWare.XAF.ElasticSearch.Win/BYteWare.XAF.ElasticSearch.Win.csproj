@@ -102,10 +102,6 @@
     <Compile Include="Template\NestedDynamicActionContainer.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Template\PopupForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Template\TemplateFactory.cs" />
     <Compile Include="WaitScreenWin.cs" />
   </ItemGroup>
   <ItemGroup>

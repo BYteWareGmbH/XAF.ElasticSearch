@@ -6,6 +6,7 @@
     using DevExpress.ExpressApp.Model;
     using DevExpress.ExpressApp.Updating;
     using DevExpress.ExpressApp.Win;
+    using DevExpress.ExpressApp.Win.Templates.Bars;
     using DevExpress.Utils;
     using Model;
     using System;
@@ -37,7 +38,7 @@
         public override void Setup(XafApplication application)
         {
             base.Setup(application);
-            ((WinApplication)application).FrameTemplateFactory = new TemplateFactory();
+            application.CreateCustomTemplate += Application_CreateCustomTemplate;
         }
 
         /// <inheritdoc/>
@@ -83,9 +84,10 @@
             };
         }
 
-        /// <inheritdoc/>
+        /// <inheritdoc />
         protected override void RegisterEditorDescriptors(EditorDescriptorsFactory editorDescriptorsFactory)
         {
+            // No editors to register here
         }
 
         /// <inheritdoc/>
@@ -94,6 +96,21 @@
             var moduleTypeList = base.GetRequiredModuleTypesCore();
             moduleTypeList.Add(typeof(ElasticSearchModule));
             return moduleTypeList;
+        }
+
+        private void Application_CreateCustomTemplate(object sender, CreateCustomTemplateEventArgs e)
+        {
+            if (e.Context == TemplateContext.NestedFrame)
+            {
+                if (((WinApplication)e.Application).UseOldTemplates)
+                {
+                    e.Template = new NestedDynamicActionContainer();
+                }
+            }
+            else if (e.Context == TemplateContext.LookupControl)
+            {
+                e.Template = new ElasticLookupControlTemplate();
+            }
         }
     }
 }

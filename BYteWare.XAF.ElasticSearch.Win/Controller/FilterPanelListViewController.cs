@@ -5,6 +5,7 @@
     using DevExpress.ExpressApp.Actions;
     using DevExpress.ExpressApp.SystemModule;
     using DevExpress.ExpressApp.Templates;
+    using DevExpress.ExpressApp.Win.Editors;
     using DevExpress.ExpressApp.Win.Templates;
     using DevExpress.ExpressApp.Win.Templates.ActionContainers;
     using DevExpress.XtraEditors;
@@ -15,6 +16,9 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+    using System.Reflection;
+    using System.Threading.Tasks;
+    using Template;
     using Forms = System.Windows.Forms;
 
     /// <summary>
@@ -46,13 +50,14 @@
         private PanelControl _FilterPanel;
         private ButtonsContainer buttonsContainer;
         private ElasticSearchFilterController filterController;
+        private FillActionContainersController _FillActionContainersController;
         private SingleChoiceAction oldFilterFieldsAction;
         private PropertyEditor.ButtonsContainersParametrizedActionComboItem searchTextActionItem;
         private bool _canUpdate = true;
         private bool _needUpdate = true;
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="FilterPanelListViewController"/> class.
+        /// Initializes a new instance of the <see cref="FilterPanelListViewController"/> class.
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Suggest List")]
         public FilterPanelListViewController()
@@ -140,8 +145,8 @@
         {
             base.OnFrameAssigned();
             filterController = Frame.GetController<ElasticSearchFilterController>();
-            var fillActionContainersController = Frame.GetController<FillActionContainersController>();
-            fillActionContainersController.CustomFillContainers += FillActionContainersController_CustomFillContainers;
+            _FillActionContainersController = Frame.GetController<FillActionContainersController>();
+            _FillActionContainersController.CustomFillContainers += FillActionContainersController_CustomFillContainers;
         }
 
         /// <inheritdoc/>
@@ -154,7 +159,7 @@
         /// <inheritdoc/>
         protected override void OnViewChanged()
         {
-            if (Active && View?.Editor != null && View.IsControlCreated)
+            if (Active[nameof(IModelFilterPanel.FilterPanelPosition)] && View?.Editor != null && View.IsControlCreated)
             {
                 var control = View.Editor.Control as GridControl;
                 if (control != null)
@@ -176,31 +181,17 @@
                 {
                     UpdateActionState();
                 }
-                if (Frame != null)
-                {
-                    if (Frame.Template is IDynamicContainersTemplate)
-                    {
-                        TemplateChanged();
-                    }
-                    else
-                    {
-                        Frame.TemplateChanged += Frame_TemplateChanged;
-                    }
-                }
             }
         }
 
         /// <inheritdoc/>
         protected override void OnDeactivated()
         {
+            _FillActionContainersController.CustomFillContainers -= FillActionContainersController_CustomFillContainers;
             var control = View.Editor.Control as Forms.Control;
             if (control != null)
             {
                 control.HandleCreated -= GridControlHandleCreated;
-            }
-            if (Frame != null)
-            {
-                Frame.TemplateChanged -= Frame_TemplateChanged;
             }
             if (oldFilterFieldsAction != null)
             {
@@ -210,11 +201,6 @@
             }
             if (buttonsContainer != null)
             {
-                var template = Frame?.Template as IDynamicContainersTemplate;
-                if (template != null)
-                {
-                    template.UnregisterActionContainers(new IActionContainer[] { buttonsContainer });
-                }
                 if (!buttonsContainer.IsDisposed)
                 {
                     buttonsContainer.Dispose();
@@ -310,14 +296,14 @@
                     _FilterPanel.EndInit();
                     _FilterPanel.ResumeLayout(false);
 
-                    if (Frame != null && Frame.Template != null)
-                    {
-                        var template = Frame.Template as IDynamicContainersTemplate;
-                        if (template != null)
-                        {
-                            template.RegisterActionContainers(new IActionContainer[] { buttonsContainer });
-                        }
-                    }
+                    oldFilterFieldsAction = filterController.FilterFieldsAction;
+                    oldFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, false);
+                    newFilterFieldsAction.Execute += filterController.FilterFieldsActionExecute;
+                    newFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, true);
+                    filterController.FilterFieldsAction = newFilterFieldsAction;
+                    filterController.SetupFilterFields();
+
+                    _FillActionContainersController.GetType().GetMethod("FillContainers", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(_FillActionContainersController, new object[] { new IActionContainer[] { buttonsContainer }, Frame.Controllers.GetValues(), null, Frame.Template });
                     var ff = buttonsContainer.ActionItems.FirstOrDefault(t => t.Key.Id == newFilterFieldsAction.Id);
                     if (ff.Value != null && ff.Value.LayoutItem != null)
                     {
@@ -405,7 +391,7 @@
             _needUpdate = false;
         }
 
-        private void Control_TextChanged(object sender, EventArgs e)
+        private async void Control_TextChanged(object sender, EventArgs e)
         {
             var control = sender as Forms.Control;
             if (control != null)
@@ -419,7 +405,7 @@
                     if (_canUpdate)
                     {
                         _canUpdate = false;
-                        UpdateSuggestDataAsync();
+                        await UpdateSuggestDataAsync();
                     }
                     else
                     {
@@ -437,14 +423,14 @@
             searchTextTimer.Start();
         }
 
-        private void SearchTextTimer_Tick(object sender, EventArgs e)
+        private async void SearchTextTimer_Tick(object sender, EventArgs e)
         {
             _canUpdate = true;
             searchTextTimer.Stop();
-            UpdateSuggestDataAsync();
+            await UpdateSuggestDataAsync();
         }
 
-        private async void UpdateSuggestDataAsync()
+        private async Task UpdateSuggestDataAsync()
         {
             if (filterController != null && searchTextActionItem != null)
             {
@@ -483,25 +469,6 @@
             if (gridControl.Parent != null)
             {
                 gridControl.Parent.Controls.Add(_FilterPanel);
-            }
-        }
-
-        private void Frame_TemplateChanged(object sender, EventArgs e)
-        {
-            TemplateChanged();
-        }
-
-        private void TemplateChanged()
-        {
-            if (Frame != null && oldFilterFieldsAction == null && Frame.Template is IDynamicContainersTemplate)
-            {
-                oldFilterFieldsAction = filterController.FilterFieldsAction;
-                oldFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, false);
-                newFilterFieldsAction.Execute += filterController.FilterFieldsActionExecute;
-                newFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, true);
-                filterController.FilterFieldsAction = newFilterFieldsAction;
-                filterController.SetupFilterFields();
-                UpdateActionState();
             }
         }
     }
