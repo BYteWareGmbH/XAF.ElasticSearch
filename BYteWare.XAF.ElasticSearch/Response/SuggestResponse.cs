@@ -11,7 +11,7 @@
     public class SuggestResponse
     {
         /// <summary>
-        /// Initalizes a new instance of the <see cref="SuggestResponse"/> class.
+        /// Initializes a new instance of the <see cref="SuggestResponse"/> class.
         /// </summary>
         public SuggestResponse()
         {

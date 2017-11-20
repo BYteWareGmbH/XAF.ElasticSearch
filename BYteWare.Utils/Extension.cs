@@ -17,7 +17,7 @@
     public static class Extension
     {
         /// <summary>
-        /// Regular Expression to test E-Mail Adresses
+        /// Regular Expression to test E-Mail Addresses
         /// </summary>
         public const string EMailRegEx = @"^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$";
 
@@ -228,7 +228,7 @@
         }
 
         /// <summary>
-        /// Formats a string with two literal placeholders.
+        /// Formats a string with two literal placeholder.
         /// </summary>
         /// <param name="text">The extension text</param>
         /// <param name="arg0">Argument 0</param>
@@ -240,7 +240,7 @@
         }
 
         /// <summary>
-        /// Formats a string with tree literal placeholders.
+        /// Formats a string with tree literal placeholder.
         /// </summary>
         /// <param name="text">The extension text</param>
         /// <param name="arg0">Argument 0</param>
@@ -253,7 +253,7 @@
         }
 
         /// <summary>
-        /// Formats a string with a list of literal placeholders.
+        /// Formats a string with a list of literal placeholder.
         /// </summary>
         /// <param name="text">The extension text</param>
         /// <param name="args">The argument list</param>
@@ -264,7 +264,7 @@
         }
 
         /// <summary>
-        /// Formats a string with a list of literal placeholders.
+        /// Formats a string with a list of literal placeholder.
         /// </summary>
         /// <param name="text">The extension text</param>
         /// <param name="provider">The format provider</param>
@@ -323,7 +323,7 @@
         /// Toes the integer.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <param name="defaultvalue">The defaultvalue.</param>
+        /// <param name="defaultvalue">The default value.</param>
         /// <returns>Integer from String value</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "Extension Method")]
         public static int ToInteger(this string value, int defaultvalue)
@@ -346,7 +346,7 @@
         /// Toes the double.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <param name="defaultvalue">The defaultvalue.</param>
+        /// <param name="defaultvalue">The default value.</param>
         /// <returns>Double from String value</returns>
         public static double ToDouble(this string value, double defaultvalue)
         {
@@ -375,7 +375,7 @@
         /// Toes the date time.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <param name="defaultvalue">The defaultvalue.</param>
+        /// <param name="defaultvalue">The default value.</param>
         /// <returns>DateTime from String value</returns>
         public static DateTime? ToDateTime(this string value, DateTime? defaultvalue)
         {
@@ -633,7 +633,7 @@
         /// Returns characters from right of specified length
         /// </summary>
         /// <param name="value">String value</param>
-        /// <param name="length">Max number of charaters to return</param>
+        /// <param name="length">Max number of characters to return</param>
         /// <returns>Returns string from right</returns>
         public static string Right(this string value, int length)
         {
@@ -644,7 +644,7 @@
         /// Returns characters from left of specified length
         /// </summary>
         /// <param name="value">String value</param>
-        /// <param name="length">Max number of charaters to return</param>
+        /// <param name="length">Max number of characters to return</param>
         /// <returns>Returns string from left</returns>
         public static string Left(this string value, int length)
         {
@@ -1057,10 +1057,10 @@
         {
             public EnumeratorWrapper(IEnumerable<T> source)
             {
-                SourceEumerable = source;
+                SourceEnumerable = source;
             }
 
-            private IEnumerable<T> SourceEumerable
+            private IEnumerable<T> SourceEnumerable
             {
                 get;
                 set;
@@ -1100,7 +1100,7 @@
                     currentEnumeration = new Enumeration
                     {
                         Position = -1,
-                        Source = SourceEumerable.GetEnumerator(),
+                        Source = SourceEnumerable.GetEnumerator(),
                         AtEnd = false
                     };
                 }
@@ -1431,7 +1431,7 @@
         /// </summary>
         /// <param name="tp">The Type</param>
         /// <param name="value">The Value</param>
-        /// <returns>True if value euqals the default value of Type tp; otherwise False</returns>
+        /// <returns>True if value equals the default value of Type tp; otherwise False</returns>
         public static bool IsDefaultValue(this Type tp, object value)
         {
             if (tp == null)
@@ -1450,7 +1450,7 @@
         /// </summary>
         /// <typeparam name="T">The Type</typeparam>
         /// <param name="value">The Value</param>
-        /// <returns>True if value euqals the default value of Type tp; otherwise False</returns>
+        /// <returns>True if value equals the default value of Type tp; otherwise False</returns>
         public static bool IsDefaultValue<T>(this T value)
         {
             return EqualityComparer<T>.Default.Equals(value, default(T));
@@ -1463,7 +1463,7 @@
         /// <typeparam name="TKey1">Type for the first key level</typeparam>
         /// <typeparam name="TKey2">Type for the second key level</typeparam>
         /// <typeparam name="TValue">Type for the elements</typeparam>
-        /// <param name="items">Source Enumration</param>
+        /// <param name="items">Source Enumeration</param>
         /// <param name="key1">Selector Function for the first key level</param>
         /// <param name="key2">Selector Function for the second key level</param>
         /// <param name="value">Selector Function for the values of the Dictionary</param>
@@ -1502,7 +1502,7 @@
         /// <typeparam name="TKey2">Type for the second key level</typeparam>
         /// <typeparam name="TKey3">Type for the third key level</typeparam>
         /// <typeparam name="TValue">Type for the elements</typeparam>
-        /// <param name="items">Source Enumration</param>
+        /// <param name="items">Source Enumeration</param>
         /// <param name="key1">Selector Function for the first key level</param>
         /// <param name="key2">Selector Function for the second key level</param>
         /// <param name="key3">Selector Function for the third key level</param>

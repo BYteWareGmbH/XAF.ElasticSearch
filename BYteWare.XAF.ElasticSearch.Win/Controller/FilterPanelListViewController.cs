@@ -60,6 +60,7 @@
         public FilterPanelListViewController()
         {
 #pragma warning disable CC0009 // Use object initializer
+#pragma warning disable S2583 // Conditionally executed blocks should be reachable
             ParametrizedAction tempAction = null;
             try
             {
@@ -123,7 +124,7 @@
             {
                 tempTimer = new Forms.Timer();
                 tempTimer.Interval = 500;
-                tempTimer.Tick += SearchTextTimer_Tick;
+                tempTimer.Tick += SearchTextTimer_TickAsync;
                 searchTextTimer = tempTimer;
                 tempTimer = null;
             }
@@ -134,6 +135,7 @@
                     tempTimer.Dispose();
                 }
             }
+#pragma warning restore S2583 // Conditionally executed blocks should be reachable
 #pragma warning restore CC0009 // Use object initializer
         }
 
@@ -356,7 +358,7 @@
                     oldItem.Dispose();
                 }
                 buttons.BarManager.Items.Add(e.Item.ShortcutHandler);
-                searchTextActionItem.Control.TextChanged += Control_TextChanged;
+                searchTextActionItem.Control.TextChanged += Control_TextChangedAsync;
                 var be = searchTextActionItem.Control as ComboBoxEdit;
                 if (be != null)
                 {
@@ -408,7 +410,7 @@
             _needUpdate = false;
         }
 
-        private async void Control_TextChanged(object sender, EventArgs e)
+        private async void Control_TextChangedAsync(object sender, EventArgs e)
         {
             var control = sender as Forms.Control;
             if (control != null)
@@ -422,7 +424,7 @@
                     if (_canUpdate)
                     {
                         _canUpdate = false;
-                        await UpdateSuggestDataAsync();
+                        await UpdateSuggestDataAsync().ConfigureAwait(true);
                     }
                     else
                     {
@@ -440,11 +442,11 @@
             searchTextTimer.Start();
         }
 
-        private async void SearchTextTimer_Tick(object sender, EventArgs e)
+        private async void SearchTextTimer_TickAsync(object sender, EventArgs e)
         {
             _canUpdate = true;
             searchTextTimer.Stop();
-            await UpdateSuggestDataAsync();
+            await UpdateSuggestDataAsync().ConfigureAwait(true);
         }
 
         private async Task UpdateSuggestDataAsync()

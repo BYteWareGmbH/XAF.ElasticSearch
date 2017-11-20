@@ -100,6 +100,18 @@
     <Compile Include="Template\ElasticLookupControlTemplate.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Template\MainFormDynamicActionContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\MainFormDynamicActionContainer.Designer.cs">
+      <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Template\MainRibbonDynamicActionContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\MainRibbonDynamicActionContainer.Designer.cs">
+      <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Template\NestedDynamicActionContainer.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -109,13 +121,28 @@
     <Compile Include="Template\NestedDynamicActionContainerV2.Designer.cs">
       <DependentUpon>NestedDynamicActionContainerV2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Template\OutlookStyleMainRibbonDynamicActionContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\OutlookStyleMainRibbonDynamicActionContainer.Designer.cs">
+      <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="WaitScreenWin.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Model.DesignedDiffs.xafml" />
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Template\MainFormDynamicActionContainer.resx">
+      <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainRibbonDynamicActionContainer.resx">
+      <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\NestedDynamicActionContainerV2.resx">
       <DependentUpon>NestedDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\OutlookStyleMainRibbonDynamicActionContainer.resx">
+      <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

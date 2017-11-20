@@ -133,7 +133,7 @@
         /// Check if this set has any elements in common with other
         /// </summary>
         /// <param name="other">The other IEnumerable</param>
-        /// <returns>True if other conatins overlapping elements; False otherwise</returns>
+        /// <returns>True if other contains overlapping elements; False otherwise</returns>
         public bool Overlaps(IEnumerable<T> other)
         {
             return _set.Overlaps(other);
@@ -143,7 +143,7 @@
         /// Check if this set contains the same and only the same elements as other
         /// </summary>
         /// <param name="other">The other IEnumerable</param>
-        /// <returns>True if other conatins the same elements; False otherwise</returns>
+        /// <returns>True if other contains the same elements; False otherwise</returns>
         public bool SetEquals(IEnumerable<T> other)
         {
             return _set.SetEquals(other);
@@ -171,7 +171,7 @@
         /// Does the collection contain the item
         /// </summary>
         /// <param name="item">item to search</param>
-        /// <returns>True if the collection contains the item; Fslse otherwise</returns>
+        /// <returns>True if the collection contains the item; False otherwise</returns>
         public bool Contains(T item)
         {
             return _set.Contains(item);

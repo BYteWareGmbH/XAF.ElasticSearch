@@ -21,7 +21,7 @@
     public class ButtonsContainersParametrizedActionComboItem : ButtonsContainersParametrizedActionItem
     {
         /// <summary>
-        /// Initalizes a new instance of the <see cref="ButtonsContainersParametrizedActionComboItem"/> class.
+        /// Initializes a new instance of the <see cref="ButtonsContainersParametrizedActionComboItem"/> class.
         /// </summary>
         /// <param name="action">Parametrized Action instance</param>
         /// <param name="owner">Buttons Container</param>

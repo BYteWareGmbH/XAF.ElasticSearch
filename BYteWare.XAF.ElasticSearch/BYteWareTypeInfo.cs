@@ -58,7 +58,7 @@
         }
 
         /// <summary>
-        /// Returns a ByteWareTypeInfo instance with inormations about the type
+        /// Returns a ByteWareTypeInfo instance with informations about the type
         /// </summary>
         /// <param name="type">A Type instance</param>
         /// <returns>The ByteWareTypeInfo instance for type</returns>
@@ -248,7 +248,7 @@
         }
 
         /// <summary>
-        /// List of members who are to be reindexed on saving of instances of this tpye
+        /// List of members who are to be reindexed on saving of instances of this type
         /// </summary>
         public ReadOnlyCollection<XPMemberInfo> ESReferences
         {
@@ -432,7 +432,7 @@
         /// <summary>
         /// Returns an Enumeration of all ElasticSearch Field Names
         /// </summary>
-        /// <param name="wildcards">Should possible wildcard names (only useable for search) also be returned</param>
+        /// <param name="wildcards">Should possible wildcard names (only usable for search) also be returned</param>
         /// <returns>Enumeration of all ElasticSearch Field Names</returns>
         public IEnumerable<string> ESFields(bool wildcards)
         {

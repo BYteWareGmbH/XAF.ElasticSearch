@@ -17,7 +17,7 @@
     public class ElasticSearchContractResolver : DefaultContractResolver
     {
         /// <summary>
-        /// Initalizes a new instance of the <see cref="ElasticSearchContractResolver"/> class.
+        /// Initializes a new instance of the <see cref="ElasticSearchContractResolver"/> class.
         /// </summary>
         public ElasticSearchContractResolver() : base()
         {

@@ -15,8 +15,8 @@
     [CLSCompliant(false)]
     public class NestedDynamicActionContainer : NestedFrameTemplate, IDynamicContainersTemplate, IContextMenuHolder
     {
-        private ActionContainersManager actionsContainers;
         private readonly DevExpress.XtraBars.PopupMenu contextMenu;
+        private ActionContainersManager actionsContainers;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NestedDynamicActionContainer"/> class.

@@ -43,7 +43,7 @@
         }
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="TypeMappingWriter"/> class.
+        /// Initializes a new instance of the <see cref="TypeMappingWriter"/> class.
         /// </summary>
         /// <param name="ec">ElasticSearchClient instance</param>
         /// <param name="bti">Type to create the mapping for</param>
@@ -126,7 +126,7 @@
         }
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="TypeMappingWriter"/> class.
+        /// Initializes a new instance of the <see cref="TypeMappingWriter"/> class.
         /// internal constructor by TypeMappingWriter itself when it recurses, passes seenTypes as safeguard against maxRecursion
         /// </summary>
         /// <param name="ec">ElasticSearchClient instance</param>

@@ -60,9 +60,9 @@
         public const string IndexExceptionGroup = @"Exceptions\ElasticIndexException";
 
         /// <summary>
-        /// Name for the Lock on Checking for a neccesary Reindex
+        /// Name for the Lock on Checking for a necessary Reindex
         /// </summary>
-        public const string ElasticSearchCheckNeccesary = "ElasticSearchCheckNeccesary";
+        public const string ElasticSearchCheckNecessary = "ElasticSearchCheckNecessary";
 
         /// <summary>
         /// Name for the Lock on Reindexing
@@ -129,7 +129,7 @@
         }
 
         /// <summary>
-        /// Inferes the FieldType from the type of the property.
+        /// Infers the FieldType from the type of the property.
         /// </summary>
         /// <param name="propertyType">Type of the property</param>
         /// <returns>FieldType or null if can not be inferred</returns>
@@ -591,7 +591,7 @@
         }
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="ElasticSearchClient"/> class.
+        /// Initializes a new instance of the <see cref="ElasticSearchClient"/> class.
         /// </summary>
         /// <param name="indexPersistentType">BusinessClass Type to store the state of ElasticSearch indexes</param>
         /// <param name="indexRefreshPersistentType">BusinessClass Type to store if an ElasticSearch index should be refreshed</param>
@@ -613,7 +613,7 @@
         = string.Empty;
 
         /// <summary>
-        /// Use Asnyc Methods if possible
+        /// Use Async Methods if possible
         /// </summary>
         public bool UseAsync
         {
@@ -1156,7 +1156,7 @@
         /// <summary>
         /// Test if searching with ElasticSearch is available for Type identified by ti
         /// </summary>
-        /// <param name="ti">The Tpye Info to test if searching with ElasticSearch is available</param>
+        /// <param name="ti">The Type Info to test if searching with ElasticSearch is available</param>
         /// <returns>True if searching with ElasticSearch is available; False otherwise</returns>
         [CLSCompliant(false)]
         public bool IsElasticSearchAvailable(ITypeInfo ti)
@@ -1219,7 +1219,7 @@
         }
 
         /// <summary>
-        /// Replaces all ocurrences of '@{ParameterName}' with the value of the Parameter
+        /// Replaces all occurrences of '@{ParameterName}' with the value of the Parameter
         /// </summary>
         /// <param name="filter">filter string with optional parameters</param>
         /// <returns>The string filter with all parameters replaced with their values</returns>
@@ -1267,7 +1267,7 @@
         /// <summary>
         /// Checks if the provided filter string is valid for the Type with ITypeInfo ti
         /// </summary>
-        /// <param name="ti">The Tpye Info to test if searching with ElasticSearch is available</param>
+        /// <param name="ti">The Type Info to test if searching with ElasticSearch is available</param>
         /// <param name="filter">The filter string to test</param>
         /// <returns>The error messages; empty array if valid</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
@@ -1338,7 +1338,7 @@
         /// <param name="application">A XafApplication instance</param>
         /// <param name="progress">Optional Progress Callback method</param>
         [CLSCompliant(false)]
-        public void RefreshNeccessaryIndexes(XafApplication application, Action<IWorkerProgress> progress)
+        public void RefreshNecessaryIndexes(XafApplication application, Action<IWorkerProgress> progress)
         {
             if (application == null)
             {
@@ -1348,7 +1348,7 @@
             {
                 string[] indexes = null;
                 var indexMap = new Dictionary<string, string>();
-                using (var lck = new ResourceLock(os.Session, ElasticSearchCheckNeccesary, LockMode.Shared))
+                using (var lck = new ResourceLock(os.Session, ElasticSearchCheckNecessary, LockMode.Shared))
                 {
                     if (lck.Acquire(0))
                     {

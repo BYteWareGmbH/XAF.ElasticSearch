@@ -6,8 +6,11 @@
     using DevExpress.ExpressApp.Model;
     using DevExpress.ExpressApp.Updating;
     using DevExpress.ExpressApp.Win;
+    using DevExpress.ExpressApp.Win.SystemModule;
     using DevExpress.ExpressApp.Win.Templates.Bars;
+    using DevExpress.ExpressApp.Win.Utils;
     using DevExpress.Utils;
+    using DevExpress.XtraBars.Ribbon;
     using Model;
     using System;
     using System.Collections.Generic;
@@ -108,12 +111,30 @@
                 }
                 else
                 {
-                    e.Template = new NestedDynamicActionContainer();
+                    e.Template = new NestedDynamicActionContainerV2();
                 }
             }
             else if (e.Context == TemplateContext.LookupControl)
             {
                 e.Template = new ElasticLookupControlTemplate();
+            }
+            else if (e.Context == TemplateContext.ApplicationWindow)
+            {
+                if (((IModelOptionsWin)Application.Model.Options).FormStyle == RibbonFormStyle.Standard)
+                {
+                    e.Template = new MainFormDynamicActionContainer();
+                }
+                else
+                {
+                    if (ModelOptionsHelper.IsOutlookTemplateEnabled(Application.Model))
+                    {
+                        e.Template = new OutlookStyleMainRibbonDynamicActionContainer();
+                    }
+                    else
+                    {
+                        e.Template = new MainRibbonDynamicActionContainer();
+                    }
+                }
             }
         }
     }

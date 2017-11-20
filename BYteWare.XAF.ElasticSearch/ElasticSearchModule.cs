@@ -101,7 +101,7 @@
         {
             try
             {
-                ElasticSearchClient.Instance?.RefreshNeccessaryIndexes(Application, p =>
+                ElasticSearchClient.Instance?.RefreshNecessaryIndexes(Application, p =>
                 {
                     Application.UpdateStatus("ElasticSearch RefreshIndexes", p.Name, string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(ElasticSearchClient.MessageGroup, "RefreshProgress"), p.Phase, p.Position, p.Maximum, p.Position / (double)p.Maximum));
                 });

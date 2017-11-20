@@ -43,11 +43,12 @@
         private string lastSearchText;
 
         /// <summary>
-        /// Initalizes a new instance of the <see cref="ElasticSearchFilterController"/> class.
+        /// Initializes a new instance of the <see cref="ElasticSearchFilterController"/> class.
         /// </summary>
         public ElasticSearchFilterController()
         {
 #pragma warning disable CC0009 // Use object initializer
+#pragma warning disable S2583 // Conditionally executed blocks should be reachable
             SingleChoiceAction tempAction = null;
             try
             {
@@ -101,6 +102,7 @@
                     tempAction.Dispose();
                 }
             }
+#pragma warning restore S2583 // Conditionally executed blocks should be reachable
 #pragma warning restore CC0009 // Use object initializer
         }
 
@@ -145,7 +147,7 @@
         }
 
         /// <summary>
-        /// Is ElasticSearch for the type of the View avaiable
+        /// Is ElasticSearch for the type of the View available
         /// </summary>
         public bool IsElasticSearchAvailable
         {

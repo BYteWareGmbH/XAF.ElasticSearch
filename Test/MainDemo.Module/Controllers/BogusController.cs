@@ -53,12 +53,6 @@ namespace MainDemo.Module.Controllers
             WaitScreen.Instance.Hide();
         }
 
-        private Contact AddContracts(int i)
-        {
-            var v = ObjectSpace.CreateObject<Contact>();
-            return v;
-        }
-
         private bool CreateBogusContactData()
         {
             try
@@ -114,10 +108,9 @@ namespace MainDemo.Module.Controllers
                 }
                 return true;
             }
-            catch (Exception ex)
+            catch
             {
                 return false;
-                throw;
             }
         }
     }
