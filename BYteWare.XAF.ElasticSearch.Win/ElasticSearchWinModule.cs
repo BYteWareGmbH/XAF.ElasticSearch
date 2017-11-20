@@ -106,6 +106,10 @@
                 {
                     e.Template = new NestedDynamicActionContainer();
                 }
+                else
+                {
+                    e.Template = new NestedDynamicActionContainer();
+                }
             }
             else if (e.Context == TemplateContext.LookupControl)
             {

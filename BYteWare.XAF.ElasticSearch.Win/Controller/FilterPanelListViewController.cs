@@ -5,7 +5,6 @@
     using DevExpress.ExpressApp.Actions;
     using DevExpress.ExpressApp.SystemModule;
     using DevExpress.ExpressApp.Templates;
-    using DevExpress.ExpressApp.Win.Editors;
     using DevExpress.ExpressApp.Win.Templates;
     using DevExpress.ExpressApp.Win.Templates.ActionContainers;
     using DevExpress.XtraEditors;
@@ -16,9 +15,7 @@
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
-    using System.Reflection;
     using System.Threading.Tasks;
-    using Template;
     using Forms = System.Windows.Forms;
 
     /// <summary>
@@ -181,6 +178,17 @@
                 {
                     UpdateActionState();
                 }
+                if (Frame != null)
+                {
+                    if (Frame.Template is IDynamicContainersTemplate)
+                    {
+                        TemplateChanged();
+                    }
+                    else
+                    {
+                        Frame.TemplateChanged += Frame_TemplateChanged;
+                    }
+                }
             }
         }
 
@@ -193,6 +201,10 @@
             {
                 control.HandleCreated -= GridControlHandleCreated;
             }
+            if (Frame != null)
+            {
+                Frame.TemplateChanged -= Frame_TemplateChanged;
+            }
             if (oldFilterFieldsAction != null)
             {
                 oldFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, true);
@@ -201,6 +213,11 @@
             }
             if (buttonsContainer != null)
             {
+                var template = Frame?.Template as IDynamicContainersTemplate;
+                if (template != null)
+                {
+                    template.UnregisterActionContainers(new IActionContainer[] { buttonsContainer });
+                }
                 if (!buttonsContainer.IsDisposed)
                 {
                     buttonsContainer.Dispose();
@@ -296,14 +313,14 @@
                     _FilterPanel.EndInit();
                     _FilterPanel.ResumeLayout(false);
 
-                    oldFilterFieldsAction = filterController.FilterFieldsAction;
-                    oldFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, false);
-                    newFilterFieldsAction.Execute += filterController.FilterFieldsActionExecute;
-                    newFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, true);
-                    filterController.FilterFieldsAction = newFilterFieldsAction;
-                    filterController.SetupFilterFields();
-
-                    _FillActionContainersController.GetType().GetMethod("FillContainers", BindingFlags.NonPublic | BindingFlags.Instance).Invoke(_FillActionContainersController, new object[] { new IActionContainer[] { buttonsContainer }, Frame.Controllers.GetValues(), null, Frame.Template });
+                    if (Frame != null && Frame.Template != null)
+                    {
+                        var template = Frame.Template as IDynamicContainersTemplate;
+                        if (template != null)
+                        {
+                            template.RegisterActionContainers(new IActionContainer[] { buttonsContainer });
+                        }
+                    }
                     var ff = buttonsContainer.ActionItems.FirstOrDefault(t => t.Key.Id == newFilterFieldsAction.Id);
                     if (ff.Value != null && ff.Value.LayoutItem != null)
                     {
@@ -469,6 +486,25 @@
             if (gridControl.Parent != null)
             {
                 gridControl.Parent.Controls.Add(_FilterPanel);
+            }
+        }
+
+        private void Frame_TemplateChanged(object sender, EventArgs e)
+        {
+            TemplateChanged();
+        }
+
+        private void TemplateChanged()
+        {
+            if (Frame != null && oldFilterFieldsAction == null && Frame.Template is IDynamicContainersTemplate)
+            {
+                oldFilterFieldsAction = filterController.FilterFieldsAction;
+                oldFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, false);
+                newFilterFieldsAction.Execute += filterController.FilterFieldsActionExecute;
+                newFilterFieldsAction.Active.SetItemValue(FilterPanelGroup, true);
+                filterController.FilterFieldsAction = newFilterFieldsAction;
+                filterController.SetupFilterFields();
+                UpdateActionState();
             }
         }
     }
