@@ -132,16 +132,52 @@
   <ItemGroup>
     <EmbeddedResource Include="Model.DesignedDiffs.xafml" />
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Template\MainFormDynamicActionContainer.de.resx">
+      <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainFormDynamicActionContainer.es.resx">
+      <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainFormDynamicActionContainer.ja.resx">
+      <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\MainFormDynamicActionContainer.resx">
       <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainFormDynamicActionContainer.ru.resx">
+      <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainRibbonDynamicActionContainer.de.resx">
+      <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainRibbonDynamicActionContainer.es.resx">
+      <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainRibbonDynamicActionContainer.ja.resx">
+      <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\MainRibbonDynamicActionContainer.resx">
+      <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\MainRibbonDynamicActionContainer.ru.resx">
       <DependentUpon>MainRibbonDynamicActionContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Template\NestedDynamicActionContainerV2.resx">
       <DependentUpon>NestedDynamicActionContainerV2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Template\OutlookStyleMainRibbonDynamicActionContainer.de.resx">
+      <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\OutlookStyleMainRibbonDynamicActionContainer.es.resx">
+      <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\OutlookStyleMainRibbonDynamicActionContainer.ja.resx">
+      <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\OutlookStyleMainRibbonDynamicActionContainer.resx">
+      <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\OutlookStyleMainRibbonDynamicActionContainer.ru.resx">
       <DependentUpon>OutlookStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
