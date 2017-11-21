@@ -42,7 +42,7 @@
     </ItemGroup>
     <Exec Command="$(NugetExePath) push %(NewNuGetSymbolPackages.Identity) -NonInteractive -Source https://nuget.bytewa.re/nuget/BYteWare" />
     <Exec Command="$(NugetExePath) push %(NewNuGetPackages.Identity) -NonInteractive -NoSymbols -Source https://www.nuget.org/api/v2/package" />
-    <Move SourceFiles="%(NewNuGetPackages.Identity)" DestinationFiles="$(NupkgFile)" />
+    <Move SourceFiles="%(NewNuGetSymbolPackages.Identity)" DestinationFiles="$(NupkgFile)" />
     <ItemGroup>
       <NonSymbolNuGetPackages Include="**\*.nupkg" Exclude="packages\**\*.nupkg;**\*.symbols.nupkg"/>
     </ItemGroup>
