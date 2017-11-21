@@ -118,7 +118,7 @@
             {
                 e.Template = new ElasticLookupControlTemplate();
             }
-            else if (e.Context == TemplateContext.ApplicationWindow)
+            else if (e.Context == TemplateContext.ApplicationWindow && !((WinApplication)e.Application).UseOldTemplates)
             {
                 if (((IModelOptionsWin)Application.Model.Options).FormStyle == RibbonFormStyle.Standard)
                 {

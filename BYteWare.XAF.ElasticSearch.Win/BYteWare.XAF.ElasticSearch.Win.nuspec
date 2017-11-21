@@ -15,5 +15,8 @@
   <files>
     <file src="bin\$configuration$\$id$.pdb" target="lib\net452" />
     <file src="bin\$configuration$\de\$id$.resources.dll" target="lib\net452\de" />
+    <file src="bin\$configuration$\es\$id$.resources.dll" target="lib\net452\es" />
+    <file src="bin\$configuration$\ja\$id$.resources.dll" target="lib\net452\ja" />
+    <file src="bin\$configuration$\ru\$id$.resources.dll" target="lib\net452\ru" />
   </files>
 </package>

@@ -29,7 +29,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainRibbonDynamicActionContainer));
             this.ribbonControl = new DevExpress.ExpressApp.Win.Templates.Ribbon.XafRibbonControlV2();
             this.barActionContainerViewsHistoryNavigation = new DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer();
@@ -90,8 +89,8 @@
             this.barContainerNotifications = new DevExpress.XtraBars.BarLinkContainerExItem();
             this.ribbonChooseSkinActionControl = new DevExpress.ExpressApp.Win.Templates.Ribbon.ActionControls.RibbonChooseSkinActionControl();
             this.ribbonGallerySkins = new DevExpress.XtraBars.RibbonGalleryBarItem();
-            this.applicationMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
-            this.mainBarAndDockingController = new DevExpress.XtraBars.BarAndDockingController(this.components);
+            this.applicationMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu();
+            this.mainBarAndDockingController = new DevExpress.XtraBars.BarAndDockingController();
             this.barMdiChildrenListItem = new DevExpress.XtraBars.BarDockingMenuItem();
             this.barSubItemPanels = new DevExpress.XtraBars.BarSubItem();
             this.barContainerStatusMessages = new DevExpress.XtraBars.BarLinkContainerExItem();
@@ -120,20 +119,20 @@
             this.ribbonGroupDiagnostic = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.windowPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-            this.dockManager = new DevExpress.XtraBars.Docking.DockManager(this.components);
+            this.dockManager = new DevExpress.XtraBars.Docking.DockManager();
             this.dockPanelNavigation = new DevExpress.XtraBars.Docking.DockPanel();
             this.dockPanelNavigation_Container = new DevExpress.XtraBars.Docking.ControlContainer();
             this.navigation = new DevExpress.ExpressApp.Win.Templates.ActionContainers.NavigationActionContainer();
             this.viewSitePanel = new DevExpress.XtraEditors.PanelControl();
-            this.documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
-            this.noDocumentsView = new DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView(this.components);
-            this.tabbedView = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
-            this.nativeMdiView = new DevExpress.XtraBars.Docking2010.Views.NativeMdi.NativeMdiView(this.components);
-            this.viewSiteManager = new DevExpress.ExpressApp.Win.Templates.ViewSiteManager(this.components);
-            this.modelSynchronizationManager = new DevExpress.ExpressApp.Win.Templates.ModelSynchronizationManager(this.components);
-            this.formStateModelSynchronizer = new DevExpress.ExpressApp.Win.Core.FormStateModelSynchronizer(this.components);
-            this.contextMenu = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.actionContainersManager = new DevExpress.ExpressApp.Win.Templates.ActionContainersManager(this.components);
+            this.documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager();
+            this.noDocumentsView = new DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView();
+            this.tabbedView = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView();
+            this.nativeMdiView = new DevExpress.XtraBars.Docking2010.Views.NativeMdi.NativeMdiView();
+            this.viewSiteManager = new DevExpress.ExpressApp.Win.Templates.ViewSiteManager();
+            this.modelSynchronizationManager = new DevExpress.ExpressApp.Win.Templates.ModelSynchronizationManager();
+            this.formStateModelSynchronizer = new DevExpress.ExpressApp.Win.Core.FormStateModelSynchronizer();
+            this.contextMenu = new DevExpress.XtraBars.PopupMenu();
+            this.actionContainersManager = new DevExpress.ExpressApp.Win.Templates.ActionContainersManager();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barActionContainerViewsHistoryNavigation)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.barActionContainerObjectsCreation)).BeginInit();
@@ -969,6 +968,10 @@
             this.contextMenu.ItemLinks.Add(this.barContainerMenu, true);
             this.contextMenu.Name = "contextMenu";
             this.contextMenu.Ribbon = this.ribbonControl;
+            // 
+            // actionContainersManager
+            // 
+            this.actionContainersManager.DefaultContainer = null;
             this.actionContainersManager.Template = this;
             // 
             // MainRibbonDynamicActionContainer

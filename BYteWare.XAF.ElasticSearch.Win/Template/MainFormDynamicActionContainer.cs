@@ -170,6 +170,7 @@ namespace BYteWare.XAF.ElasticSearch.Win.Template
             barManager.ForceLinkCreate();
             statusMessagesHelper = new StatusMessagesHelper(barContainerStatusMessages);
             OnUITypeChanged();
+            ActionContainersManager.ActionContainerComponents.Add(navigation);
         }
 
         #region IActionControlsSite Members

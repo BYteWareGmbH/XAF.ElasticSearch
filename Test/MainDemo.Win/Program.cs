@@ -32,6 +32,7 @@ namespace MainDemo.Win {
 				e.ObjectSpaceProviders.Add(new SecuredObjectSpaceProvider((ISelectDataSecurityProvider)winApplication.Security, e.ConnectionString, e.Connection, false));
 				e.ObjectSpaceProviders.Add(new NonPersistentObjectSpaceProvider(winApplication.TypesInfo, null));
 			};
+            ////winApplication.UseOldTemplates = true;
             ConnectionStringSettings connectionStringSettings = ConfigurationManager.ConnectionStrings["ConnectionString"];
             if(connectionStringSettings != null) {
                 winApplication.ConnectionString = connectionStringSettings.ConnectionString;
