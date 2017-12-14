@@ -97,6 +97,18 @@
     <Compile Include="Model\IModelListViewFilterPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyEditor\ButtonsContainersParametrizedActionComboItem.cs" />
+    <Compile Include="Template\DetailDynamicActionContainerV2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\DetailDynamicActionContainerV2.Designer.cs">
+      <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Template\DetailRibbonDynamicActionContainerV2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\DetailRibbonDynamicActionContainerV2.Designer.cs">
+      <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Template\ElasticLookupControlTemplate.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -132,6 +144,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Model.DesignedDiffs.xafml" />
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Template\DetailDynamicActionContainerV2.resx">
+      <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailRibbonDynamicActionContainerV2.resx">
+      <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\MainFormDynamicActionContainer.de.resx">
       <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>
     </EmbeddedResource>

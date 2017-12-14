@@ -135,6 +135,16 @@
                         e.Template = new MainRibbonDynamicActionContainer();
                     }
                 }
+            } else if (e.Context == TemplateContext.View && !((WinApplication)e.Application).UseOldTemplates)
+            {
+                if (((IModelOptionsWin)Application.Model.Options).FormStyle == RibbonFormStyle.Standard)
+                {
+                    e.Template = new DetailDynamicActionContainerV2();
+                }
+                else
+                {
+                    e.Template = new DetailRibbonDynamicActionContainerV2();
+                }
             }
         }
     }
