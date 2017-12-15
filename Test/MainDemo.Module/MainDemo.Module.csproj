@@ -114,82 +114,91 @@
       <HintPath>..\..\packages\Bogus.10.0.1\lib\net40\Bogus.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="DevExpress.Data.v16.2">
+    <Reference Include="DevExpress.Data.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.ConditionalAppearance.v16.2">
+    <Reference Include="DevExpress.ExpressApp.ConditionalAppearance.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.Notifications.v16.2">
+    <Reference Include="DevExpress.ExpressApp.Notifications.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.PivotChart.v16.2">
+    <Reference Include="DevExpress.ExpressApp.PivotChart.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Charts.v16.2.Core">
+    <Reference Include="DevExpress.Charts.v17.2.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.ReportsV2.v16.2">
+    <Reference Include="DevExpress.ExpressApp.ReportsV2.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.Xpo.v16.2">
+    <Reference Include="DevExpress.ExpressApp.Xpo.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Printing.v16.2.Core">
+    <Reference Include="DevExpress.Office.v17.2.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraCharts.v16.2.Wizard">
+    <Reference Include="DevExpress.RichEdit.v17.2.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraCharts.v16.2">
+    <Reference Include="DevExpress.RichEdit.v17.2.Export">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.PivotGrid.v16.2.Core">
+    <Reference Include="DevExpress.Printing.v17.2.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraPivotGrid.v16.2">
+    <Reference Include="DevExpress.XtraCharts.v17.2.Wizard">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v16.2.Extensions">
+    <Reference Include="DevExpress.XtraCharts.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Sparkline.v16.2.Core">
+    <Reference Include="DevExpress.PivotGrid.v17.2.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.CodeParser.v16.2">
+    <Reference Include="DevExpress.XtraPivotGrid.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Utils.v16.2.UI">
+    <Reference Include="DevExpress.XtraReports.v17.2.Extensions">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraReports.v16.2">
+    <Reference Include="DevExpress.Sparkline.v17.2.Core">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.XtraPrinting.v16.2">
+    <Reference Include="DevExpress.CodeParser.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.v16.2">
+    <Reference Include="DevExpress.Utils.v17.2.UI">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.Objects.v16.2">
+    <Reference Include="DevExpress.XtraReports.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.Security.v16.2">
+    <Reference Include="DevExpress.XtraPrinting.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.ViewVariantsModule.v16.2">
+    <Reference Include="DevExpress.ExpressApp.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.ExpressApp.Validation.v16.2">
+    <Reference Include="DevExpress.ExpressApp.Objects.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Persistent.Base.v16.2">
+    <Reference Include="DevExpress.ExpressApp.Security.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Persistent.BaseImpl.v16.2">
+    <Reference Include="DevExpress.ExpressApp.ViewVariantsModule.v17.2">
       <Private>False</Private>
     </Reference>
-    <Reference Include="DevExpress.Xpo.v16.2">
+    <Reference Include="DevExpress.ExpressApp.Validation.v17.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Persistent.Base.v17.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Persistent.BaseImpl.v17.2">
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v17.2">
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
