@@ -1,1 +1,1 @@
-CMD /c ""C:\Program Files (x86)\Microsoft Visual Studio 14.0\Common7\Tools\VsMSBuildCmd.bat" && msbuild /m XAF.ElasticSearch.msbuild /t:NugetPackAndPush /clp:WarningsOnly /l:FileLogger,Microsoft.Build.Engine;logfile=Build.log"
+CMD /c "pushd "%~dp0" && (IF DEFINED VS150COMNTOOLS ("%VS150COMNTOOLS%VsMSBuildCmd.bat") ELSE ("%VS140COMNTOOLS%VsMSBuildCmd.bat")) && popd && msbuild /m XAF.ElasticSearch.msbuild /clp:WarningsOnly /l:FileLogger,Microsoft.Build.Engine;logfile=Build.log"
