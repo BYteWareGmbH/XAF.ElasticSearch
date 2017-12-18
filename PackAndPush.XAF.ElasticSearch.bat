@@ -1,1 +1,2 @@
-CMD /c "pushd "%~dp0" && (IF DEFINED VS150COMNTOOLS ("%VS150COMNTOOLS%VsMSBuildCmd.bat") ELSE ("%VS140COMNTOOLS%VsMSBuildCmd.bat")) && popd && msbuild /m XAF.ElasticSearch.msbuild /clp:WarningsOnly /l:FileLogger,Microsoft.Build.Engine;logfile=Build.log"
+FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" 2^>NUL ^| FIND "REG_SZ"') DO SET VSPath=%%B
+CMD /c "pushd "%~dp0" && "%VSPath%VsMSBuildCmd.bat" && popd && msbuild /m XAF.ElasticSearch.msbuild /clp:WarningsOnly /l:FileLogger,Microsoft.Build.Engine;logfile=Build.log"
