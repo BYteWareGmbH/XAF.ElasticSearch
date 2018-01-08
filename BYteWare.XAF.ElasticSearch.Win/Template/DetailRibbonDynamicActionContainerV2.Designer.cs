@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DetailRibbonDynamicActionContainerV2));
+            System.ComponentModel.ComponentResourceManager resources = new DevExpress.ExpressApp.Win.Templates.XafComponentResourceManager(typeof(DetailRibbonDynamicActionContainerV2));
             this.ribbonControl = new DevExpress.ExpressApp.Win.Templates.Ribbon.XafRibbonControlV2();
             this.barActionContainerObjectsCreation = new DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer();
             this.barContainerObjectsCreation = new DevExpress.XtraBars.BarLinkContainerExItem();
@@ -189,7 +189,6 @@
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.defaultPage,
             this.toolsPage});
-            this.ribbonControl.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonControlStyle.Office2010;
             this.ribbonControl.StatusBar = this.ribbonStatusBar;
             // 
             // barActionContainerObjectsCreation
@@ -405,8 +404,8 @@
             // barActionContainerTools
             // 
             this.barActionContainerTools.ActionCategory = "Tools";
-            this.barActionContainerTools.BarContainerItem = this.barContainerTools;
             this.barActionContainerTools.IsMenuMode = true;
+            this.barActionContainerTools.BarContainerItem = this.barContainerTools;
             // 
             // barContainerTools
             // 
@@ -418,8 +417,8 @@
             // barActionContainerDiagnostic
             // 
             this.barActionContainerDiagnostic.ActionCategory = "Diagnostic";
-            this.barActionContainerDiagnostic.BarContainerItem = this.barContainerDiagnostic;
             this.barActionContainerDiagnostic.IsMenuMode = true;
+            this.barActionContainerDiagnostic.BarContainerItem = this.barContainerDiagnostic;
             // 
             // barContainerDiagnostic
             // 
@@ -431,8 +430,8 @@
             // barActionContainerOptions
             // 
             this.barActionContainerOptions.ActionCategory = "Options";
-            this.barActionContainerOptions.BarContainerItem = this.barContainerOptions;
             this.barActionContainerOptions.IsMenuMode = true;
+            this.barActionContainerOptions.BarContainerItem = this.barContainerOptions;
             // 
             // barContainerOptions
             // 

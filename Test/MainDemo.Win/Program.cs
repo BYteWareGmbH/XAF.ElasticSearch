@@ -22,6 +22,7 @@ namespace MainDemo.Win {
             MainDemoWinApplication winApplication = new MainDemoWinApplication();
             winApplication.EnableModelCache = true;
             winApplication.LinkNewObjectToParentImmediately = false;
+            winApplication.UseLightStyle = true;
 #if DEBUG
             DevExpress.ExpressApp.Win.EasyTest.EasyTestRemotingRegistration.Register();
 #endif

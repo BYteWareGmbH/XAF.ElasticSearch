@@ -90,6 +90,13 @@ namespace BYteWare.XAF.ElasticSearch.Win.Template
             barSubItemPanels.Glyph = ImageLoader.Instance.GetImageInfo("Action_Navigation").Image;
             barSubItemPanels.LargeGlyph = ImageLoader.Instance.GetLargeImageInfo("Action_Navigation").Image;
         }
+
+        protected virtual void SynchronizeBarAndDockingControllerWithDefault()
+        {
+            mainBarAndDockingController.PropertiesBar.ScaleEditors = BarAndDockingController.Default.PropertiesBar.ScaleEditors;
+            mainBarAndDockingController.PropertiesRibbon.ScaleEditors = BarAndDockingController.Default.PropertiesRibbon.ScaleEditors;
+        }
+
         protected virtual void OnUITypeChanged()
         {
             UIType uiType = ((IXafDocumentsHostWindow)this).UIType;
@@ -168,6 +175,7 @@ namespace BYteWare.XAF.ElasticSearch.Win.Template
         {
             InitializeComponent();
             InitializeImages();
+            SynchronizeBarAndDockingControllerWithDefault();
             ribbonControl.Manager.ForceLinkCreate();
             statusMessagesHelper = new StatusMessagesHelper(barContainerStatusMessages);
             OnUITypeChanged();

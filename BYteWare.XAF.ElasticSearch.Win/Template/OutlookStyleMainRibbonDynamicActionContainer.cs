@@ -93,6 +93,12 @@ namespace BYteWare.XAF.ElasticSearch.Win.Template
             barCheckItemReading.Glyph = ImageLoader.Instance.GetImageInfo("OutlookNavigation_Reading").Image;
         }
 
+        protected virtual void SynchronizeBarAndDockingControllerWithDefault()
+        {
+            mainBarAndDockingController.PropertiesBar.ScaleEditors = BarAndDockingController.Default.PropertiesBar.ScaleEditors;
+            mainBarAndDockingController.PropertiesRibbon.ScaleEditors = BarAndDockingController.Default.PropertiesRibbon.ScaleEditors;
+        }
+
         protected virtual void RaiseViewChanged(DevExpress.ExpressApp.View view)
         {
             EventHandler<TemplateViewChangedEventArgs> handler = (EventHandler<TemplateViewChangedEventArgs>)Events[viewChanged];
@@ -122,6 +128,7 @@ namespace BYteWare.XAF.ElasticSearch.Win.Template
         {
             InitializeComponent();
             InitializeImages();
+            SynchronizeBarAndDockingControllerWithDefault();
             ribbonControl.Manager.ForceLinkCreate();
             statusMessagesHelper = new StatusMessagesHelper(barContainerStatusMessages);
             new ReadingModeSwitcher(barCheckItemNormal, barCheckItemReading, navBarControl, officeNavigationBar);

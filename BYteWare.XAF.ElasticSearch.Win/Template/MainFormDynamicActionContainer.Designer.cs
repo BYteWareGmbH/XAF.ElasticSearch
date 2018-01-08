@@ -258,7 +258,7 @@
             // barContainerObjectsCreation
             // 
             resources.ApplyResources(this.barContainerObjectsCreation, "barContainerObjectsCreation");
-            this.barContainerObjectsCreation.Id = 18;
+            this.barContainerObjectsCreation.Id = 6;
             this.barContainerObjectsCreation.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerObjectsCreation.Name = "barContainerObjectsCreation";
             // 
@@ -270,7 +270,7 @@
             // barContainerFile
             // 
             resources.ApplyResources(this.barContainerFile, "barContainerFile");
-            this.barContainerFile.Id = 5;
+            this.barContainerFile.Id = 7;
             this.barContainerFile.MergeOrder = 2;
             this.barContainerFile.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerFile.Name = "barContainerFile";
@@ -295,7 +295,7 @@
             // barContainerPrint
             // 
             resources.ApplyResources(this.barContainerPrint, "barContainerPrint");
-            this.barContainerPrint.Id = 6;
+            this.barContainerPrint.Id = 9;
             this.barContainerPrint.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerPrint.Name = "barContainerPrint";
             // 
@@ -307,7 +307,7 @@
             // barContainerExport
             // 
             resources.ApplyResources(this.barContainerExport, "barContainerExport");
-            this.barContainerExport.Id = 7;
+            this.barContainerExport.Id = 10;
             this.barContainerExport.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerExport.Name = "barContainerExport";
             // 
@@ -319,7 +319,7 @@
             // barContainerExit
             // 
             resources.ApplyResources(this.barContainerExit, "barContainerExit");
-            this.barContainerExit.Id = 8;
+            this.barContainerExit.Id = 11;
             this.barContainerExit.MergeOrder = 900;
             this.barContainerExit.Name = "barContainerExit";
             // 
@@ -331,7 +331,7 @@
             // barContainerUndoRedo
             // 
             resources.ApplyResources(this.barContainerUndoRedo, "barContainerUndoRedo");
-            this.barContainerUndoRedo.Id = 10;
+            this.barContainerUndoRedo.Id = 12;
             this.barContainerUndoRedo.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerUndoRedo.Name = "barContainerUndoRedo";
             // 
@@ -343,7 +343,7 @@
             // barContainerEdit
             // 
             resources.ApplyResources(this.barContainerEdit, "barContainerEdit");
-            this.barContainerEdit.Id = 9;
+            this.barContainerEdit.Id = 13;
             this.barContainerEdit.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerEdit.Name = "barContainerEdit";
             // 
@@ -355,7 +355,7 @@
             // barContainerRecordEdit
             // 
             resources.ApplyResources(this.barContainerRecordEdit, "barContainerRecordEdit");
-            this.barContainerRecordEdit.Id = 9;
+            this.barContainerRecordEdit.Id = 14;
             this.barContainerRecordEdit.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerRecordEdit.Name = "barContainerRecordEdit";
             // 
@@ -367,7 +367,7 @@
             // barContainerWorkflow
             // 
             resources.ApplyResources(this.barContainerWorkflow, "barContainerWorkflow");
-            this.barContainerWorkflow.Id = 9;
+            this.barContainerWorkflow.Id = 15;
             this.barContainerWorkflow.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerWorkflow.Name = "barContainerWorkflow";
             // 
@@ -379,7 +379,7 @@
             // barContainerOpenObject
             // 
             resources.ApplyResources(this.barContainerOpenObject, "barContainerOpenObject");
-            this.barContainerOpenObject.Id = 9;
+            this.barContainerOpenObject.Id = 16;
             this.barContainerOpenObject.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerOpenObject.Name = "barContainerOpenObject";
             // 
@@ -392,7 +392,7 @@
             // barContainerPanels
             // 
             resources.ApplyResources(this.barContainerPanels, "barContainerPanels");
-            this.barContainerPanels.Id = 16;
+            this.barContainerPanels.Id = 17;
             this.barContainerPanels.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerPanels.Name = "barContainerPanels";
             // 
@@ -405,7 +405,7 @@
             // barContainerViewsHistoryNavigation
             // 
             resources.ApplyResources(this.barContainerViewsHistoryNavigation, "barContainerViewsHistoryNavigation");
-            this.barContainerViewsHistoryNavigation.Id = 35;
+            this.barContainerViewsHistoryNavigation.Id = 18;
             this.barContainerViewsHistoryNavigation.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerViewsHistoryNavigation.Name = "barContainerViewsHistoryNavigation";
             // 
@@ -417,7 +417,7 @@
             // barContainerViewsNavigation
             // 
             resources.ApplyResources(this.barContainerViewsNavigation, "barContainerViewsNavigation");
-            this.barContainerViewsNavigation.Id = 14;
+            this.barContainerViewsNavigation.Id = 19;
             this.barContainerViewsNavigation.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerViewsNavigation.Name = "barContainerViewsNavigation";
             // 
@@ -429,7 +429,7 @@
             // barContainerRecordsNavigation
             // 
             resources.ApplyResources(this.barContainerRecordsNavigation, "barContainerRecordsNavigation");
-            this.barContainerRecordsNavigation.Id = 10;
+            this.barContainerRecordsNavigation.Id = 20;
             this.barContainerRecordsNavigation.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerRecordsNavigation.Name = "barContainerRecordsNavigation";
             // 
@@ -441,7 +441,7 @@
             // barContainerView
             // 
             resources.ApplyResources(this.barContainerView, "barContainerView");
-            this.barContainerView.Id = 12;
+            this.barContainerView.Id = 21;
             this.barContainerView.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerView.Name = "barContainerView";
             // 
@@ -453,7 +453,7 @@
             // barContainerReports
             // 
             resources.ApplyResources(this.barContainerReports, "barContainerReports");
-            this.barContainerReports.Id = 11;
+            this.barContainerReports.Id = 22;
             this.barContainerReports.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerReports.Name = "barContainerReports";
             // 
@@ -465,7 +465,7 @@
             // barContainerDefault
             // 
             resources.ApplyResources(this.barContainerDefault, "barContainerDefault");
-            this.barContainerDefault.Id = 50;
+            this.barContainerDefault.Id = 23;
             this.barContainerDefault.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerDefault.Name = "barContainerDefault";
             // 
@@ -477,7 +477,7 @@
             // barContainerSearch
             // 
             resources.ApplyResources(this.barContainerSearch, "barContainerSearch");
-            this.barContainerSearch.Id = 11;
+            this.barContainerSearch.Id = 24;
             this.barContainerSearch.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerSearch.Name = "barContainerSearch";
             // 
@@ -489,7 +489,7 @@
             // barContainerFilters
             // 
             resources.ApplyResources(this.barContainerFilters, "barContainerFilters");
-            this.barContainerFilters.Id = 26;
+            this.barContainerFilters.Id = 25;
             this.barContainerFilters.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerFilters.Name = "barContainerFilters";
             // 
@@ -502,7 +502,7 @@
             // 
             this.barContainerFullTextSearch.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
             resources.ApplyResources(this.barContainerFullTextSearch, "barContainerFullTextSearch");
-            this.barContainerFullTextSearch.Id = 12;
+            this.barContainerFullTextSearch.Id = 26;
             this.barContainerFullTextSearch.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerFullTextSearch.Name = "barContainerFullTextSearch";
             // 
@@ -515,7 +515,7 @@
             // barContainerTools
             // 
             resources.ApplyResources(this.barContainerTools, "barContainerTools");
-            this.barContainerTools.Id = 13;
+            this.barContainerTools.Id = 27;
             this.barContainerTools.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerTools.Name = "barContainerTools";
             // 
@@ -528,7 +528,7 @@
             // barContainerOptions
             // 
             resources.ApplyResources(this.barContainerOptions, "barContainerOptions");
-            this.barContainerOptions.Id = 14;
+            this.barContainerOptions.Id = 28;
             this.barContainerOptions.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerOptions.Name = "barContainerOptions";
             // 
@@ -541,7 +541,7 @@
             // barContainerDiagnostic
             // 
             resources.ApplyResources(this.barContainerDiagnostic, "barContainerDiagnostic");
-            this.barContainerDiagnostic.Id = 16;
+            this.barContainerDiagnostic.Id = 29;
             this.barContainerDiagnostic.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerDiagnostic.Name = "barContainerDiagnostic";
             // 
@@ -554,7 +554,7 @@
             // barContainerAbout
             // 
             resources.ApplyResources(this.barContainerAbout, "barContainerAbout");
-            this.barContainerAbout.Id = 15;
+            this.barContainerAbout.Id = 30;
             this.barContainerAbout.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerAbout.Name = "barContainerAbout";
             // 
@@ -566,7 +566,7 @@
             // barContainerMenu
             // 
             resources.ApplyResources(this.barContainerMenu, "barContainerMenu");
-            this.barContainerMenu.Id = 7;
+            this.barContainerMenu.Id = 31;
             this.barContainerMenu.Name = "barContainerMenu";
             // 
             // actionContainerWindows
@@ -577,7 +577,7 @@
             // barContainerWindows
             // 
             resources.ApplyResources(this.barContainerWindows, "barContainerWindows");
-            this.barContainerWindows.Id = 34;
+            this.barContainerWindows.Id = 32;
             this.barContainerWindows.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerWindows.Name = "barContainerWindows";
             // 
@@ -589,7 +589,7 @@
             // barContainerNotifications
             // 
             resources.ApplyResources(this.barContainerNotifications, "barContainerNotifications");
-            this.barContainerNotifications.Id = 38;
+            this.barContainerNotifications.Id = 33;
             this.barContainerNotifications.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerNotifications.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
             this.barContainerNotifications.Name = "barContainerNotifications";
@@ -597,7 +597,7 @@
             // barContainerStatusMessages
             // 
             resources.ApplyResources(this.barContainerStatusMessages, "barContainerStatusMessages");
-            this.barContainerStatusMessages.Id = 37;
+            this.barContainerStatusMessages.Id = 34;
             this.barContainerStatusMessages.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerStatusMessages.Name = "barContainerStatusMessages";
             // 
@@ -611,7 +611,7 @@
             this.barChooseSkinItem.AllowDrawArrow = true;
             this.barChooseSkinItem.ButtonStyle = DevExpress.XtraBars.BarButtonStyle.DropDown;
             resources.ApplyResources(this.barChooseSkinItem, "barChooseSkinItem");
-            this.barChooseSkinItem.Id = 36;
+            this.barChooseSkinItem.Id = 35;
             this.barChooseSkinItem.Name = "barChooseSkinItem";
             // 
             // mainMenuBar
@@ -684,7 +684,7 @@
             // 
             resources.ApplyResources(this.barSubItemPanels, "barSubItemPanels");
             this.barSubItemPanels.HideWhenEmpty = true;
-            this.barSubItemPanels.Id = 35;
+            this.barSubItemPanels.Id = 3;
             this.barSubItemPanels.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barContainerPanels, true)});
             this.barSubItemPanels.Name = "barSubItemPanels";
@@ -693,7 +693,7 @@
             // 
             resources.ApplyResources(this.barSubItemTools, "barSubItemTools");
             this.barSubItemTools.HideWhenEmpty = true;
-            this.barSubItemTools.Id = 3;
+            this.barSubItemTools.Id = 4;
             this.barSubItemTools.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barContainerTools, true),
             new DevExpress.XtraBars.LinkPersistInfo(this.barContainerOptions, true),
@@ -705,7 +705,7 @@
             // 
             resources.ApplyResources(this.barSubItemWindow, "barSubItemWindow");
             this.barSubItemWindow.HideWhenEmpty = true;
-            this.barSubItemWindow.Id = 32;
+            this.barSubItemWindow.Id = 5;
             this.barSubItemWindow.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barContainerWindow),
             new DevExpress.XtraBars.LinkPersistInfo(this.barContainerWindows, true)});
@@ -715,7 +715,7 @@
             // barContainerWindow
             // 
             resources.ApplyResources(this.barContainerWindow, "barContainerWindow");
-            this.barContainerWindow.Id = 16;
+            this.barContainerWindow.Id = 36;
             this.barContainerWindow.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barMdiChildrenListItem)});
             this.barContainerWindow.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
@@ -731,7 +731,7 @@
             // 
             resources.ApplyResources(this.barSubItemHelp, "barSubItemHelp");
             this.barSubItemHelp.HideWhenEmpty = true;
-            this.barSubItemHelp.Id = 4;
+            this.barSubItemHelp.Id = 38;
             this.barSubItemHelp.LinksPersistInfo.AddRange(new DevExpress.XtraBars.LinkPersistInfo[] {
             new DevExpress.XtraBars.LinkPersistInfo(this.barContainerAbout, true)});
             this.barSubItemHelp.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;

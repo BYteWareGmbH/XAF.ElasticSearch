@@ -1,6 +1,6 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Win.Template
 {
-    partial class OutlookStyleMainRibbonDynamicActionContainer
+    partial class LightStyleMainRibbonDynamicActionContainer
     {
         /// <summary>
         /// Required designer variable.
@@ -30,12 +30,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new DevExpress.ExpressApp.Win.Templates.XafComponentResourceManager(typeof(OutlookStyleMainRibbonDynamicActionContainer));
-            DevExpress.Utils.Animation.Transition transition = new DevExpress.Utils.Animation.Transition();
-            DevExpress.Utils.Animation.SlideFadeTransition slideFadeTransition = new DevExpress.Utils.Animation.SlideFadeTransition();
-            this.mainContainer = new DevExpress.XtraEditors.XtraUserControl();
+            System.ComponentModel.ComponentResourceManager resources = new DevExpress.ExpressApp.Win.Templates.XafComponentResourceManager(typeof(LightStyleMainRibbonDynamicActionContainer));
             this.viewSitePanel = new DevExpress.XtraEditors.PanelControl();
-            this.separatorControl = new DevExpress.XtraEditors.SeparatorControl();
             this.navBarControl = new DevExpress.ExpressApp.Win.Templates.Navigation.XafNavBarControl();
             this.navBarSingleChoiceActionControl = new DevExpress.ExpressApp.Win.Templates.Navigation.NavBarSingleChoiceActionControl();
             this.ribbonControl = new DevExpress.ExpressApp.Win.Templates.Ribbon.XafRibbonControlV2();
@@ -99,10 +95,9 @@
             this.ribbonGallerySkins = new DevExpress.XtraBars.RibbonGalleryBarItem();
             this.applicationMenu = new DevExpress.XtraBars.Ribbon.ApplicationMenu(this.components);
             this.mainBarAndDockingController = new DevExpress.XtraBars.BarAndDockingController(this.components);
+            this.barMdiChildrenListItem = new DevExpress.XtraBars.BarDockingMenuItem();
             this.barSubItemPanels = new DevExpress.XtraBars.BarSubItem();
             this.barContainerStatusMessages = new DevExpress.XtraBars.BarLinkContainerExItem();
-            this.barCheckItemNormal = new DevExpress.XtraBars.BarCheckItem();
-            this.barCheckItemReading = new DevExpress.XtraBars.BarCheckItem();
             this.barSubItemNavigationPane = new DevExpress.XtraBars.BarSubItem();
             this.defaultPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonGroupViewsHistoryNavigation = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
@@ -129,21 +124,19 @@
             this.ribbonGroupDiagnostic = new DevExpress.XtraBars.Ribbon.RibbonPageGroup();
             this.windowPage = new DevExpress.XtraBars.Ribbon.RibbonPage();
             this.ribbonStatusBar = new DevExpress.XtraBars.Ribbon.RibbonStatusBar();
-            this.officeNavigationBar = new DevExpress.XtraBars.Navigation.OfficeNavigationBar();
             this.dockManager = new DevExpress.XtraBars.Docking.DockManager(this.components);
             this.documentManager = new DevExpress.XtraBars.Docking2010.DocumentManager(this.components);
             this.noDocumentsView = new DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView(this.components);
+            this.tabbedView = new DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView(this.components);
+            this.nativeMdiView = new DevExpress.XtraBars.Docking2010.Views.NativeMdi.NativeMdiView(this.components);
             this.viewSiteManager = new DevExpress.ExpressApp.Win.Templates.ViewSiteManager(this.components);
-            this.transitionManager = new DevExpress.Utils.Animation.TransitionManager();
             this.modelSynchronizationManager = new DevExpress.ExpressApp.Win.Templates.ModelSynchronizationManager(this.components);
             this.formStateModelSynchronizer = new DevExpress.ExpressApp.Win.Core.FormStateModelSynchronizer(this.components);
             this.navBarControlModelSynchronizer = new DevExpress.ExpressApp.Win.Templates.Navigation.NavBarControlModelSynchronizer(this.components);
-            this.officeNavigationBarCustomizationModelSynchronizer = new DevExpress.ExpressApp.Win.Templates.Navigation.OfficeNavigationBarCustomizationModelSynchronizer(this.components);
             this.contextMenu = new DevExpress.XtraBars.PopupMenu(this.components);
-            this.actionContainersManager = new DevExpress.ExpressApp.Win.Templates.ActionContainersManager(this.components);
-            this.mainContainer.SuspendLayout();
+            this.sidePanel = new DevExpress.XtraEditors.SidePanel();
+            this.actionContainersManager = new DevExpress.ExpressApp.Win.Templates.ActionContainersManager();
             ((System.ComponentModel.ISupportInitialize)(this.viewSitePanel)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.separatorControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.navBarSingleChoiceActionControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).BeginInit();
@@ -178,20 +171,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.ribbonChooseSkinActionControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainBarAndDockingController)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.officeNavigationBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.noDocumentsView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tabbedView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nativeMdiView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenu)).BeginInit();
+            this.sidePanel.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // mainContainer
-            // 
-            this.mainContainer.Controls.Add(this.viewSitePanel);
-            this.mainContainer.Controls.Add(this.separatorControl);
-            this.mainContainer.Controls.Add(this.navBarControl);
-            resources.ApplyResources(this.mainContainer, "mainContainer");
-            this.mainContainer.Name = "mainContainer";
             // 
             // viewSitePanel
             // 
@@ -199,23 +186,15 @@
             resources.ApplyResources(this.viewSitePanel, "viewSitePanel");
             this.viewSitePanel.Name = "viewSitePanel";
             // 
-            // separatorControl
-            //            
-            resources.ApplyResources(this.separatorControl, "separatorControl");
-            this.separatorControl.LineAlignment = DevExpress.XtraEditors.Alignment.Center;
-            this.separatorControl.LineOrientation = System.Windows.Forms.Orientation.Vertical;
-            this.separatorControl.LineThickness = 1;
-            this.separatorControl.Name = "separatorControl";
-            // 
             // navBarControl
             // 
             this.navBarControl.ActionControl = this.navBarSingleChoiceActionControl;
             this.navBarControl.ActiveGroup = null;
-            this.navBarControl.AllowHorizontalResizing = DevExpress.Utils.DefaultBoolean.True;
+            this.navBarControl.AllowHorizontalResizing = DevExpress.Utils.DefaultBoolean.False;
             this.navBarControl.BorderStyle = DevExpress.XtraEditors.Controls.BorderStyles.NoBorder;
             resources.ApplyResources(this.navBarControl, "navBarControl");
             this.navBarControl.DragDropFlags = DevExpress.XtraNavBar.NavBarDragDrop.None;
-            this.navBarControl.LinkSelectionMode = DevExpress.XtraNavBar.LinkSelectionModeType.OneInGroupAndAllowAutoSelect;
+            this.navBarControl.LinkSelectionMode = DevExpress.XtraNavBar.LinkSelectionModeType.OneInControl;
             this.navBarControl.MenuManager = this.ribbonControl.Manager;
             this.navBarControl.Name = "navBarControl";
             this.navBarControl.OptionsNavPane.ExpandedWidth = ((int)(resources.GetObject("resource.ExpandedWidth")));
@@ -264,6 +243,7 @@
             this.ribbonControl.ExpandCollapseItem.Id = 0;
             this.ribbonControl.Items.AddRange(new DevExpress.XtraBars.BarItem[] {
             this.ribbonControl.ExpandCollapseItem,
+            this.barMdiChildrenListItem,
             this.barSubItemPanels,
             this.barContainerViewsHistoryNavigation,
             this.barContainerEdit,
@@ -295,12 +275,9 @@
             this.barContainerNotifications,
             this.barContainerStatusMessages,
             this.ribbonGallerySkins,
-            this.barCheckItemNormal,
-            this.barCheckItemReading,
             this.barSubItemNavigationPane});
             resources.ApplyResources(this.ribbonControl, "ribbonControl");
             this.ribbonControl.MaxItemId = 19;
-            this.ribbonControl.MdiMergeStyle = DevExpress.XtraBars.Ribbon.RibbonMdiMergeStyle.Never;
             this.ribbonControl.Name = "ribbonControl";
             this.ribbonControl.Pages.AddRange(new DevExpress.XtraBars.Ribbon.RibbonPage[] {
             this.defaultPage,
@@ -689,6 +666,11 @@
             this.mainBarAndDockingController.PropertiesBar.DefaultGlyphSize = new System.Drawing.Size(16, 16);
             this.mainBarAndDockingController.PropertiesBar.DefaultLargeGlyphSize = new System.Drawing.Size(32, 32);
             // 
+            // barMdiChildrenListItem
+            // 
+            this.barMdiChildrenListItem.Id = 37;
+            this.barMdiChildrenListItem.Name = "barMdiChildrenListItem";
+            // 
             // barSubItemPanels
             // 
             resources.ApplyResources(this.barSubItemPanels, "barSubItemPanels");
@@ -704,28 +686,6 @@
             this.barContainerStatusMessages.Id = 27;
             this.barContainerStatusMessages.MergeType = DevExpress.XtraBars.BarMenuMerge.MergeItems;
             this.barContainerStatusMessages.Name = "barContainerStatusMessages";
-            // 
-            // barCheckItemNormal
-            // 
-            this.barCheckItemNormal.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
-            this.barCheckItemNormal.AllowGlyphSkinning = DevExpress.Utils.DefaultBoolean.True;
-            this.barCheckItemNormal.BindableChecked = true;
-            resources.ApplyResources(this.barCheckItemNormal, "barCheckItemNormal");
-            this.barCheckItemNormal.Checked = true;
-            this.barCheckItemNormal.GroupIndex = 1180782442;
-            this.barCheckItemNormal.Id = 16;
-            this.barCheckItemNormal.Name = "barCheckItemNormal";
-            this.barCheckItemNormal.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText;
-            // 
-            // barCheckItemReading
-            // 
-            this.barCheckItemReading.Alignment = DevExpress.XtraBars.BarItemLinkAlignment.Right;
-            this.barCheckItemReading.AllowGlyphSkinning = DevExpress.Utils.DefaultBoolean.True;
-            resources.ApplyResources(this.barCheckItemReading, "barCheckItemReading");
-            this.barCheckItemReading.GroupIndex = 1180782442;
-            this.barCheckItemReading.Id = 17;
-            this.barCheckItemReading.Name = "barCheckItemReading";
-            this.barCheckItemReading.RibbonStyle = DevExpress.XtraBars.Ribbon.RibbonItemStyles.SmallWithoutText;
             // 
             // barSubItemNavigationPane
             // 
@@ -890,6 +850,7 @@
             // ribbonGroupWindows
             // 
             this.ribbonGroupWindows.AllowTextClipping = false;
+            this.ribbonGroupWindows.ItemLinks.Add(this.barMdiChildrenListItem);
             this.ribbonGroupWindows.ItemLinks.Add(this.barContainerWindows);
             this.ribbonGroupWindows.MergeOrder = 2;
             this.ribbonGroupWindows.Name = "ribbonGroupWindows";
@@ -946,26 +907,16 @@
             // ribbonStatusBar
             // 
             this.ribbonStatusBar.ItemLinks.Add(this.barContainerStatusMessages);
-            this.ribbonStatusBar.ItemLinks.Add(this.barCheckItemNormal);
-            this.ribbonStatusBar.ItemLinks.Add(this.barCheckItemReading);
             this.ribbonStatusBar.ItemLinks.Add(this.barContainerNotifications);
             resources.ApplyResources(this.ribbonStatusBar, "ribbonStatusBar");
             this.ribbonStatusBar.Name = "ribbonStatusBar";
             this.ribbonStatusBar.Ribbon = this.ribbonControl;
-            // 
-            // officeNavigationBar
-            // 
-            resources.ApplyResources(this.officeNavigationBar, "officeNavigationBar");
-            this.officeNavigationBar.MenuManager = this.ribbonControl.Manager;
-            this.officeNavigationBar.Name = "officeNavigationBar";
-            this.officeNavigationBar.NavigationClient = this.navBarControl;
             // 
             // dockManager
             // 
             this.dockManager.Controller = this.mainBarAndDockingController;
             this.dockManager.Form = this;
             this.dockManager.TopZIndexControls.AddRange(new string[] {
-            "DevExpress.XtraBars.Navigation.OfficeNavigationBar",
             "DevExpress.ExpressApp.Win.Templates.Ribbon.XafRibbonControlV2",
             "DevExpress.XtraBars.Ribbon.RibbonStatusBar"});
             // 
@@ -977,27 +928,28 @@
             this.documentManager.ShowThumbnailsInTaskBar = DevExpress.Utils.DefaultBoolean.False;
             this.documentManager.View = this.noDocumentsView;
             this.documentManager.ViewCollection.AddRange(new DevExpress.XtraBars.Docking2010.Views.BaseView[] {
-            this.noDocumentsView});
+            this.noDocumentsView,
+            this.tabbedView,
+            this.nativeMdiView});
+            // 
+            // tabbedView
+            // 
+            this.tabbedView.DocumentProperties.MaxTabWidth = 150;
+            this.tabbedView.FloatingDocumentContainer = DevExpress.XtraBars.Docking2010.Views.FloatingDocumentContainer.DocumentsHost;
+            this.tabbedView.OptionsLayout.PropertiesRestoreMode = DevExpress.XtraBars.Docking2010.Views.PropertiesRestoreMode.None;
+            // 
+            // nativeMdiView
+            // 
+            this.nativeMdiView.FloatingDocumentContainer = DevExpress.XtraBars.Docking2010.Views.FloatingDocumentContainer.DocumentsHost;
             // 
             // viewSiteManager
             // 
             this.viewSiteManager.ViewSiteControl = this.viewSitePanel;
             // 
-            // transitionManager
-            // 
-            transition.Control = this.mainContainer;
-            transition.ShowWaitingIndicator = DevExpress.Utils.DefaultBoolean.False;
-            slideFadeTransition.Parameters.Background = System.Drawing.Color.Empty;
-            slideFadeTransition.Parameters.EffectOptions = DevExpress.Utils.Animation.PushEffectOptions.FromRight;
-            slideFadeTransition.Parameters.FrameInterval = 3000;
-            transition.TransitionType = slideFadeTransition;
-            this.transitionManager.Transitions.Add(transition);
-            // 
             // modelSynchronizationManager
             // 
             this.modelSynchronizationManager.ModelSynchronizableComponents.Add(this.formStateModelSynchronizer);
             this.modelSynchronizationManager.ModelSynchronizableComponents.Add(this.navBarControlModelSynchronizer);
-            this.modelSynchronizationManager.ModelSynchronizableComponents.Add(this.officeNavigationBarCustomizationModelSynchronizer);
             // 
             // formStateModelSynchronizer
             // 
@@ -1006,10 +958,6 @@
             // navBarControlModelSynchronizer
             // 
             this.navBarControlModelSynchronizer.NavBarControl = this.navBarControl;
-            // 
-            // officeNavBarModelSynchronizer
-            // 
-            this.officeNavigationBarCustomizationModelSynchronizer.OfficeNavigationBar = this.officeNavigationBar;
             // 
             // contextMenu
             // 
@@ -1024,22 +972,29 @@
             this.contextMenu.ItemLinks.Add(this.barContainerMenu, true);
             this.contextMenu.Name = "contextMenu";
             this.contextMenu.Ribbon = this.ribbonControl;
+            // 
+            // sidePanel
+            // 
+            this.sidePanel.Controls.Add(this.navBarControl);
+            resources.ApplyResources(this.sidePanel, "sidePanel");
+            this.sidePanel.Name = "sidePanel";
+            // actionContainersManager
+            // 
+            this.actionContainersManager.DefaultContainer = null;
             this.actionContainersManager.Template = this;
             // 
-            // OutlookStyleMainRibbonDynamicActionContainer
+            // LightStyleMainRibbonForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.mainContainer);
-            this.Controls.Add(this.officeNavigationBar);
+            this.Controls.Add(this.viewSitePanel);
+            this.Controls.Add(this.sidePanel);
             this.Controls.Add(this.ribbonStatusBar);
             this.Controls.Add(this.ribbonControl);
-            this.Name = "OutlookStyleMainRibbonDynamicActionContainer";
+            this.Name = "LightStyleMainRibbonForm";
             this.Ribbon = this.ribbonControl;
             this.StatusBar = this.ribbonStatusBar;
-            this.mainContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.viewSitePanel)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.separatorControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.navBarControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.navBarSingleChoiceActionControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl)).EndInit();
@@ -1074,14 +1029,15 @@
             ((System.ComponentModel.ISupportInitialize)(this.ribbonChooseSkinActionControl)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.applicationMenu)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.mainBarAndDockingController)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.officeNavigationBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dockManager)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.documentManager)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.noDocumentsView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tabbedView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.nativeMdiView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.contextMenu)).EndInit();
+            this.sidePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
-
         }
         #endregion
 
@@ -1091,7 +1047,6 @@
         private DevExpress.XtraBars.Ribbon.RibbonStatusBar ribbonStatusBar;
         private DevExpress.XtraEditors.PanelControl viewSitePanel;
         private DevExpress.ExpressApp.Win.Templates.Navigation.XafNavBarControl navBarControl;
-        private DevExpress.XtraEditors.XtraUserControl mainContainer;
         private DevExpress.XtraBars.BarSubItem barSubItemPanels;
         private DevExpress.XtraBars.Ribbon.RibbonPage defaultPage;
         private DevExpress.XtraBars.Ribbon.RibbonPage viewPage;
@@ -1178,20 +1133,18 @@
         private DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer barActionContainerNotifications;
         private DevExpress.ExpressApp.Win.Templates.Ribbon.ActionControls.RibbonChooseSkinActionControl ribbonChooseSkinActionControl;
         private DevExpress.ExpressApp.Win.Templates.Navigation.NavBarSingleChoiceActionControl navBarSingleChoiceActionControl;
-        private DevExpress.XtraBars.Navigation.OfficeNavigationBar officeNavigationBar;
+        private DevExpress.XtraBars.BarDockingMenuItem barMdiChildrenListItem;
         private DevExpress.XtraBars.Docking2010.DocumentManager documentManager;
         private DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView noDocumentsView;
+        private DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView tabbedView;
+        private DevExpress.XtraBars.Docking2010.Views.NativeMdi.NativeMdiView nativeMdiView;
         private DevExpress.ExpressApp.Win.Templates.ViewSiteManager viewSiteManager;
-        private DevExpress.Utils.Animation.TransitionManager transitionManager;
         private DevExpress.ExpressApp.Win.Templates.ModelSynchronizationManager modelSynchronizationManager;
         private DevExpress.ExpressApp.Win.Core.FormStateModelSynchronizer formStateModelSynchronizer;
         private DevExpress.ExpressApp.Win.Templates.Navigation.NavBarControlModelSynchronizer navBarControlModelSynchronizer;
-        private DevExpress.ExpressApp.Win.Templates.Navigation.OfficeNavigationBarCustomizationModelSynchronizer officeNavigationBarCustomizationModelSynchronizer;
         private DevExpress.XtraBars.PopupMenu contextMenu;
-        private DevExpress.XtraBars.BarCheckItem barCheckItemNormal;
-        private DevExpress.XtraBars.BarCheckItem barCheckItemReading;
         private DevExpress.XtraBars.BarSubItem barSubItemNavigationPane;
-        private DevExpress.XtraEditors.SeparatorControl separatorControl;
+        private DevExpress.XtraEditors.SidePanel sidePanel;
         private DevExpress.ExpressApp.Win.Templates.ActionContainersManager actionContainersManager;
     }
 }

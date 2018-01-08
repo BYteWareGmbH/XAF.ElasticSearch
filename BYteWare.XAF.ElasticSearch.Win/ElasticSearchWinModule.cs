@@ -122,7 +122,14 @@
             {
                 if (((IModelOptionsWin)Application.Model.Options).FormStyle == RibbonFormStyle.Standard)
                 {
-                    e.Template = new MainFormDynamicActionContainer();
+                    if (((WinApplication)e.Application).UseLightStyle)
+                    {
+                        e.Template = new LightStyleMainFormDynamicActionContainer();
+                    }
+                    else
+                    {
+                        e.Template = new MainFormDynamicActionContainer();
+                    }
                 }
                 else
                 {
@@ -132,10 +139,18 @@
                     }
                     else
                     {
-                        e.Template = new MainRibbonDynamicActionContainer();
+                        if (((WinApplication)e.Application).UseLightStyle)
+                        {
+                            e.Template = new LightStyleMainRibbonDynamicActionContainer();
+                        }
+                        else
+                        {
+                            e.Template = new MainRibbonDynamicActionContainer();
+                        }
                     }
                 }
-            } else if (e.Context == TemplateContext.View && !((WinApplication)e.Application).UseOldTemplates)
+            }
+            else if (e.Context == TemplateContext.View && !((WinApplication)e.Application).UseOldTemplates)
             {
                 if (((IModelOptionsWin)Application.Model.Options).FormStyle == RibbonFormStyle.Standard)
                 {

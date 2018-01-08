@@ -112,6 +112,18 @@
     <Compile Include="Template\ElasticLookupControlTemplate.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Template\LightStyleMainFormDynamicActionContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\LightStyleMainFormDynamicActionContainer.Designer.cs">
+      <DependentUpon>LightStyleMainFormDynamicActionContainer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Template\LightStyleMainRibbonDynamicActionContainer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Template\LightStyleMainRibbonDynamicActionContainer.Designer.cs">
+      <DependentUpon>LightStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </Compile>
     <Compile Include="Template\MainFormDynamicActionContainer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,11 +156,65 @@
   <ItemGroup>
     <EmbeddedResource Include="Model.DesignedDiffs.xafml" />
     <EmbeddedResource Include="Properties\licenses.licx" />
+    <EmbeddedResource Include="Template\DetailDynamicActionContainerV2.de.resx">
+      <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailDynamicActionContainerV2.es.resx">
+      <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailDynamicActionContainerV2.ja.resx">
+      <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\DetailDynamicActionContainerV2.resx">
       <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailDynamicActionContainerV2.ru.resx">
+      <DependentUpon>DetailDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailRibbonDynamicActionContainerV2.de.resx">
+      <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailRibbonDynamicActionContainerV2.es.resx">
+      <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailRibbonDynamicActionContainerV2.ja.resx">
+      <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Template\DetailRibbonDynamicActionContainerV2.resx">
       <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\DetailRibbonDynamicActionContainerV2.ru.resx">
+      <DependentUpon>DetailRibbonDynamicActionContainerV2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainFormDynamicActionContainer.de.resx">
+      <DependentUpon>LightStyleMainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainFormDynamicActionContainer.es.resx">
+      <DependentUpon>LightStyleMainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainFormDynamicActionContainer.ja.resx">
+      <DependentUpon>LightStyleMainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainFormDynamicActionContainer.resx">
+      <DependentUpon>LightStyleMainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainFormDynamicActionContainer.ru.resx">
+      <DependentUpon>LightStyleMainFormDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainRibbonDynamicActionContainer.de.resx">
+      <DependentUpon>LightStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainRibbonDynamicActionContainer.es.resx">
+      <DependentUpon>LightStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainRibbonDynamicActionContainer.ja.resx">
+      <DependentUpon>LightStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainRibbonDynamicActionContainer.resx">
+      <DependentUpon>LightStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Template\LightStyleMainRibbonDynamicActionContainer.ru.resx">
+      <DependentUpon>LightStyleMainRibbonDynamicActionContainer.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Template\MainFormDynamicActionContainer.de.resx">
       <DependentUpon>MainFormDynamicActionContainer.cs</DependentUpon>

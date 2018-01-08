@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <metadata name="barManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>141, 17</value>
+    <value>363, 17</value>
   </metadata>
   <data name="barContainerObjectsCreation.Caption" xml:space="preserve">
     <value>Records Creation</value>
@@ -126,17 +126,17 @@
   <data name="barContainerFile.Caption" xml:space="preserve">
     <value>File</value>
   </data>
-  <data name="barContainerClose.Caption" xml:space="preserve">
-    <value>Close</value>
-  </data>
   <data name="barContainerSave.Caption" xml:space="preserve">
     <value>Save</value>
+  </data>
+  <data name="barContainerPrint.Caption" xml:space="preserve">
+    <value>Print</value>
   </data>
   <data name="barContainerExport.Caption" xml:space="preserve">
     <value>Export</value>
   </data>
-  <data name="barContainerPrint.Caption" xml:space="preserve">
-    <value>Print</value>
+  <data name="barContainerExit.Caption" xml:space="preserve">
+    <value>Exit</value>
   </data>
   <data name="barContainerUndoRedo.Caption" xml:space="preserve">
     <value>UndoRedo</value>
@@ -153,6 +153,15 @@
   <data name="barContainerOpenObject.Caption" xml:space="preserve">
     <value>Open Related Record</value>
   </data>
+  <data name="barContainerPanels.Caption" xml:space="preserve">
+    <value>Panels</value>
+  </data>
+  <data name="barContainerViewsHistoryNavigation.Caption" xml:space="preserve">
+    <value>Views History Navigation</value>
+  </data>
+  <data name="barContainerViewsNavigation.Caption" xml:space="preserve">
+    <value>Navigation</value>
+  </data>
   <data name="barContainerRecordsNavigation.Caption" xml:space="preserve">
     <value>Records Navigation</value>
   </data>
@@ -162,14 +171,17 @@
   <data name="barContainerReports.Caption" xml:space="preserve">
     <value>Reports</value>
   </data>
+  <data name="barContainerDefault.Caption" xml:space="preserve">
+    <value>Default</value>
+  </data>
   <data name="barContainerSearch.Caption" xml:space="preserve">
     <value>Search</value>
   </data>
-  <data name="barContainerFullTextSearch.Caption" xml:space="preserve">
-    <value>Full Text Search</value>
-  </data>
   <data name="barContainerFilters.Caption" xml:space="preserve">
     <value>Filters</value>
+  </data>
+  <data name="barContainerFullTextSearch.Caption" xml:space="preserve">
+    <value>Full Text Search</value>
   </data>
   <data name="barContainerTools.Caption" xml:space="preserve">
     <value>Tools</value>
@@ -189,33 +201,24 @@
   <data name="barContainerNotifications.Caption" xml:space="preserve">
     <value>Notifications</value>
   </data>
-  <data name="barSubItemFile.Caption" xml:space="preserve">
-    <value>File</value>
+  <data name="barContainerWindows.Caption" xml:space="preserve">
+    <value>Windows</value>
   </data>
-  <data name="barSubItemEdit.Caption" xml:space="preserve">
-    <value>Edit</value>
+  <data name="barChooseSkinItem.Caption" xml:space="preserve">
+    <value>Appearance</value>
   </data>
-  <data name="barSubItemView.Caption" xml:space="preserve">
-    <value>View</value>
-  </data>
-  <data name="barSubItemTools.Caption" xml:space="preserve">
-    <value>Tools</value>
-  </data>
-  <data name="barSubItemHelp.Caption" xml:space="preserve">
-    <value>Help</value>
-  </data>
-  <data name="_mainMenuBar.Text" xml:space="preserve">
+  <data name="mainMenuBar.Text" xml:space="preserve">
     <value>Main Menu</value>
   </data>
   <data name="standardToolBar.Text" xml:space="preserve">
     <value>Main Toolbar</value>
   </data>
-  <data name="barContainerStatusMessages.Caption" xml:space="preserve">
-    <value>StatusMessages</value>
-  </data>
-  <data name="_statusBar.Text" xml:space="preserve">
+  <data name="statusBar.Text" xml:space="preserve">
     <value>Status Bar</value>
   </data>
+  <metadata name="barAndDockingController.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1119, 17</value>
+  </metadata>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"></assembly>
   <data name="barDockControlTop.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Top</value>
@@ -237,7 +240,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;barDockControlTop.ZOrder" xml:space="preserve">
-    <value>4</value>
+    <value>6</value>
   </data>
   <data name="barDockControlBottom.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Bottom</value>
@@ -258,7 +261,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;barDockControlBottom.ZOrder" xml:space="preserve">
-    <value>3</value>
+    <value>5</value>
   </data>
   <data name="barDockControlLeft.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Left</value>
@@ -279,7 +282,7 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;barDockControlLeft.ZOrder" xml:space="preserve">
-    <value>1</value>
+    <value>3</value>
   </data>
   <data name="barDockControlRight.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Right</value>
@@ -300,10 +303,16 @@
     <value>$this</value>
   </data>
   <data name="&gt;&gt;barDockControlRight.ZOrder" xml:space="preserve">
-    <value>2</value>
+    <value>4</value>
   </data>
+  <metadata name="dockManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>481, 17</value>
+  </metadata>
   <metadata name="$this.Localizable" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>111</value>
   </metadata>
   <data name="$this.AutoScaleDimensions" type="System.Drawing.SizeF, System.Drawing">
     <value>6, 13</value>
@@ -311,18 +320,45 @@
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>792, 566</value>
   </data>
+  <data name="sidePanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Left</value>
+  </data>
+  <data name="sidePanel.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 143</value>
+  </data>
+  <data name="sidePanel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>166, 429</value>
+  </data>
+  <data name="sidePanel.TabIndex" type="System.Int32, mscorlib">
+    <value>8</value>
+  </data>
+  <data name="sidePanel.Text" xml:space="preserve">
+    <value>sidePanel</value>
+  </data>
+  <data name="&gt;&gt;sidePanel.Name" xml:space="preserve">
+    <value>sidePanel</value>
+  </data>
+  <data name="&gt;&gt;sidePanel.Type" xml:space="preserve">
+    <value>DevExpress.XtraEditors.SidePanel, DevExpress.Utils.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;sidePanel.Parent" xml:space="preserve">
+    <value>$this</value>
+  </data>
+  <data name="&gt;&gt;sidePanel.ZOrder" xml:space="preserve">
+    <value>1</value>
+  </data>
   <data name="viewSitePanel.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
     <value>Fill</value>
   </data>
   <data name="viewSitePanel.Location" type="System.Drawing.Point, System.Drawing">
-    <value>0, 51</value>
+    <value>200, 51</value>
   </data>
   <data name="viewSitePanel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>792, 490</value>
+    <value>592, 490</value>
   </data>
   <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"></assembly>
   <data name="viewSitePanel.TabIndex" type="System.Int32, mscorlib">
-    <value>4</value>
+    <value>5</value>
   </data>
   <data name="&gt;&gt;viewSitePanel.Name" xml:space="preserve">
     <value>viewSitePanel</value>
@@ -336,8 +372,47 @@
   <data name="&gt;&gt;viewSitePanel.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
+  <data name="navBarControl.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
+    <value>Fill</value>
+  </data>
+  <data name="navBarControl.Location" type="System.Drawing.Point, System.Drawing">
+    <value>0, 0</value>
+  </data>
+  <data name="resource.ExpandedWidth" type="System.Int32, mscorlib">
+    <value>165</value>
+  </data>
+  <data name="navBarControl.Size" type="System.Drawing.Size, System.Drawing">
+    <value>165, 429</value>
+  </data>
+  <data name="navBarControl.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
+  </data>
+  <data name="&gt;&gt;navBarControl.Name" xml:space="preserve">
+    <value>navBarControl</value>
+  </data>
+  <data name="&gt;&gt;navBarControl.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Navigation.XafNavBarControl, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;navBarControl.Parent" xml:space="preserve">
+    <value>sidePanel</value>
+  </data>
+  <data name="&gt;&gt;navBarControl.ZOrder" xml:space="preserve">
+    <value>0</value>
+  </data>
+  <data name="$this.Margin" type="System.Windows.Forms.Padding, System.Windows.Forms">
+    <value>3, 5, 3, 5</value>
+  </data>
+  <data name="$this.MinimumSize" type="System.Drawing.Size, System.Drawing">
+    <value>400, 300</value>
+  </data>
   <data name="$this.Text" xml:space="preserve">
-    <value>DetailDynamicActionContainerV2</value>
+    <value>LightStyleMainForm</value>
+  </data>
+  <data name="&gt;&gt;navBarSingleChoiceActionControl.Name" xml:space="preserve">
+    <value>navBarSingleChoiceActionControl</value>
+  </data>
+  <data name="&gt;&gt;navBarSingleChoiceActionControl.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Navigation.NavBarSingleChoiceActionControl, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;barManager.Name" xml:space="preserve">
     <value>barManager</value>
@@ -369,18 +444,6 @@
   <data name="&gt;&gt;barContainerFile.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;actionContainerClose.Name" xml:space="preserve">
-    <value>actionContainerClose</value>
-  </data>
-  <data name="&gt;&gt;actionContainerClose.Type" xml:space="preserve">
-    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
-  </data>
-  <data name="&gt;&gt;barContainerClose.Name" xml:space="preserve">
-    <value>barContainerClose</value>
-  </data>
-  <data name="&gt;&gt;barContainerClose.Type" xml:space="preserve">
-    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
-  </data>
   <data name="&gt;&gt;actionContainerSave.Name" xml:space="preserve">
     <value>actionContainerSave</value>
   </data>
@@ -391,6 +454,18 @@
     <value>barContainerSave</value>
   </data>
   <data name="&gt;&gt;barContainerSave.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;actionContainerPrint.Name" xml:space="preserve">
+    <value>actionContainerPrint</value>
+  </data>
+  <data name="&gt;&gt;actionContainerPrint.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerPrint.Name" xml:space="preserve">
+    <value>barContainerPrint</value>
+  </data>
+  <data name="&gt;&gt;barContainerPrint.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;actionContainerExport.Name" xml:space="preserve">
@@ -405,16 +480,16 @@
   <data name="&gt;&gt;barContainerExport.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;actionContainerPrint.Name" xml:space="preserve">
-    <value>actionContainerPrint</value>
+  <data name="&gt;&gt;actionContainerExit.Name" xml:space="preserve">
+    <value>actionContainerExit</value>
   </data>
-  <data name="&gt;&gt;actionContainerPrint.Type" xml:space="preserve">
+  <data name="&gt;&gt;actionContainerExit.Type" xml:space="preserve">
     <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;barContainerPrint.Name" xml:space="preserve">
-    <value>barContainerPrint</value>
+  <data name="&gt;&gt;barContainerExit.Name" xml:space="preserve">
+    <value>barContainerExit</value>
   </data>
-  <data name="&gt;&gt;barContainerPrint.Type" xml:space="preserve">
+  <data name="&gt;&gt;barContainerExit.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;actionContainerUndoRedo.Name" xml:space="preserve">
@@ -477,6 +552,42 @@
   <data name="&gt;&gt;barContainerOpenObject.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
+  <data name="&gt;&gt;actionContainerPanels.Name" xml:space="preserve">
+    <value>actionContainerPanels</value>
+  </data>
+  <data name="&gt;&gt;actionContainerPanels.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerPanels.Name" xml:space="preserve">
+    <value>barContainerPanels</value>
+  </data>
+  <data name="&gt;&gt;barContainerPanels.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;actionContainerViewsHistoryNavigation.Name" xml:space="preserve">
+    <value>actionContainerViewsHistoryNavigation</value>
+  </data>
+  <data name="&gt;&gt;actionContainerViewsHistoryNavigation.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerViewsHistoryNavigation.Name" xml:space="preserve">
+    <value>barContainerViewsHistoryNavigation</value>
+  </data>
+  <data name="&gt;&gt;barContainerViewsHistoryNavigation.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;actionContainerViewsNavigation.Name" xml:space="preserve">
+    <value>actionContainerViewsNavigation</value>
+  </data>
+  <data name="&gt;&gt;actionContainerViewsNavigation.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerViewsNavigation.Name" xml:space="preserve">
+    <value>barContainerViewsNavigation</value>
+  </data>
+  <data name="&gt;&gt;barContainerViewsNavigation.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
   <data name="&gt;&gt;actionContainerRecordsNavigation.Name" xml:space="preserve">
     <value>actionContainerRecordsNavigation</value>
   </data>
@@ -513,6 +624,18 @@
   <data name="&gt;&gt;barContainerReports.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
+  <data name="&gt;&gt;actionContainerDefault.Name" xml:space="preserve">
+    <value>actionContainerDefault</value>
+  </data>
+  <data name="&gt;&gt;actionContainerDefault.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerDefault.Name" xml:space="preserve">
+    <value>barContainerDefault</value>
+  </data>
+  <data name="&gt;&gt;barContainerDefault.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
   <data name="&gt;&gt;actionContainerSearch.Name" xml:space="preserve">
     <value>actionContainerSearch</value>
   </data>
@@ -525,18 +648,6 @@
   <data name="&gt;&gt;barContainerSearch.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;actionContainerFullTextSearch.Name" xml:space="preserve">
-    <value>actionContainerFullTextSearch</value>
-  </data>
-  <data name="&gt;&gt;actionContainerFullTextSearch.Type" xml:space="preserve">
-    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
-  </data>
-  <data name="&gt;&gt;barContainerFullTextSearch.Name" xml:space="preserve">
-    <value>barContainerFullTextSearch</value>
-  </data>
-  <data name="&gt;&gt;barContainerFullTextSearch.Type" xml:space="preserve">
-    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
-  </data>
   <data name="&gt;&gt;actionContainerFilters.Name" xml:space="preserve">
     <value>actionContainerFilters</value>
   </data>
@@ -547,6 +658,18 @@
     <value>barContainerFilters</value>
   </data>
   <data name="&gt;&gt;barContainerFilters.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;actionContainerFullTextSearch.Name" xml:space="preserve">
+    <value>actionContainerFullTextSearch</value>
+  </data>
+  <data name="&gt;&gt;actionContainerFullTextSearch.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerFullTextSearch.Name" xml:space="preserve">
+    <value>barContainerFullTextSearch</value>
+  </data>
+  <data name="&gt;&gt;barContainerFullTextSearch.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;actionContainerTools.Name" xml:space="preserve">
@@ -621,10 +744,34 @@
   <data name="&gt;&gt;barContainerNotifications.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;_mainMenuBar.Name" xml:space="preserve">
-    <value>_mainMenuBar</value>
+  <data name="&gt;&gt;actionContainerWindows.Name" xml:space="preserve">
+    <value>actionContainerWindows</value>
   </data>
-  <data name="&gt;&gt;_mainMenuBar.Type" xml:space="preserve">
+  <data name="&gt;&gt;actionContainerWindows.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarLinkActionControlContainer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerWindows.Name" xml:space="preserve">
+    <value>barContainerWindows</value>
+  </data>
+  <data name="&gt;&gt;barContainerWindows.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barChooseSkinActionControl.Name" xml:space="preserve">
+    <value>barChooseSkinActionControl</value>
+  </data>
+  <data name="&gt;&gt;barChooseSkinActionControl.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Bars.ActionControls.BarChooseSkinActionControl, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barChooseSkinItem.Name" xml:space="preserve">
+    <value>barChooseSkinItem</value>
+  </data>
+  <data name="&gt;&gt;barChooseSkinItem.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarButtonItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;mainMenuBar.Name" xml:space="preserve">
+    <value>mainMenuBar</value>
+  </data>
+  <data name="&gt;&gt;mainMenuBar.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.Bar, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;barSubItemFile.Name" xml:space="preserve">
@@ -645,11 +792,35 @@
   <data name="&gt;&gt;barSubItemView.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarSubItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
+  <data name="&gt;&gt;barSubItemPanels.Name" xml:space="preserve">
+    <value>barSubItemPanels</value>
+  </data>
+  <data name="&gt;&gt;barSubItemPanels.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarSubItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
   <data name="&gt;&gt;barSubItemTools.Name" xml:space="preserve">
     <value>barSubItemTools</value>
   </data>
   <data name="&gt;&gt;barSubItemTools.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarSubItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barSubItemWindow.Name" xml:space="preserve">
+    <value>barSubItemWindow</value>
+  </data>
+  <data name="&gt;&gt;barSubItemWindow.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarSubItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barContainerWindow.Name" xml:space="preserve">
+    <value>barContainerWindow</value>
+  </data>
+  <data name="&gt;&gt;barContainerWindow.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;barMdiChildrenListItem.Name" xml:space="preserve">
+    <value>barMdiChildrenListItem</value>
+  </data>
+  <data name="&gt;&gt;barMdiChildrenListItem.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarDockingMenuItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;barSubItemHelp.Name" xml:space="preserve">
     <value>barSubItemHelp</value>
@@ -663,10 +834,10 @@
   <data name="&gt;&gt;standardToolBar.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.Bar, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;_statusBar.Name" xml:space="preserve">
-    <value>_statusBar</value>
+  <data name="&gt;&gt;statusBar.Name" xml:space="preserve">
+    <value>statusBar</value>
   </data>
-  <data name="&gt;&gt;_statusBar.Type" xml:space="preserve">
+  <data name="&gt;&gt;statusBar.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.Bar, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;barContainerStatusMessages.Name" xml:space="preserve">
@@ -675,23 +846,71 @@
   <data name="&gt;&gt;barContainerStatusMessages.Type" xml:space="preserve">
     <value>DevExpress.XtraBars.BarLinkContainerExItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;modelSynchronizationManager.Name" xml:space="preserve">
-    <value>modelSynchronizationManager</value>
+  <data name="&gt;&gt;barSubItemNavigationPane.Name" xml:space="preserve">
+    <value>barSubItemNavigationPane</value>
   </data>
-  <data name="&gt;&gt;modelSynchronizationManager.Type" xml:space="preserve">
-    <value>DevExpress.ExpressApp.Win.Templates.ModelSynchronizationManager, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  <data name="&gt;&gt;barSubItemNavigationPane.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarSubItem, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
-  <data name="&gt;&gt;formStateModelSynchronizerComponent.Name" xml:space="preserve">
-    <value>formStateModelSynchronizerComponent</value>
+  <data name="&gt;&gt;barAndDockingController.Name" xml:space="preserve">
+    <value>barAndDockingController</value>
   </data>
-  <data name="&gt;&gt;formStateModelSynchronizerComponent.Type" xml:space="preserve">
-    <value>DevExpress.ExpressApp.Win.Core.FormStateModelSynchronizer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  <data name="&gt;&gt;barAndDockingController.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.BarAndDockingController, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;dockManager.Name" xml:space="preserve">
+    <value>dockManager</value>
+  </data>
+  <data name="&gt;&gt;dockManager.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.Docking.DockManager, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;documentManager.Name" xml:space="preserve">
+    <value>documentManager</value>
+  </data>
+  <data name="&gt;&gt;documentManager.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.Docking2010.DocumentManager, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;noDocumentsView.Name" xml:space="preserve">
+    <value>noDocumentsView</value>
+  </data>
+  <data name="&gt;&gt;noDocumentsView.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.Docking2010.Views.NoDocuments.NoDocumentsView, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;tabbedView.Name" xml:space="preserve">
+    <value>tabbedView</value>
+  </data>
+  <data name="&gt;&gt;tabbedView.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.Docking2010.Views.Tabbed.TabbedView, DevExpress.XtraBars.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;nativeMdiView.Name" xml:space="preserve">
+    <value>nativeMdiView</value>
+  </data>
+  <data name="&gt;&gt;nativeMdiView.Type" xml:space="preserve">
+    <value>DevExpress.XtraBars.Docking2010.Views.NativeMdi.NativeMdiView, DevExpress.XtraBars.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;viewSiteManager.Name" xml:space="preserve">
     <value>viewSiteManager</value>
   </data>
   <data name="&gt;&gt;viewSiteManager.Type" xml:space="preserve">
     <value>DevExpress.ExpressApp.Win.Templates.ViewSiteManager, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;modelSynchronizationManager.Name" xml:space="preserve">
+    <value>modelSynchronizationManager</value>
+  </data>
+  <data name="&gt;&gt;modelSynchronizationManager.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.ModelSynchronizationManager, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;formStateModelSynchronizer.Name" xml:space="preserve">
+    <value>formStateModelSynchronizer</value>
+  </data>
+  <data name="&gt;&gt;formStateModelSynchronizer.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Core.FormStateModelSynchronizer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
+  </data>
+  <data name="&gt;&gt;navBarControlModelSynchronizer.Name" xml:space="preserve">
+    <value>navBarControlModelSynchronizer</value>
+  </data>
+  <data name="&gt;&gt;navBarControlModelSynchronizer.Type" xml:space="preserve">
+    <value>DevExpress.ExpressApp.Win.Templates.Navigation.NavBarControlModelSynchronizer, DevExpress.ExpressApp.Win.v17.2, Culture=neutral</value>
   </data>
   <data name="&gt;&gt;contextMenu.Name" xml:space="preserve">
     <value>contextMenu</value>
@@ -706,24 +925,60 @@
     <value>DevExpress.ExpressApp.Win.Templates.ActionContainersManager, DevExpress.ExpressApp.Win.v17.2, Version=17.2.4.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
-    <value>DetailDynamicActionContainerV2</value>
+    <value>LightStyleMainForm</value>
   </data>
   <data name="&gt;&gt;$this.Type" xml:space="preserve">
     <value>DevExpress.XtraEditors.XtraForm, DevExpress.Utils.v17.2, Culture=neutral</value>
   </data>
-  <metadata name="modelSynchronizationManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>404, 17</value>
-  </metadata>
-  <metadata name="formStateModelSynchronizerComponent.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>626, 17</value>
+  <data name="barSubItemFile.Caption" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="barSubItemEdit.Caption" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="barSubItemView.Caption" xml:space="preserve">
+    <value>View</value>
+  </data>
+  <data name="barSubItemTools.Caption" xml:space="preserve">
+    <value>Tools</value>
+  </data>
+  <data name="barSubItemHelp.Caption" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="barContainerWindow.Caption" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="barSubItemWindow.Caption" xml:space="preserve">
+    <value>Window</value>
+  </data>
+  <data name="barMdiChildrenListItem.Caption" xml:space="preserve">
+    <value>Window List</value>
+  </data>
+  <data name="barSubItemPanels.Caption" xml:space="preserve">
+    <value>Panels</value>
+  </data>
+  <data name="barContainerStatusMessages.Caption" xml:space="preserve">
+    <value>StatusMessages</value>
+  </data>
+  <data name="barSubItemNavigationPane.Caption" xml:space="preserve">
+    <value>Navigation Pane</value>
+  </data>
+  <metadata name="documentManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>608, 17</value>
   </metadata>
   <metadata name="viewSiteManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>259, 17</value>
+    <value>764, 17</value>
   </metadata>
-  <metadata name="contextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="modelSynchronizationManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="formStateModelSynchronizer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>909, 17</value>
+  </metadata>
+  <metadata name="contextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>239, 17</value>
+  </metadata>
   <metadata name="actionContainersManager.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>836, 17</value>
+    <value>17, 17</value>
   </metadata>
 </root>
