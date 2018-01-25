@@ -84,8 +84,8 @@
         private readonly Dictionary<XPObjectSpace, Changes> _RegisteredObjectSpaces = new Dictionary<XPObjectSpace, Changes>();
         private readonly Dictionary<UnitOfWork, Changes> _RegisteredUnitOfWork = new Dictionary<UnitOfWork, Changes>();
 
-        private Type elasticSearchIndexPersistentType;
-        private Type elasticSearchIndexRefreshPersistentType;
+        private readonly Type elasticSearchIndexPersistentType;
+        private readonly Type elasticSearchIndexRefreshPersistentType;
         private JsonSerializerSettings jsonSerializerSettings;
         private JsonSerializerSettings jsonDeserializerSettings;
         private ElasticLowLevelClient elasticClient;
@@ -397,8 +397,7 @@
             {
                 var noFilter = false;
                 var filters = new HashSet<string>();
-                var security = SecuritySystem.Instance as IRoleTypeProvider;
-                if (security != null)
+                if (SecuritySystem.Instance is IRoleTypeProvider security)
                 {
                     if (typeof(SecuritySystemRole).IsAssignableFrom(security.RoleType))
                     {
@@ -685,8 +684,7 @@
         /// <returns>Assigned Value of the parameter or null if parameter could not be found</returns>
         public string GetParameterValue(string parameter)
         {
-            string s;
-            parameters.TryGetValue(parameter, out s);
+            parameters.TryGetValue(parameter, out string s);
             return ParameterContent(s);
         }
 
@@ -839,7 +837,7 @@
                 throw new ArgumentNullException(nameof(bo));
             }
             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(bo.GetType());
-            if (bo != null && ci != null && ci.IsESIndexed && ElasticLowLevelClient != null)
+            if (ci != null && ci.IsESIndexed && ElasticLowLevelClient != null)
             {
                 var version = ci.GetVersion(bo);
                 if (UseAsync)
@@ -948,7 +946,7 @@
                 throw new ArgumentNullException(nameof(bo));
             }
             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(bo.GetType());
-            if (bo != null && ci != null && ci.IsESIndexed && ElasticLowLevelClient != null)
+            if (ci != null && ci.IsESIndexed && ElasticLowLevelClient != null)
             {
                 var version = ci.GetVersion(bo);
                 if (UseAsync)
@@ -1072,7 +1070,7 @@
             var typeProgress = new WorkerProgress
             {
                 Name = string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(MessageGroup, "IndexListProgress"), xci.TableName, memberInfo == null ? string.Empty : memberInfo.Name),
-                Maximum = keyList.Count()
+                Maximum = keyList.Count
             };
             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(xci.ClassType);
             var typeLists = new Dictionary<ContainingType, HashSet<object>>();
@@ -1212,9 +1210,7 @@
             {
                 throw new ArgumentNullException(nameof(ci));
             }
-            bool fuzzy;
-            bool wildcard;
-            searchText = PrepareSearchText(searchText, out fuzzy, out wildcard);
+            searchText = PrepareSearchText(searchText, out bool fuzzy, out bool wildcard);
             return Search(ci.ESIndexes, ci.ESTypes, SearchBody(searchText, results, fuzzy, wildcard, filter, ci.ESSecurityFilter, null, fields, false));
         }
 
@@ -1748,8 +1744,7 @@
                                     // Loop through all the objects.
                                     foreach (var theObject in cursor)
                                     {
-                                        var o = theObject as XPBaseObject;
-                                        if (o != null)
+                                        if (theObject is XPBaseObject o)
                                         {
                                             sb.Append(SerializeObjectForBulk(uSession, o, ci));
                                             j++;
@@ -1796,7 +1791,7 @@
             using (var xpColl = new XPCollection(session, elasticSearchIndexPersistentType))
             {
                 var ei = xpColl.OfType<IElasticSearchIndex>().FirstOrDefault(t => IndexName(indexName).Equals(t.Name, StringComparison.OrdinalIgnoreCase));
-                return ei == null ? false : ei.Active;
+                return (ei != null) && ei.Active;
             }
         }
 
@@ -1831,8 +1826,7 @@
                                 ei.Name = indexName;
                                 ei.Active = false;
                             }
-                            var pb = ei as XPBaseObject;
-                            if (pb != null && pb.IsDeleted)
+                            if (ei is XPBaseObject pb && pb.IsDeleted)
                             {
                                 pb.SetMemberValue(GCRecordField.StaticName, null);
                                 pb.Save();
@@ -2087,8 +2081,7 @@
 
         private void BulkIndex(Session session, Dictionary<XPClassInfo, HashSet<object>> indexed, StringBuilder bulk, HashSet<BYteWareTypeInfo> typeInfos, BYteWareTypeInfo ci, Dictionary<ContainingType, HashSet<object>> typeLists, XPBaseObject bo)
         {
-            HashSet<object> indexedKeys;
-            if (!indexed.TryGetValue(bo.ClassInfo, out indexedKeys))
+            if (!indexed.TryGetValue(bo.ClassInfo, out HashSet<object> indexedKeys))
             {
                 indexedKeys = new HashSet<object>();
                 indexed.Add(bo.ClassInfo, indexedKeys);
@@ -2105,8 +2098,7 @@
                 {
                     foreach (var esReference in ci.ESReferences)
                     {
-                        var reference = esReference.GetValue(bo) as XPBaseObject;
-                        if (reference != null)
+                        if (esReference.GetValue(bo) is XPBaseObject reference)
                         {
                             BulkIndex(session, indexed, bulk, typeInfos, BYteWareTypeInfo.GetBYteWareTypeInfo(reference.GetType()), typeLists, reference);
                         }
@@ -2116,8 +2108,7 @@
                 {
                     foreach (var containingType in ci.ContainingTypes)
                     {
-                        HashSet<object> keys;
-                        if (!typeLists.TryGetValue(containingType, out keys))
+                        if (!typeLists.TryGetValue(containingType, out HashSet<object> keys))
                         {
                             keys = new HashSet<object>();
                             typeLists.Add(containingType, keys);
@@ -2171,8 +2162,7 @@
                                 ei.Name = indexName;
                             }
                             ei.Active = active;
-                            var pb = ei as XPBaseObject;
-                            if (pb != null)
+                            if (ei is XPBaseObject pb)
                             {
                                 pb.SetMemberValue(GCRecordField.StaticName, null);
                                 pb.Save();
@@ -2273,8 +2263,7 @@
 
         private void ObjectSpace_Committing(object sender, CancelEventArgs e)
         {
-            var os = sender as XPObjectSpace;
-            if (os != null && _RegisteredObjectSpaces.ContainsKey(os))
+            if (sender is XPObjectSpace os && _RegisteredObjectSpaces.ContainsKey(os))
             {
                 _RegisteredObjectSpaces[os] = new Changes(os.GetObjectsToDelete(false).OfType<XPBaseObject>().Concat(os.GetObjectsToSave(false).OfType<XPBaseObject>()));
             }
@@ -2282,14 +2271,9 @@
 
         private void ObjectSpace_Committed(object sender, EventArgs e)
         {
-            var os = sender as XPObjectSpace;
-            if (os != null)
+            if (sender is XPObjectSpace os && _RegisteredObjectSpaces.TryGetValue(os, out Changes changes))
             {
-                Changes changes;
-                if (_RegisteredObjectSpaces.TryGetValue(os, out changes))
-                {
-                    IndexChanges(os.Session, changes);
-                }
+                IndexChanges(os.Session, changes);
             }
         }
 
@@ -2300,8 +2284,7 @@
 
         private void Uow_BeforeFlushChanges(object sender, SessionManipulationEventArgs e)
         {
-            var uow = e.Session as UnitOfWork;
-            if (uow != null && _RegisteredUnitOfWork.ContainsKey(uow))
+            if (e.Session is UnitOfWork uow && _RegisteredUnitOfWork.ContainsKey(uow))
             {
                 _RegisteredUnitOfWork[uow] = new Changes(uow.GetObjectsToDelete(false).OfType<XPBaseObject>().Concat(uow.GetObjectsToSave(false).OfType<XPBaseObject>()));
             }
@@ -2309,14 +2292,9 @@
 
         private void Uow_AfterFlushChanges(object sender, SessionManipulationEventArgs e)
         {
-            var uow = e.Session as UnitOfWork;
-            if (uow != null)
+            if (e.Session is UnitOfWork uow && _RegisteredUnitOfWork.TryGetValue(uow, out Changes changes))
             {
-                Changes changes;
-                if (_RegisteredUnitOfWork.TryGetValue(uow, out changes))
-                {
-                    IndexChanges(uow, changes);
-                }
+                IndexChanges(uow, changes);
             }
         }
 
@@ -2378,8 +2356,7 @@
             {
                 foreach (var esReference in ci.ESReferences)
                 {
-                    var reference = esReference.GetValue(bo) as XPBaseObject;
-                    if (reference != null)
+                    if (esReference.GetValue(bo) is XPBaseObject reference)
                     {
                         var oid = reference.Session.GetKeyValue(reference);
                         if (!indexed.Contains(oid))
@@ -2416,8 +2393,7 @@
                         // Loop through all the objects.
                         foreach (var theObject in cursor)
                         {
-                            var reference = theObject as XPBaseObject;
-                            if (reference != null)
+                            if (theObject is XPBaseObject reference)
                             {
                                 var oid = reference.Session.GetKeyValue(reference);
                                 if (!indexed.Contains(oid))
