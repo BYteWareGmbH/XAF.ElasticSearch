@@ -392,8 +392,7 @@
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         public static string SecurityFilter(object user, Type type)
         {
-            var u = user as ISecurityUserWithRoles;
-            if (u != null && type != null)
+            if (user is ISecurityUserWithRoles u && type != null)
             {
                 var noFilter = false;
                 var filters = new HashSet<string>();
