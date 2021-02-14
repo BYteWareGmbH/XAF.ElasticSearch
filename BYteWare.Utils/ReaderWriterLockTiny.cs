@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// Upgrade the lock to write mode
+        /// Upgrade the lock to write mode.
         /// </summary>
         public void UpgradeToWrite()
         {
@@ -57,7 +57,7 @@
         }
 
         /// <summary>
-        /// Downgrades the lock to read mode
+        /// Downgrades the lock to read mode.
         /// </summary>
         public void DowngradeToRead()
         {

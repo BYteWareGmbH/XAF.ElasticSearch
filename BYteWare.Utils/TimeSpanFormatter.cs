@@ -7,7 +7,7 @@
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// Formatter Class for TimeSpans
+    /// Formatter Class for TimeSpans.
     /// </summary>
     public class TimeSpanFormatter : IFormatProvider, ICustomFormatter
     {
@@ -22,10 +22,10 @@
         }
 
         /// <summary>
-        /// Returns a formatter for the formatType if fitting
+        /// Returns a formatter for the formatType if fitting.
         /// </summary>
-        /// <param name="formatType">The Formatter Type</param>
-        /// <returns>This if formatType is fitting, otherwise null</returns>
+        /// <param name="formatType">The Formatter Type.</param>
+        /// <returns>This if formatType is fitting, otherwise null.</returns>
         public object GetFormat(Type formatType)
         {
             if (formatType == typeof(ICustomFormatter))
@@ -39,12 +39,12 @@
         }
 
         /// <summary>
-        /// Formats the arg with the format string and the formatProvider
+        /// Formats the arg with the format string and the formatProvider.
         /// </summary>
-        /// <param name="format">format string</param>
-        /// <param name="arg">object to format</param>
-        /// <param name="formatProvider">format provider</param>
-        /// <returns>The formatted string</returns>
+        /// <param name="format">format string.</param>
+        /// <param name="arg">object to format.</param>
+        /// <param name="formatProvider">format provider.</param>
+        /// <returns>The formatted string.</returns>
         public string Format(string format, object arg, IFormatProvider formatProvider)
         {
             if (arg is TimeSpan && _formatParser.IsMatch(format))

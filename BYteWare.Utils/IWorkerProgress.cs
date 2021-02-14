@@ -1,12 +1,12 @@
 ﻿namespace BYteWare.Utils
 {
     /// <summary>
-    /// Interface to report progress
+    /// Interface to report progress.
     /// </summary>
     public interface IWorkerProgress
     {
         /// <summary>
-        /// Name of the progress bar
+        /// Name of the progress bar.
         /// </summary>
         string Name
         {
@@ -15,7 +15,7 @@
         }
 
         /// <summary>
-        /// Phase of the action
+        /// Phase of the action.
         /// </summary>
         string Phase
         {
@@ -24,7 +24,7 @@
         }
 
         /// <summary>
-        /// Maximum of the progress bar
+        /// Maximum of the progress bar.
         /// </summary>
         int Maximum
         {
@@ -33,7 +33,7 @@
         }
 
         /// <summary>
-        /// Position of the progress bar
+        /// Position of the progress bar.
         /// </summary>
         int Position
         {

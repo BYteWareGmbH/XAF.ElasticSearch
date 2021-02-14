@@ -6,9 +6,9 @@
     using System.Linq;
 
     /// <summary>
-    /// BindingList with support for Remove
+    /// BindingList with support for Remove.
     /// </summary>
-    /// <typeparam name="T">Type for the elements</typeparam>
+    /// <typeparam name="T">Type for the elements.</typeparam>
     public class BindingListRemove<T> : BindingList<T>
     {
         /// <summary>
@@ -17,9 +17,9 @@
         public event ListChangedEventHandler Removing;
 
         /// <summary>
-        /// Event Handler for the Removing event
+        /// Event Handler for the Removing event.
         /// </summary>
-        /// <param name="e">The ListChangedEventArgs</param>
+        /// <param name="e">The ListChangedEventArgs.</param>
         protected void OnRemoving(ListChangedEventArgs e)
         {
             Removing?.Invoke(this, e);

@@ -6,7 +6,7 @@
     using System.Threading;
 
     /// <summary>
-    /// Class to generate Comb Guids
+    /// Class to generate Comb Guids.
     /// </summary>
     public static class CombGuid
     {
@@ -16,7 +16,7 @@
         /// <summary>
         /// Generate a new <see cref="Guid"/> using the comb algorithm.
         /// </summary>
-        /// <returns>Guid Value with a incremental "end" to be consecutively indexed in SQL Server</returns>
+        /// <returns>Guid Value with a incremental "end" to be consecutively indexed in SQL Server.</returns>
         public static Guid GenerateComb()
         {
             var guidArray = Guid.NewGuid().ToByteArray();

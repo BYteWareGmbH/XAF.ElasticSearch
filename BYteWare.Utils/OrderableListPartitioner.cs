@@ -8,9 +8,9 @@
     using System.Threading;
 
     /// <summary>
-    /// Partitioner who returns ordered elements as partitions
+    /// Partitioner who returns ordered elements as partitions.
     /// </summary>
-    /// <typeparam name="TSource">Type for the elements of the list</typeparam>
+    /// <typeparam name="TSource">Type for the elements of the list.</typeparam>
     public class OrderableListPartitioner<TSource> : OrderablePartitioner<TSource>
     {
         private readonly IList<TSource> input;
@@ -18,7 +18,7 @@
         /// <summary>
         /// Initalizes a new instance of the <see cref="OrderableListPartitioner&lt;TSource&gt;"/> class.
         /// </summary>
-        /// <param name="input">The source list</param>
+        /// <param name="input">The source list.</param>
         public OrderableListPartitioner(IList<TSource> input)
             : base(true, false, true)
         {

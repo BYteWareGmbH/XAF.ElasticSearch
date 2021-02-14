@@ -5,12 +5,12 @@
     using System.Linq;
 
     /// <summary>
-    /// Class to report progress
+    /// Class to report progress.
     /// </summary>
     public class WorkerProgress : IWorkerProgress
     {
         /// <summary>
-        /// Name of the progress bar
+        /// Name of the progress bar.
         /// </summary>
         public string Name
         {
@@ -19,7 +19,7 @@
         }
 
         /// <summary>
-        /// Phase of the action
+        /// Phase of the action.
         /// </summary>
         public string Phase
         {
@@ -28,7 +28,7 @@
         }
 
         /// <summary>
-        /// Maximum of the progress bar
+        /// Maximum of the progress bar.
         /// </summary>
         public int Maximum
         {
@@ -37,7 +37,7 @@
         }
 
         /// <summary>
-        /// Position of the progress bar
+        /// Position of the progress bar.
         /// </summary>
         public int Position
         {

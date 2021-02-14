@@ -12,21 +12,21 @@
     using System.Text.RegularExpressions;
 
     /// <summary>
-    /// Collection of various useful extension methods
+    /// Collection of various useful extension methods.
     /// </summary>
     public static class Extension
     {
         /// <summary>
-        /// Regular Expression to test E-Mail Addresses
+        /// Regular Expression to test E-Mail Addresses.
         /// </summary>
         public const string EMailRegEx = @"^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\.)+[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?$";
 
         /// <summary>
-        /// Creates an empty List with elements of the Type of obj
+        /// Creates an empty List with elements of the Type of obj.
         /// </summary>
-        /// <param name="obj">Object where the Type T is deduced from</param>
-        /// <typeparam name="T">Type for the elements of the list</typeparam>
-        /// <returns>Empty List of Type T</returns>
+        /// <param name="obj">Object where the Type T is deduced from.</param>
+        /// <typeparam name="T">Type for the elements of the list.</typeparam>
+        /// <returns>Empty List of Type T.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "obj", Justification = "Extension Method")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Extension Method")]
         public static List<T> CreateEmptyList<T>(T obj)
@@ -35,11 +35,11 @@
         }
 
         /// <summary>
-        /// Creates a List with the given elements
+        /// Creates a List with the given elements.
         /// </summary>
-        /// <param name="elements">The elements to add to the list</param>
-        /// <typeparam name="T">Type for the elements of the list</typeparam>
-        /// <returns>List with elements</returns>
+        /// <param name="elements">The elements to add to the list.</param>
+        /// <typeparam name="T">Type for the elements of the list.</typeparam>
+        /// <returns>List with elements.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Extension Method")]
         public static List<T> CreateList<T>(params T[] elements)
         {
@@ -47,10 +47,10 @@
         }
 
         /// <summary>
-        /// Returns null if the String str is null or empty
+        /// Returns null if the String str is null or empty.
         /// </summary>
-        /// <param name="str">String to be tested</param>
-        /// <returns>Null if the string is null or empty, str otherwise</returns>
+        /// <param name="str">String to be tested.</param>
+        /// <returns>Null if the string is null or empty, str otherwise.</returns>
         public static string AsNullIfEmpty(this string str)
         {
             if (string.IsNullOrEmpty(str))
@@ -61,10 +61,10 @@
         }
 
         /// <summary>
-        /// Returns null if the String str is null or empty or contains only whitespace characters
+        /// Returns null if the String str is null or empty or contains only whitespace characters.
         /// </summary>
-        /// <param name="str">String to be tested</param>
-        /// <returns>Null if the string is null or empty or contains only whitespace characters, str otherwise</returns>
+        /// <param name="str">String to be tested.</param>
+        /// <returns>Null if the string is null or empty or contains only whitespace characters, str otherwise.</returns>
         public static string AsNullIfWhiteSpace(this string str)
         {
             if (string.IsNullOrWhiteSpace(str))
@@ -75,11 +75,11 @@
         }
 
         /// <summary>
-        /// Returns null if the Enumeration items is null or empty
+        /// Returns null if the Enumeration items is null or empty.
         /// </summary>
-        /// <typeparam name="T">Type for the elements of the list</typeparam>
-        /// <param name="items">Enumeration to be tested</param>
-        /// <returns>Null if the Enumeration is null or empty, items otherwise</returns>
+        /// <typeparam name="T">Type for the elements of the list.</typeparam>
+        /// <param name="items">Enumeration to be tested.</param>
+        /// <returns>Null if the Enumeration is null or empty, items otherwise.</returns>
         public static IEnumerable<T> AsNullIfEmpty<T>(this IEnumerable<T> items)
         {
             if (items == null || !items.Any())
@@ -90,45 +90,45 @@
         }
 
         /// <summary>
-        /// Returns true if the Collection is null or empty
+        /// Returns true if the Collection is null or empty.
         /// </summary>
-        /// <typeparam name="T">Type for the elements of the Collection</typeparam>
-        /// <param name="input">Collection to be tested</param>
-        /// <returns>True if the Collection is null or empty, false otherwise</returns>
+        /// <typeparam name="T">Type for the elements of the Collection.</typeparam>
+        /// <param name="input">Collection to be tested.</param>
+        /// <returns>True if the Collection is null or empty, false otherwise.</returns>
         public static bool IsNullOrEmpty<T>(this ICollection<T> input)
         {
             return (input == null) || (input.Count == 0);
         }
 
         /// <summary>
-        /// Returns true if the Enumeration is null or empty
+        /// Returns true if the Enumeration is null or empty.
         /// </summary>
-        /// <typeparam name="T">Type for the elements of the Enumeration</typeparam>
-        /// <param name="source">Enumeration to be tested</param>
-        /// <returns>True if the Enumeration is null or empty, false otherwise</returns>
+        /// <typeparam name="T">Type for the elements of the Enumeration.</typeparam>
+        /// <param name="source">Enumeration to be tested.</param>
+        /// <returns>True if the Enumeration is null or empty, false otherwise.</returns>
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
             return (source == null) || (!source.Any());
         }
 
         /// <summary>
-        /// Returns true if the Enumeration has items
+        /// Returns true if the Enumeration has items.
         /// </summary>
-        /// <typeparam name="T">Type for the elements of the Enumeration</typeparam>
-        /// <param name="source">Enumeration to be tested</param>
-        /// <returns>True if the Enumeration is not null or empty, false otherwise</returns>
+        /// <typeparam name="T">Type for the elements of the Enumeration.</typeparam>
+        /// <param name="source">Enumeration to be tested.</param>
+        /// <returns>True if the Enumeration is not null or empty, false otherwise.</returns>
         public static bool HasValues<T>(this IEnumerable<T> source)
         {
             return !IsNullOrEmpty(source);
         }
 
         /// <summary>
-        /// Returns the substring without throwing exceptions
+        /// Returns the substring without throwing exceptions.
         /// </summary>
-        /// <param name="text">The text to get the substring from</param>
-        /// <param name="start">starting character position</param>
-        /// <param name="length">maximum number of characters to copy</param>
-        /// <returns>The Substring from text starting at start with maximum length characters</returns>
+        /// <param name="text">The text to get the substring from.</param>
+        /// <param name="start">starting character position.</param>
+        /// <param name="length">maximum number of characters to copy.</param>
+        /// <returns>The Substring from text starting at start with maximum length characters.</returns>
         public static string SafeSubstring(this string text, int start, int length)
         {
             return text == null ? null : text.Length <= start ? string.Empty
@@ -139,10 +139,10 @@
         /// <summary>
         /// Get string value between [first] after and [last] until.
         /// </summary>
-        /// <param name="value">String to be searched for</param>
-        /// <param name="after">Search for after</param>
-        /// <param name="until">End on until</param>
-        /// <returns>returns the String between the first a and the last b</returns>
+        /// <param name="value">String to be searched for.</param>
+        /// <param name="after">Search for after.</param>
+        /// <param name="until">End on until.</param>
+        /// <returns>returns the String between the first a and the last b.</returns>
         public static string Between(this string value, string after, string until)
         {
             if (value == null)
@@ -172,9 +172,9 @@
         /// <summary>
         /// Get string value before [first] until.
         /// </summary>
-        /// <param name="value">String to be searched</param>
-        /// <param name="until">End at this string</param>
-        /// <returns>String value before first until</returns>
+        /// <param name="value">String to be searched.</param>
+        /// <param name="until">End at this string.</param>
+        /// <returns>String value before first until.</returns>
         public static string Before(this string value, string until)
         {
             if (value == null)
@@ -193,9 +193,9 @@
         /// <summary>
         /// Get string value after [last] aft.
         /// </summary>
-        /// <param name="value">String to be searched</param>
-        /// <param name="aft">Begin at this string</param>
-        /// <returns>String value after last aft</returns>
+        /// <param name="value">String to be searched.</param>
+        /// <param name="aft">Begin at this string.</param>
+        /// <returns>String value after last aft.</returns>
         public static string After(this string value, string aft)
         {
             if (value == null)
@@ -219,9 +219,9 @@
         /// <summary>
         /// Formats a string with one literal placeholder.
         /// </summary>
-        /// <param name="text">The extension text</param>
-        /// <param name="arg0">Argument 0</param>
-        /// <returns>The formatted string</returns>
+        /// <param name="text">The extension text.</param>
+        /// <param name="arg0">Argument 0.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatWith(this string text, object arg0)
         {
             return string.Format(CultureInfo.CurrentCulture, text, arg0);
@@ -230,10 +230,10 @@
         /// <summary>
         /// Formats a string with two literal placeholder.
         /// </summary>
-        /// <param name="text">The extension text</param>
-        /// <param name="arg0">Argument 0</param>
-        /// <param name="arg1">Argument 1</param>
-        /// <returns>The formatted string</returns>
+        /// <param name="text">The extension text.</param>
+        /// <param name="arg0">Argument 0.</param>
+        /// <param name="arg1">Argument 1.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatWith(this string text, object arg0, object arg1)
         {
             return string.Format(CultureInfo.CurrentCulture, text, arg0, arg1);
@@ -242,11 +242,11 @@
         /// <summary>
         /// Formats a string with tree literal placeholder.
         /// </summary>
-        /// <param name="text">The extension text</param>
-        /// <param name="arg0">Argument 0</param>
-        /// <param name="arg1">Argument 1</param>
-        /// <param name="arg2">Argument 2</param>
-        /// <returns>The formatted string</returns>
+        /// <param name="text">The extension text.</param>
+        /// <param name="arg0">Argument 0.</param>
+        /// <param name="arg1">Argument 1.</param>
+        /// <param name="arg2">Argument 2.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatWith(this string text, object arg0, object arg1, object arg2)
         {
             return string.Format(CultureInfo.CurrentCulture, text, arg0, arg1, arg2);
@@ -255,9 +255,9 @@
         /// <summary>
         /// Formats a string with a list of literal placeholder.
         /// </summary>
-        /// <param name="text">The extension text</param>
-        /// <param name="args">The argument list</param>
-        /// <returns>The formatted string</returns>
+        /// <param name="text">The extension text.</param>
+        /// <param name="args">The argument list.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatWith(this string text, params object[] args)
         {
             return string.Format(CultureInfo.CurrentCulture, text, args);
@@ -266,33 +266,33 @@
         /// <summary>
         /// Formats a string with a list of literal placeholder.
         /// </summary>
-        /// <param name="text">The extension text</param>
-        /// <param name="provider">The format provider</param>
-        /// <param name="args">The argument list</param>
-        /// <returns>The formatted string</returns>
+        /// <param name="text">The extension text.</param>
+        /// <param name="provider">The format provider.</param>
+        /// <param name="args">The argument list.</param>
+        /// <returns>The formatted string.</returns>
         public static string FormatWith(this string text, IFormatProvider provider, params object[] args)
         {
             return string.Format(provider, text, args);
         }
 
         /// <summary>
-        /// Parses a string into an Enum
+        /// Parses a string into an Enum.
         /// </summary>
-        /// <typeparam name="T">The type of the Enum</typeparam>
-        /// <param name="value">String value to parse</param>
-        /// <returns>The Enum corresponding to the stringExtensions</returns>
+        /// <typeparam name="T">The type of the Enum.</typeparam>
+        /// <param name="value">String value to parse.</param>
+        /// <returns>The Enum corresponding to the stringExtensions.</returns>
         public static T ToEnum<T>(this string value)
         {
             return ToEnum<T>(value, false);
         }
 
         /// <summary>
-        /// Parses a string into an Enum
+        /// Parses a string into an Enum.
         /// </summary>
-        /// <typeparam name="T">The type of the Enum</typeparam>
-        /// <param name="value">String value to parse</param>
-        /// <param name="ignorecase">Ignore the case of the string being parsed</param>
-        /// <returns>The Enum corresponding to the stringExtensions</returns>
+        /// <typeparam name="T">The type of the Enum.</typeparam>
+        /// <param name="value">String value to parse.</param>
+        /// <param name="ignorecase">Ignore the case of the string being parsed.</param>
+        /// <returns>The Enum corresponding to the stringExtensions.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly", Justification = "Generic Parameter")]
         public static T ToEnum<T>(this string value, bool ignorecase)
         {
@@ -324,7 +324,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="defaultvalue">The default value.</param>
-        /// <returns>Integer from String value</returns>
+        /// <returns>Integer from String value.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "Extension Method")]
         public static int ToInteger(this string value, int defaultvalue)
         {
@@ -335,7 +335,7 @@
         /// Toes the integer.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>Integer from String value</returns>
+        /// <returns>Integer from String value.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "Extension Method")]
         public static int ToInteger(this string value)
         {
@@ -347,7 +347,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="defaultvalue">The default value.</param>
-        /// <returns>Double from String value</returns>
+        /// <returns>Double from String value.</returns>
         public static double ToDouble(this string value, double defaultvalue)
         {
             double result;
@@ -365,7 +365,7 @@
         /// Toes the double.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>Double from String value</returns>
+        /// <returns>Double from String value.</returns>
         public static double ToDouble(this string value)
         {
             return ToDouble(value, 0);
@@ -376,7 +376,7 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <param name="defaultvalue">The default value.</param>
-        /// <returns>DateTime from String value</returns>
+        /// <returns>DateTime from String value.</returns>
         public static DateTime? ToDateTime(this string value, DateTime? defaultvalue)
         {
             DateTime result;
@@ -394,7 +394,7 @@
         /// Toes the date time.
         /// </summary>
         /// <param name="value">The value.</param>
-        /// <returns>DateTime from String value</returns>
+        /// <returns>DateTime from String value.</returns>
         public static DateTime? ToDateTime(this string value)
         {
             return ToDateTime(value, null);
@@ -404,7 +404,7 @@
         /// Converts a string value to bool value, supports "T" and "F" conversions.
         /// </summary>
         /// <param name="value">The string value.</param>
-        /// <returns>A bool based on the string value</returns>
+        /// <returns>A bool based on the string value.</returns>
         public static bool? ToBoolean(this string value)
         {
             if (string.Compare("T", value, true, CultureInfo.CurrentCulture) == 0)
@@ -430,7 +430,7 @@
         /// Converts string to a Name-Format where each first letter is Uppercase.
         /// </summary>
         /// <param name="value">The string value.</param>
-        /// <returns>String With Each First Letter Uppercase</returns>
+        /// <returns>String With Each First Letter Uppercase.</returns>
         public static string ToUpperLowerNameVariant(this string value)
         {
             if (string.IsNullOrEmpty(value))
@@ -470,7 +470,7 @@
         /// <summary>
         /// Determines whether it is a valid URL.
         /// </summary>
-        /// <param name="text">The String to test</param>
+        /// <param name="text">The String to test.</param>
         /// <returns>
         ///     <c>true</c> if [is valid URL] [the specified text]; otherwise, <c>false</c>.
         /// </returns>
@@ -480,9 +480,9 @@
         }
 
         /// <summary>
-        /// Determines whether it is a valid email address
+        /// Determines whether it is a valid email address.
         /// </summary>
-        /// <param name="email">The String to test</param>
+        /// <param name="email">The String to test.</param>
         /// <returns>
         ///     <c>true</c> if [is valid email address] [the specified s]; otherwise, <c>false</c>.
         /// </returns>
@@ -494,9 +494,9 @@
         /// <summary>
         /// Truncates the string to a specified length and replace the truncated to a ...
         /// </summary>
-        /// <param name="text">The String to truncate</param>
-        /// <param name="maxLength">total length of characters to maintain before the truncate happens</param>
-        /// <returns>truncated string</returns>
+        /// <param name="text">The String to truncate.</param>
+        /// <param name="maxLength">total length of characters to maintain before the truncate happens.</param>
+        /// <returns>truncated string.</returns>
         public static string Truncate(this string text, int maxLength)
         {
             // replaces the truncated string to a ...
@@ -582,7 +582,7 @@
         /// <summary>
         /// Determines whether [is not null or empty] [the specified input].
         /// </summary>
-        /// <param name="input">The String to test</param>
+        /// <param name="input">The String to test.</param>
         /// <returns>
         ///     <c>true</c> if [is not null or empty] [the specified input]; otherwise, <c>false</c>.
         /// </returns>
@@ -594,7 +594,7 @@
         /// <summary>
         /// Determines whether [is not null or empty or only contains space characters] [the specified input].
         /// </summary>
-        /// <param name="input">The string to test</param>
+        /// <param name="input">The string to test.</param>
         /// <returns>
         ///     <c>true</c> if [is not null or empty] [the specified input]; otherwise, <c>false</c>.
         /// </returns>
@@ -604,11 +604,11 @@
         }
 
         /// <summary>
-        /// Checks string object's value to array of string values
+        /// Checks string object's value to array of string values.
         /// </summary>
-        /// <param name="value">The String to test</param>
-        /// <param name="values">Array of string values to compare</param>
-        /// <returns>Return true if any string value matches</returns>
+        /// <param name="value">The String to test.</param>
+        /// <param name="values">Array of string values to compare.</param>
+        /// <returns>Return true if any string value matches.</returns>
         public static bool In(this string value, params string[] values)
         {
             if (value == null)
@@ -630,32 +630,32 @@
         }
 
         /// <summary>
-        /// Returns characters from right of specified length
+        /// Returns characters from right of specified length.
         /// </summary>
-        /// <param name="value">String value</param>
-        /// <param name="length">Max number of characters to return</param>
-        /// <returns>Returns string from right</returns>
+        /// <param name="value">String value.</param>
+        /// <param name="length">Max number of characters to return.</param>
+        /// <returns>Returns string from right.</returns>
         public static string Right(this string value, int length)
         {
             return value != null && value.Length > length ? value.Substring(value.Length - length) : value;
         }
 
         /// <summary>
-        /// Returns characters from left of specified length
+        /// Returns characters from left of specified length.
         /// </summary>
-        /// <param name="value">String value</param>
-        /// <param name="length">Max number of characters to return</param>
-        /// <returns>Returns string from left</returns>
+        /// <param name="value">String value.</param>
+        /// <param name="length">Max number of characters to return.</param>
+        /// <returns>Returns string from left.</returns>
         public static string Left(this string value, int length)
         {
             return value != null && value.Length > length ? value.Substring(0, length) : value;
         }
 
         /// <summary>
-        /// Convert hex String to bytes representation
+        /// Convert hex String to bytes representation.
         /// </summary>
-        /// <param name="value">Hex string to convert into bytes</param>
-        /// <returns>Bytes of hex string</returns>
+        /// <param name="value">Hex string to convert into bytes.</param>
+        /// <returns>Bytes of hex string.</returns>
         public static byte[] HexToBytes(this string value)
         {
             if (value == null)
@@ -677,22 +677,22 @@
         }
 
         /// <summary>
-        /// Returns true if enum matches any of the given values
+        /// Returns true if enum matches any of the given values.
         /// </summary>
-        /// <param name="value">Value to match</param>
-        /// <param name="values">Values to match against</param>
-        /// <returns>Return true if matched</returns>
+        /// <param name="value">Value to match.</param>
+        /// <param name="values">Values to match against.</param>
+        /// <returns>Return true if matched.</returns>
         public static bool In(this Enum value, params Enum[] values)
         {
             return values.Any(v => v == value);
         }
 
         /// <summary>
-        /// Adds the String append to each Word in String text, that doesn't already contain append
+        /// Adds the String append to each Word in String text, that doesn't already contain append.
         /// </summary>
-        /// <param name="text">The String where each word is appended with c</param>
-        /// <param name="append">The string to append</param>
-        /// <returns>The string with each word in text appended with append</returns>
+        /// <param name="text">The String where each word is appended with c.</param>
+        /// <param name="append">The string to append.</param>
+        /// <returns>The string with each word in text appended with append.</returns>
         public static string AddStringToWordEnd(this string text, string append)
         {
             if (text == null)
@@ -716,10 +716,10 @@
         }
 
         /// <summary>
-        /// Checks if each word in the String text, contains str
+        /// Checks if each word in the String text, contains str.
         /// </summary>
-        /// <param name="text">The String to test</param>
-        /// <param name="str">The String to be searched for</param>
+        /// <param name="text">The String to test.</param>
+        /// <param name="str">The String to be searched for.</param>
         /// <returns>
         ///     <c>true</c> if every word in text contains str otherwise, <c>false</c>.
         /// </returns>
@@ -733,12 +733,12 @@
         }
 
         /// <summary>
-        /// Enumerates obj and all its children, which are recursively fetched through the function children
+        /// Enumerates obj and all its children, which are recursively fetched through the function children.
         /// </summary>
-        /// <typeparam name="T">Type for the elements of the Enumeration</typeparam>
-        /// <param name="obj">The Object to start with</param>
-        /// <param name="children">The function which delivers the children</param>
-        /// <returns>Enumeration of obj and all its children, recursively</returns>
+        /// <typeparam name="T">Type for the elements of the Enumeration.</typeparam>
+        /// <param name="obj">The Object to start with.</param>
+        /// <param name="children">The function which delivers the children.</param>
+        /// <returns>Enumeration of obj and all its children, recursively.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func")]
         public static IEnumerable<T> DescendantsAndSelf<T>(this T obj, Func<T, IEnumerable<T>> children)
         {
@@ -771,10 +771,10 @@
         }
 
         /// <summary>
-        /// Tests if name fits the mask expression
+        /// Tests if name fits the mask expression.
         /// </summary>
-        /// <param name="name">The String to be tested</param>
-        /// <param name="expression">The expression with optional wildcard characters '*', '?', '>', '>', '"' </param>
+        /// <param name="name">The String to be tested.</param>
+        /// <param name="expression">The expression with optional wildcard characters '*', '?', '>', '>', '"'. </param>
         /// <returns>
         ///     <c>true</c> if name fits the mask expression otherwise, <c>false</c>.
         /// </returns>
@@ -794,7 +794,6 @@
             name = name.ToLowerInvariant();
             int num9;
             var ch = '\0';
-            var ch2 = '\0';
             var sourceArray = new int[16];
             var numArray2 = new int[16];
             var flag = false;
@@ -853,7 +852,7 @@
                         }
                         else
                         {
-                            ch2 = expression[num2];
+                            var ch2 = expression[num2];
                             num3 = 1;
                             if (num5 >= 14)
                             {
@@ -1101,7 +1100,7 @@
                     {
                         Position = -1,
                         Source = SourceEnumerable.GetEnumerator(),
-                        AtEnd = false
+                        AtEnd = false,
                     };
                 }
 
@@ -1148,12 +1147,12 @@
         }
 
         /// <summary>
-        /// Splits the Enumeration source into chunks with maximum chunksize elements
+        /// Splits the Enumeration source into chunks with maximum chunksize elements.
         /// </summary>
-        /// <typeparam name="T">Type for the elements of the Enumeration</typeparam>
-        /// <param name="source">The source Enumeration</param>
-        /// <param name="chunksize">The maximum number of elements of a chunk</param>
-        /// <returns>An Enumeration of Enumerations of maximum chunksize elements</returns>
+        /// <typeparam name="T">Type for the elements of the Enumeration.</typeparam>
+        /// <param name="source">The source Enumeration.</param>
+        /// <param name="chunksize">The maximum number of elements of a chunk.</param>
+        /// <returns>An Enumeration of Enumerations of maximum chunksize elements.</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Extension Method")]
         public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunksize)
         {
@@ -1182,11 +1181,11 @@
         }
 
         /// <summary>
-        /// Returns a nullable int from the DataReader with number column
+        /// Returns a nullable int from the DataReader with number column.
         /// </summary>
-        /// <param name="reader">The DataReader</param>
-        /// <param name="column">The number of the column to return</param>
-        /// <returns>Null if the columns value is null otherwise the integer value</returns>
+        /// <param name="reader">The DataReader.</param>
+        /// <param name="column">The number of the column to return.</param>
+        /// <returns>Null if the columns value is null otherwise the integer value.</returns>
         public static int? GetNullableInt32(this IDataRecord reader, int column)
         {
             if (reader == null)
@@ -1197,35 +1196,35 @@
         }
 
         /// <summary>
-        /// Delivers the minimum of the two comparable values val1 and val2
+        /// Delivers the minimum of the two comparable values val1 and val2.
         /// </summary>
-        /// <typeparam name="T">Type for comparison</typeparam>
-        /// <param name="val1">The value val1 to compare</param>
-        /// <param name="val2">The value val2 to compare</param>
-        /// <returns>The smaller of the two values val1 and val2</returns>
+        /// <typeparam name="T">Type for comparison.</typeparam>
+        /// <param name="val1">The value val1 to compare.</param>
+        /// <param name="val2">The value val2 to compare.</param>
+        /// <returns>The smaller of the two values val1 and val2.</returns>
         public static T Min<T>(T val1, T val2) where T : IComparable
         {
             return val1.CompareTo(val2) <= 0 ? val1 : val2;
         }
 
         /// <summary>
-        /// Delivers the maximum of the two comparable values val1 and val2
+        /// Delivers the maximum of the two comparable values val1 and val2.
         /// </summary>
-        /// <typeparam name="T">Type for comparison</typeparam>
-        /// <param name="val1">The value val1 to compare</param>
-        /// <param name="val2">The value val2 to compare</param>
-        /// <returns>The bigger of the two values val1 and val2</returns>
+        /// <typeparam name="T">Type for comparison.</typeparam>
+        /// <param name="val1">The value val1 to compare.</param>
+        /// <param name="val2">The value val2 to compare.</param>
+        /// <returns>The bigger of the two values val1 and val2.</returns>
         public static T Max<T>(T val1, T val2) where T : IComparable
         {
             return val1.CompareTo(val2) >= 0 ? val1 : val2;
         }
 
         /// <summary>
-        /// Returns a MemoryStream with the bytes of the String str in the given Encoding
+        /// Returns a MemoryStream with the bytes of the String str in the given Encoding.
         /// </summary>
-        /// <param name="str">The String where the bytes should be returned from</param>
-        /// <param name="encoding">The encoding to use</param>
-        /// <returns>A MemoryStream with the bytes from str</returns>
+        /// <param name="str">The String where the bytes should be returned from.</param>
+        /// <param name="encoding">The encoding to use.</param>
+        /// <returns>A MemoryStream with the bytes from str.</returns>
         public static MemoryStream ToStream(this string str, Encoding encoding)
         {
             if (encoding == null)
@@ -1236,20 +1235,20 @@
         }
 
         /// <summary>
-        /// Returns a MemoryStream with the bytes of the String str in UTF8 Encoding
+        /// Returns a MemoryStream with the bytes of the String str in UTF8 Encoding.
         /// </summary>
-        /// <param name="str">The String where the bytes should be returned from</param>
-        /// <returns>A MemoryStream with the bytes from str</returns>
+        /// <param name="str">The String where the bytes should be returned from.</param>
+        /// <returns>A MemoryStream with the bytes from str.</returns>
         public static MemoryStream ToStream(this string str)
         {
             return str.ToStream(Encoding.UTF8);
         }
 
         /// <summary>
-        /// Returns a byte array with the bytes of the String str
+        /// Returns a byte array with the bytes of the String str.
         /// </summary>
-        /// <param name="str">The String where the bytes should be returned from</param>
-        /// <returns>A byte array with the bytes from str</returns>
+        /// <param name="str">The String where the bytes should be returned from.</param>
+        /// <returns>A byte array with the bytes from str.</returns>
         public static byte[] GetBytes(this string str)
         {
             if (str == null)
@@ -1262,10 +1261,10 @@
         }
 
         /// <summary>
-        /// Returns a string with the bytes of the byte array bytes
+        /// Returns a string with the bytes of the byte array bytes.
         /// </summary>
-        /// <param name="values">The byte array with the characters</param>
-        /// <returns>A string with the characters from bytes</returns>
+        /// <param name="values">The byte array with the characters.</param>
+        /// <returns>A string with the characters from bytes.</returns>
         public static string GetString(byte[] values)
         {
             if (values == null)
@@ -1278,10 +1277,10 @@
         }
 
         /// <summary>
-        /// Tests if the given Type is derived from Nullable
+        /// Tests if the given Type is derived from Nullable.
         /// </summary>
-        /// <param name="theType">The Type to test</param>
-        /// <returns>True if the Type is derived from Nullable otherwise false</returns>
+        /// <param name="theType">The Type to test.</param>
+        /// <returns>True if the Type is derived from Nullable otherwise false.</returns>
         public static bool IsNullableType(this Type theType)
         {
             if (theType == null)
@@ -1300,11 +1299,11 @@
         }
 
         /// <summary>
-        /// Tests if the two given byte arrays contain the same sequence
+        /// Tests if the two given byte arrays contain the same sequence.
         /// </summary>
-        /// <param name="b1">The byte array b1 to compare</param>
-        /// <param name="b2">The byte array b2 to compare</param>
-        /// <returns>True if the two byte arrays contain the same sequence of bytes</returns>
+        /// <param name="b1">The byte array b1 to compare.</param>
+        /// <param name="b2">The byte array b2 to compare.</param>
+        /// <returns>True if the two byte arrays contain the same sequence of bytes.</returns>
         public static bool SequenceEqual(this byte[] b1, byte[] b2)
         {
             if (b1 == b2)
@@ -1322,19 +1321,19 @@
 
         /// <summary>
         /// Format the given object in the current culture. This static method may be
-        /// imported in C# by
+        /// imported in C# by.
         /// <code>
         /// using static System.FormattableString;
         /// </code>.
         /// Within the scope
         /// of that import directive an interpolated string may be formatted in the
-        /// current culture by writing, for example,
+        /// current culture by writing, for example,.
         /// <code>
         /// Current($"{{ lat = {latitude}; lon = {longitude} }}")
         /// </code>
         /// </summary>
-        /// <param name="formattable">The interpolated String</param>
-        /// <returns>The interpolated String with the parameters formatted in the Current culture</returns>
+        /// <param name="formattable">The interpolated String.</param>
+        /// <returns>The interpolated String with the parameters formatted in the Current culture.</returns>
         [CLSCompliant(false)]
         public static string Current(FormattableString formattable)
         {
@@ -1349,11 +1348,11 @@
         /// <summary>
         /// Determines if a type is numeric.  Nullable numeric types are considered numeric.
         /// </summary>
-        /// <param name="type">The type to check</param>
+        /// <param name="type">The type to check.</param>
         /// <remarks>
         /// Boolean is not considered numeric.
         /// </remarks>
-        /// <returns>True if the type is numeric; False otherwise</returns>
+        /// <returns>True if the type is numeric; False otherwise.</returns>
         public static bool IsNumericType(this Type type)
         {
             if (type == null)
@@ -1386,32 +1385,32 @@
         }
 
         /// <summary>
-        /// Returns a read only Set
+        /// Returns a read only Set.
         /// </summary>
-        /// <typeparam name="T">The element Type</typeparam>
-        /// <param name="set">The set to return a read only set for</param>
-        /// <returns>A Read Only Set for set</returns>
+        /// <typeparam name="T">The element Type.</typeparam>
+        /// <param name="set">The set to return a read only set for.</param>
+        /// <returns>A Read Only Set for set.</returns>
         public static ReadOnlySet<T> AsReadOnly<T>(this ISet<T> set)
         {
             return new ReadOnlySet<T>(set);
         }
 
         /// <summary>
-        /// Returns a read only Collection
+        /// Returns a read only Collection.
         /// </summary>
-        /// <typeparam name="T">The element Type</typeparam>
-        /// <param name="collection">The collection to return a read only collection for</param>
-        /// <returns>A Read Only collection for collection</returns>
+        /// <typeparam name="T">The element Type.</typeparam>
+        /// <param name="collection">The collection to return a read only collection for.</param>
+        /// <returns>A Read Only collection for collection.</returns>
         public static RealReadOnlyCollection<T> AsReadOnly<T>(this ICollection<T> collection)
         {
             return new RealReadOnlyCollection<T>(collection);
         }
 
         /// <summary>
-        /// Returns the default value for the Type tp
+        /// Returns the default value for the Type tp.
         /// </summary>
-        /// <param name="tp">The Type</param>
-        /// <returns>Default Value for Type tp</returns>
+        /// <param name="tp">The Type.</param>
+        /// <returns>Default Value for Type tp.</returns>
         public static object GetDefaultValue(this Type tp)
         {
             if (tp == null)
@@ -1427,11 +1426,11 @@
         }
 
         /// <summary>
-        /// Returns if the value for the Type tp is the default value
+        /// Returns if the value for the Type tp is the default value.
         /// </summary>
-        /// <param name="tp">The Type</param>
-        /// <param name="value">The Value</param>
-        /// <returns>True if value equals the default value of Type tp; otherwise False</returns>
+        /// <param name="tp">The Type.</param>
+        /// <param name="value">The Value.</param>
+        /// <returns>True if value equals the default value of Type tp; otherwise False.</returns>
         public static bool IsDefaultValue(this Type tp, object value)
         {
             if (tp == null)
@@ -1446,28 +1445,28 @@
         }
 
         /// <summary>
-        /// Returns if the value for the Type tp is the default value
+        /// Returns if the value for the Type tp is the default value.
         /// </summary>
-        /// <typeparam name="T">The Type</typeparam>
-        /// <param name="value">The Value</param>
-        /// <returns>True if value equals the default value of Type tp; otherwise False</returns>
+        /// <typeparam name="T">The Type.</typeparam>
+        /// <param name="value">The Value.</param>
+        /// <returns>True if value equals the default value of Type tp; otherwise False.</returns>
         public static bool IsDefaultValue<T>(this T value)
         {
             return EqualityComparer<T>.Default.Equals(value, default(T));
         }
 
         /// <summary>
-        /// Returns a two key level Dictionary
+        /// Returns a two key level Dictionary.
         /// </summary>
-        /// <typeparam name="TElement">Type for the elements of the enumeration</typeparam>
-        /// <typeparam name="TKey1">Type for the first key level</typeparam>
-        /// <typeparam name="TKey2">Type for the second key level</typeparam>
-        /// <typeparam name="TValue">Type for the elements</typeparam>
-        /// <param name="items">Source Enumeration</param>
-        /// <param name="key1">Selector Function for the first key level</param>
-        /// <param name="key2">Selector Function for the second key level</param>
-        /// <param name="value">Selector Function for the values of the Dictionary</param>
-        /// <returns>Dual Key Dictionary</returns>
+        /// <typeparam name="TElement">Type for the elements of the enumeration.</typeparam>
+        /// <typeparam name="TKey1">Type for the first key level.</typeparam>
+        /// <typeparam name="TKey2">Type for the second key level.</typeparam>
+        /// <typeparam name="TValue">Type for the elements.</typeparam>
+        /// <param name="items">Source Enumeration.</param>
+        /// <param name="key1">Selector Function for the first key level.</param>
+        /// <param name="key2">Selector Function for the second key level.</param>
+        /// <param name="value">Selector Function for the values of the Dictionary.</param>
+        /// <returns>Dual Key Dictionary.</returns>
         public static DualKeyDictionary<TKey1, TKey2, TValue> ToDualKeyDictionary<TElement, TKey1, TKey2, TValue>(this IEnumerable<TElement> items, Func<TElement, TKey1> key1, Func<TElement, TKey2> key2, Func<TElement, TValue> value)
         {
             if (items == null)
@@ -1495,19 +1494,19 @@
         }
 
         /// <summary>
-        /// Returns a three key level Dictionary
+        /// Returns a three key level Dictionary.
         /// </summary>
-        /// <typeparam name="TElement">Type for the elements of the enumeration</typeparam>
-        /// <typeparam name="TKey1">Type for the first key level</typeparam>
-        /// <typeparam name="TKey2">Type for the second key level</typeparam>
-        /// <typeparam name="TKey3">Type for the third key level</typeparam>
-        /// <typeparam name="TValue">Type for the elements</typeparam>
-        /// <param name="items">Source Enumeration</param>
-        /// <param name="key1">Selector Function for the first key level</param>
-        /// <param name="key2">Selector Function for the second key level</param>
-        /// <param name="key3">Selector Function for the third key level</param>
-        /// <param name="value">Selector Function for the values of the Dictionary</param>
-        /// <returns>Triple Key Dictionary</returns>
+        /// <typeparam name="TElement">Type for the elements of the enumeration.</typeparam>
+        /// <typeparam name="TKey1">Type for the first key level.</typeparam>
+        /// <typeparam name="TKey2">Type for the second key level.</typeparam>
+        /// <typeparam name="TKey3">Type for the third key level.</typeparam>
+        /// <typeparam name="TValue">Type for the elements.</typeparam>
+        /// <param name="items">Source Enumeration.</param>
+        /// <param name="key1">Selector Function for the first key level.</param>
+        /// <param name="key2">Selector Function for the second key level.</param>
+        /// <param name="key3">Selector Function for the third key level.</param>
+        /// <param name="value">Selector Function for the values of the Dictionary.</param>
+        /// <returns>Triple Key Dictionary.</returns>
         public static TripleKeyDictionary<TKey1, TKey2, TKey3, TValue> ToTripleKeyDictionary<TElement, TKey1, TKey2, TKey3, TValue>(this IEnumerable<TElement> items, Func<TElement, TKey1> key1, Func<TElement, TKey2> key2, Func<TElement, TKey3> key3, Func<TElement, TValue> value)
         {
             if (items == null)

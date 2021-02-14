@@ -8,9 +8,9 @@
     using System.Threading.Tasks;
 
     /// <summary>
-    /// ReadOnlyCollection only works for IList so this is a real read only collection for ICollection
+    /// ReadOnlyCollection only works for IList so this is a real read only collection for ICollection.
     /// </summary>
-    /// <typeparam name="T">Element Type</typeparam>
+    /// <typeparam name="T">Element Type.</typeparam>
     [Serializable]
     public class RealReadOnlyCollection<T> : ICollection<T>, ICollection, IReadOnlyCollection<T>
     {
@@ -20,7 +20,7 @@
         /// <summary>
         /// Generates a new <see cref="RealReadOnlyCollection&lt;T&gt;"/>.
         /// </summary>
-        /// <param name="collection">Internally used collection</param>
+        /// <param name="collection">Internally used collection.</param>
         public RealReadOnlyCollection(ICollection<T> collection)
         {
             if (collection == null)

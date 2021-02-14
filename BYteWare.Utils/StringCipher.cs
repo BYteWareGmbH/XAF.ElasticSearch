@@ -8,7 +8,7 @@
     using System.Text;
 
     /// <summary>
-    /// Securely encrypt and decrypt a string
+    /// Securely encrypt and decrypt a string.
     /// </summary>
     public static class StringCipher
     {
@@ -20,11 +20,11 @@
         private const int DerivationIterations = 1000;
 
         /// <summary>
-        /// Encrypts the plainText string with the passPhrase string
+        /// Encrypts the plainText string with the passPhrase string.
         /// </summary>
-        /// <param name="plainText">The string to encrypt</param>
-        /// <param name="passPhrase">The passphrase</param>
-        /// <returns>The encrypted string</returns>
+        /// <param name="plainText">The string to encrypt.</param>
+        /// <param name="passPhrase">The passphrase.</param>
+        /// <returns>The encrypted string.</returns>
         public static string Encrypt(this string plainText, string passPhrase)
         {
             // Salt and IV is randomly generated each time, but is preprended to encrypted cipher text
@@ -72,11 +72,11 @@
         }
 
         /// <summary>
-        /// Decrypts the cipherText string with the passPhrase string
+        /// Decrypts the cipherText string with the passPhrase string.
         /// </summary>
-        /// <param name="cipherText">The string to decrypt</param>
-        /// <param name="passPhrase">The passphrase</param>
-        /// <returns>The decrypted string</returns>
+        /// <param name="cipherText">The string to decrypt.</param>
+        /// <param name="passPhrase">The passphrase.</param>
+        /// <returns>The decrypted string.</returns>
         public static string Decrypt(this string cipherText, string passPhrase)
         {
             // Get the complete stream of bytes that represent:
