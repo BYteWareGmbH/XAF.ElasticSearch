@@ -1,7 +1,7 @@
 ﻿namespace BYteWare.XAF.ElasticSearch
 {
+    using BYteWare.XAF.ElasticSearch.Model;
     using DevExpress.ExpressApp.Utils;
-    using Model;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Linq;
     using System;
@@ -51,17 +51,9 @@
         /// <param name="optOut">Was the type marked as opting out of ElasticSearch indexing</param>
         public TypeMappingWriter(ElasticSearchClient ec, BYteWareTypeInfo bti, int maxRecursion, bool optOut)
         {
-            if (ec == null)
-            {
-                throw new ArgumentNullException(nameof(ec));
-            }
-            if (bti == null)
-            {
-                throw new ArgumentNullException(nameof(bti));
-            }
-            byteWareTypeInfo = bti;
+            byteWareTypeInfo = bti ?? throw new ArgumentNullException(nameof(bti));
             baseBWTypeInfo = bti;
-            elasticSearchClient = ec;
+            elasticSearchClient = ec ?? throw new ArgumentNullException(nameof(ec));
 
             MaxRecursion = maxRecursion;
             OptOut = optOut;
@@ -86,31 +78,25 @@
                     sw = null;
                     jsonWriter.Formatting = Formatting.Indented;
                     jsonWriter.WriteStartObject();
+                    jsonWriter.WritePropertyName(elasticSearchClient.TypeName(byteWareTypeInfo.ESTypeName));
+                    jsonWriter.WriteStartObject();
+                    if (byteWareTypeInfo.ESSourceFieldDisabled ?? false)
                     {
-                        jsonWriter.WritePropertyName(elasticSearchClient.TypeName(byteWareTypeInfo.ESTypeName));
+                        jsonWriter.WritePropertyName("_source");
                         jsonWriter.WriteStartObject();
-                        {
-                            if (byteWareTypeInfo.ESSourceFieldDisabled ?? false)
-                            {
-                                jsonWriter.WritePropertyName("_source");
-                                jsonWriter.WriteStartObject();
-                                jsonWriter.WritePropertyName("enabled");
-                                jsonWriter.WriteValue(false);
-                                jsonWriter.WriteEnd();
-                            }
-                            jsonWriter.WritePropertyName("properties");
-                            jsonWriter.WriteStartObject();
-                            {
-                                WriteProperties(jsonWriter);
-                                foreach (var pathField in byteWareTypeInfo.ESSuggestContextPathFields.Where(pi => byteWareTypeInfo.ClassInfo.Members.Contains(pi.MemberInfo) && !pi.IsIndexed))
-                                {
-                                    WritePathField(jsonWriter, pathField);
-                                }
-                            }
-                            jsonWriter.WriteEnd();
-                        }
+                        jsonWriter.WritePropertyName("enabled");
+                        jsonWriter.WriteValue(false);
                         jsonWriter.WriteEnd();
                     }
+                    jsonWriter.WritePropertyName("properties");
+                    jsonWriter.WriteStartObject();
+                    WriteProperties(jsonWriter);
+                    foreach (var pathField in byteWareTypeInfo.ESSuggestContextPathFields.Where(pi => byteWareTypeInfo.ClassInfo.Members.Contains(pi.MemberInfo) && !pi.IsIndexed))
+                    {
+                        WritePathField(jsonWriter, pathField);
+                    }
+                    jsonWriter.WriteEnd();
+                    jsonWriter.WriteEnd();
                     jsonWriter.WriteEndObject();
                     jsonWriter.Flush();
                     return strw.ToString();
@@ -153,8 +139,7 @@
         /// <returns>JObject with the ElasticSearch mapping</returns>
         internal JObject MapProperties()
         {
-            int seen;
-            if (SeenTypes.TryGetValue(byteWareTypeInfo.Type, out seen) && seen > MaxRecursion)
+            if (SeenTypes.TryGetValue(byteWareTypeInfo.Type, out int seen) && seen > MaxRecursion)
             {
                 return JObject.Parse("{}");
             }
@@ -168,9 +153,7 @@
                 {
                     sw = null;
                     jsonWriter.WriteStartObject();
-                    {
-                        WriteProperties(jsonWriter);
-                    }
+                    WriteProperties(jsonWriter);
                     jsonWriter.WriteEnd();
                     jsonWriter.Flush();
                     return JObject.Parse(strw.ToString());
@@ -189,9 +172,6 @@
         /// Writes into jsonWriter mapping settings for all to be indexed properties
         /// </summary>
         /// <param name="jsonWriter">A JsonWriter instance</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "LinQ is not complicated")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "LinQ is not complicated")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(ElasticSearch))]
         internal void WriteProperties(JsonWriter jsonWriter)
         {
             foreach (var p in byteWareTypeInfo.GetTopPropertyInfos)
@@ -206,51 +186,49 @@
 
                 jsonWriter.WritePropertyName(propertyName);
                 jsonWriter.WriteStartObject();
+                if (props == null)
                 {
-                    if (props == null)
-                    {
-                        // properties that follow can not be inferred from the CLR.
+                    // properties that follow can not be inferred from the CLR.
 #pragma warning disable CC0021 // Use nameof
-                        jsonWriter.WritePropertyName("type");
+                    jsonWriter.WritePropertyName("type");
 #pragma warning restore CC0021 // Use nameof
-                        jsonWriter.WriteValue(type);
-                    }
-                    else
+                    jsonWriter.WriteValue(type);
+                }
+                else
+                {
+                    WriteProperties(jsonWriter, byteWareTypeInfo, p, props, propertyName, type);
+                    var multiFields = BYteWareTypeInfo.Model != null ? (props as IModelMemberElasticSearchField)?.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                    if (multiFields != null && multiFields.Any())
                     {
-                        WriteProperties(jsonWriter, byteWareTypeInfo, p, props, propertyName, type);
-                        var multiFields = BYteWareTypeInfo.Model != null ? (props as IModelMemberElasticSearchField)?.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
-                        if (multiFields != null && multiFields.Any())
+                        jsonWriter.WritePropertyName("fields");
+                        jsonWriter.WriteStartObject();
+                        foreach (var ga in multiFields.GroupBy(t => t.FieldName))
                         {
-                            jsonWriter.WritePropertyName("fields");
+                            var a = ga.First();
+                            var fieldName = ElasticSearchClient.FieldName(ga.Key);
+                            jsonWriter.WritePropertyName(fieldName);
                             jsonWriter.WriteStartObject();
-                            foreach (var ga in multiFields.GroupBy(t => t.FieldName))
-                            {
-                                var a = ga.First();
-                                var fieldName = ElasticSearchClient.FieldName(ga.Key);
-                                jsonWriter.WritePropertyName(fieldName);
-                                jsonWriter.WriteStartObject();
-                                WriteProperties(jsonWriter, byteWareTypeInfo, p, a, string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, fieldName), ElasticSearchClient.GetElasticSearchType(a, p.PropertyType));
-                                jsonWriter.WriteEndObject();
-                            }
+                            WriteProperties(jsonWriter, byteWareTypeInfo, p, a, string.Format(CultureInfo.InvariantCulture, "{0}.{1}", propertyName, fieldName), ElasticSearchClient.GetElasticSearchType(a, p.PropertyType));
                             jsonWriter.WriteEndObject();
                         }
+                        jsonWriter.WriteEndObject();
                     }
-                    if (type == "object" || type == "nested")
+                }
+                if (type == "object" || type == "nested")
+                {
+                    var deepType = p.PropertyType;
+                    var dbti = BYteWareTypeInfo.GetBYteWareTypeInfo(BYteWareTypeInfo.GetUnderlyingType(deepType));
+                    var seenTypes = new ConcurrentDictionary<Type, int>(SeenTypes);
+                    seenTypes.AddOrUpdate(deepType, 0, (t, i) => ++i);
+
+                    var newTypeMappingWriter = new TypeMappingWriter(elasticSearchClient, dbti, MaxRecursion, OptOut, baseBWTypeInfo, seenTypes);
+                    var nestedProperties = newTypeMappingWriter.MapProperties();
+
+                    jsonWriter.WritePropertyName("properties");
+                    nestedProperties.WriteTo(jsonWriter);
+                    foreach (var pathField in byteWareTypeInfo.ESSuggestContextPathFields.Where(pi => dbti.ClassInfo.Members.Contains(pi.MemberInfo)))
                     {
-                        var deepType = p.PropertyType;
-                        var dbti = BYteWareTypeInfo.GetBYteWareTypeInfo(BYteWareTypeInfo.GetUnderlyingType(deepType));
-                        var seenTypes = new ConcurrentDictionary<Type, int>(SeenTypes);
-                        seenTypes.AddOrUpdate(deepType, 0, (t, i) => ++i);
-
-                        var newTypeMappingWriter = new TypeMappingWriter(elasticSearchClient, dbti, MaxRecursion, OptOut, baseBWTypeInfo, seenTypes);
-                        var nestedProperties = newTypeMappingWriter.MapProperties();
-
-                        jsonWriter.WritePropertyName("properties");
-                        nestedProperties.WriteTo(jsonWriter);
-                        foreach (var pathField in byteWareTypeInfo.ESSuggestContextPathFields.Where(pi => dbti.ClassInfo.Members.Contains(pi.MemberInfo)))
-                        {
-                            WritePathField(jsonWriter, pathField);
-                        }
+                        WritePathField(jsonWriter, pathField);
                     }
                 }
                 jsonWriter.WriteEnd();
@@ -261,9 +239,7 @@
         {
             jsonWriter.WritePropertyName(pathField.ESFieldName);
             jsonWriter.WriteStartObject();
-#pragma warning disable CC0021 // Use nameof
             jsonWriter.WritePropertyName("type");
-#pragma warning restore CC0021 // Use nameof
             jsonWriter.WriteValue(ElasticSearchClient.GetElasticSearchTypeFromFieldType(FieldType.text));
             /*jsonWriter.WritePropertyName("index");
             jsonWriter.WriteValue(false);
@@ -274,8 +250,6 @@
             jsonWriter.WriteEnd();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(ElasticSearch))]
         private static void WriteProperties(JsonWriter jsonWriter, BYteWareTypeInfo bti, PropertyInfo propInfo, IElasticSearchFieldProperties props, string fieldName, string type)
         {
 #pragma warning disable CC0021 // Use nameof

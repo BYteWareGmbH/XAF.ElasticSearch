@@ -19,10 +19,12 @@ namespace MainDemo.Win {
 
             Tracing.LocalUserAppDataPath = Application.LocalUserAppDataPath;
             Tracing.Initialize();
-            MainDemoWinApplication winApplication = new MainDemoWinApplication();
-            winApplication.EnableModelCache = true;
-            winApplication.LinkNewObjectToParentImmediately = false;
-            winApplication.UseLightStyle = true;
+            MainDemoWinApplication winApplication = new MainDemoWinApplication
+            {
+                EnableModelCache = true,
+                LinkNewObjectToParentImmediately = false,
+                UseLightStyle = true
+            };
 #if DEBUG
             DevExpress.ExpressApp.Win.EasyTest.EasyTestRemotingRegistration.Register();
 #endif

@@ -38,9 +38,11 @@ namespace MainDemo.Module.Controllers {
 		private void FillItemWithEnumValues(ChoiceActionItem parentItem, Type enumType) {
 			foreach(object current in Enum.GetValues(enumType)) {
 				EnumDescriptor ed = new EnumDescriptor(enumType);
-				ChoiceActionItem item = new ChoiceActionItem(ed.GetCaption(current), current);
-				item.ImageName = ImageLoader.Instance.GetEnumValueImageName(current);
-				parentItem.Items.Add(item);
+                ChoiceActionItem item = new ChoiceActionItem(ed.GetCaption(current), current)
+                {
+                    ImageName = ImageLoader.Instance.GetEnumValueImageName(current)
+                };
+                parentItem.Items.Add(item);
 			}
 		}
 		private void TaskActionsController_Activated(object sender, EventArgs e) {

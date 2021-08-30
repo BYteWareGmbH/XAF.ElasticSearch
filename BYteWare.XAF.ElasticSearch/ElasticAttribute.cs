@@ -15,39 +15,27 @@
         /// <summary>
         /// No term vectors are stored. (default)
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(no), Justification = nameof(ElasticSearch))]
         no,
 
         /// <summary>
         /// Just the terms in the field are stored.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(yes), Justification = nameof(ElasticSearch))]
         yes,
 
         /// <summary>
         /// Terms and positions are stored.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "with", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "positions", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
         with_positions,
 
         /// <summary>
         /// Terms and character offsets are stored.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "with", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "offsets", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
         with_offsets,
 
         /// <summary>
         /// Terms, positions, and character offsets are stored.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "with", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "positions", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "offsets", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
-        with_positions_offsets
+        with_positions_offsets,
     }
 
     /// <summary>
@@ -58,26 +46,22 @@
         /// <summary>
         /// Only the doc number is indexed. Can answer the question Does this term exist in this field?
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(docs), Justification = nameof(ElasticSearch))]
         docs,
 
         /// <summary>
         /// Doc number and term frequencies are indexed. Term frequencies are used to score repeated terms higher than single terms.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(freqs), Justification = nameof(ElasticSearch))]
         freqs,
 
         /// <summary>
         /// Doc number, term frequencies, and term positions (or order) are indexed. Positions can be used for proximity or phrase queries.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(positions), Justification = nameof(ElasticSearch))]
         positions,
 
         /// <summary>
         /// Doc number, term frequencies, positions, and start and end character offsets (which map the term back to the original string) are indexed. Offsets are used by the postings highlighter.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(offsets), Justification = nameof(ElasticSearch))]
-        offsets
+        offsets,
     }
 #pragma warning restore SA1300
 
@@ -98,7 +82,6 @@
         /// <summary>
         /// The ElasticSearch Field Type
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = nameof(ElasticSearch))]
         public FieldType Type
         {
             get

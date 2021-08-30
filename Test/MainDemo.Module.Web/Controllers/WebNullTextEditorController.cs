@@ -25,12 +25,14 @@ namespace MainDemo.Module.Web.Controllers {
             }
         }
         private void WebNullTextEditorController_Activated(object sender, EventArgs e) {
-            WebPropertyEditor propertyEditor = ((DetailView)View).FindItem("Anniversary") as WebPropertyEditor;
-            if(propertyEditor != null) {
-                if(propertyEditor.Control != null) {
+            if (((DetailView)View).FindItem("Anniversary") is WebPropertyEditor propertyEditor)
+            {
+                if (propertyEditor.Control != null)
+                {
                     InitNullText(propertyEditor);
                 }
-                else {
+                else
+                {
                     propertyEditor.ControlCreated += new EventHandler<EventArgs>(propertyEditor_ControlCreated);
                 }
             }

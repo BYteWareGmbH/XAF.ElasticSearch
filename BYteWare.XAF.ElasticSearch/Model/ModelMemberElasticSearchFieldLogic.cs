@@ -1,5 +1,6 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Model
 {
+    using BYteWare.Utils.Extension;
     using DevExpress.ExpressApp.DC;
     using DevExpress.ExpressApp.Model;
     using DevExpress.ExpressApp.Model.Core;
@@ -8,7 +9,6 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Utils.Extension;
 
     /// <summary>
     /// Methods for the IModelMemberElasticSearchField Model Interface
@@ -22,8 +22,6 @@
         /// </summary>
         /// <param name="esField">IModelMemberElasticSearchField instance</param>
         /// <returns>Enumeration of all numeric members</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
         public static IEnumerable<IModelMember> Get_IntegerFields(IModelMemberElasticSearchField esField)
         {
             if (esField != null)
@@ -42,7 +40,6 @@
         /// </summary>
         /// <param name="esField">IModelMemberElasticSearchField instance</param>
         /// <returns>Name of the WeightFieldMember</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
         public static string Get_WeightField(IModelMemberElasticSearchField esField)
         {
             return esField?.WeightFieldMember?.Name;
@@ -53,13 +50,11 @@
         /// </summary>
         /// <param name="esField">IModelMemberElasticSearchField instance</param>
         /// <param name="value">FieldType value</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
         public static void Set_FieldType(IModelMemberElasticSearchField esField, FieldType? value)
         {
             if (esField != null)
             {
-                var member = esField.Parent as IModelMember;
-                if (value.HasValue && member != null && string.IsNullOrEmpty(esField.FieldName))
+                if (value.HasValue && esField.Parent is IModelMember member && string.IsNullOrEmpty(esField.FieldName))
                 {
                     esField.FieldName = ElasticSearchClient.FieldName(member.Name);
                 }

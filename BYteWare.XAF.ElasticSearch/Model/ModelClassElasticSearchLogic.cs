@@ -20,18 +20,13 @@
         /// </summary>
         /// <param name="modelClassES">IModelClassElasticSearch instance</param>
         /// <returns>Enumeration of all defined ElasticSearch Indexes</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
         public static IEnumerable<IModelElasticSearchIndex> Get_ElasticSearchIndexes(IModelClassElasticSearch modelClassES)
         {
-            var model = modelClassES as IModelClass;
-            if (model != null)
+            if (modelClassES is IModelClass model && model.Application is IModelApplicationElasticSearch esApplication)
             {
-                var esApplication = model.Application as IModelApplicationElasticSearch;
-                if (esApplication != null)
-                {
-                    return esApplication.ElasticSearch.Indexes;
-                }
+                return esApplication.ElasticSearch.Indexes;
             }
+
             return Enumerable.Empty<IModelElasticSearchIndex>();
         }
     }

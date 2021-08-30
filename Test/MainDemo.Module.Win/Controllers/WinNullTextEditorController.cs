@@ -22,12 +22,14 @@ namespace MainDemo.Module.Win.Controllers {
             ((BaseEdit)propertyEditor.Control).Properties.NullText = CaptionHelper.NullValueText;
         }
         public void TryInitializeAnniversaryItem() {
-            PropertyEditor propertyEditor = ((DetailView)View).FindItem("Anniversary") as PropertyEditor;
-            if(propertyEditor != null) {
-                if(propertyEditor.Control != null) {
+            if (((DetailView)View).FindItem("Anniversary") is PropertyEditor propertyEditor)
+            {
+                if (propertyEditor.Control != null)
+                {
                     InitNullText(propertyEditor);
                 }
-                else {
+                else
+                {
                     propertyEditor.ControlCreated += new EventHandler<EventArgs>(propertyEditor_ControlCreated);
                 }
             }

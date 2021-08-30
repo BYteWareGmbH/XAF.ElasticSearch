@@ -35,7 +35,7 @@
         public object GetValue(object target) => new
         {
             input = _Member?.GetValue(target),
-            weight = _WeightField?.GetValue(target)
+            weight = _WeightField?.GetValue(target),
         };
 
         /// <summary>

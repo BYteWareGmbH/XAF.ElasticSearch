@@ -1,5 +1,6 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Model
 {
+    using BYteWare.Utils.Extension;
     using DevExpress.ExpressApp.DC;
     using DevExpress.ExpressApp.Model;
     using System;
@@ -7,7 +8,6 @@
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Utils.Extension;
 
     /// <summary>
     /// Methods for the IModelMemberElasticSearchSuggestContext Model Interface
@@ -21,15 +21,11 @@
         /// </summary>
         /// <param name="suggestContext">IModelMemberElasticSearchSuggestContext instance</param>
         /// <returns>Enumeration of potential ElasticSearch Field Names</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = nameof(XAF))]
         public static IEnumerable<string> Get_ElasticSearchFields(IModelMemberElasticSearchSuggestContext suggestContext)
         {
-            var esProperties = suggestContext?.Parent?.Parent as IModelElasticSearchFieldProperties;
-            if (esProperties != null)
+            if (suggestContext?.Parent?.Parent is IModelElasticSearchFieldProperties esProperties)
             {
-                var member = esProperties.Parent as IModelMember;
-                if (member == null)
+                if (!(esProperties.Parent is IModelMember member))
                 {
                     var fields = esProperties.Parent as IModelMemberElasticSearchFields;
                     member = fields?.Parent?.Parent as IModelMember;

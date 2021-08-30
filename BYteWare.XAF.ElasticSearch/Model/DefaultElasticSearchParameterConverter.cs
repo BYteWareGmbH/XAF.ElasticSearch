@@ -1,6 +1,6 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Model
 {
-    using ElasticSearch;
+    using BYteWare.XAF.ElasticSearch;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;

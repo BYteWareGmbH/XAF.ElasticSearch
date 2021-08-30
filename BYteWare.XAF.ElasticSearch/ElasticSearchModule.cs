@@ -1,7 +1,8 @@
 ﻿namespace BYteWare.XAF.ElasticSearch
 {
-    using BusinessObjects;
-    using Controllers;
+    using BYteWare.XAF.ElasticSearch.BusinessObjects;
+    using BYteWare.XAF.ElasticSearch.Controllers;
+    using BYteWare.XAF.ElasticSearch.Model;
     using DevExpress.ExpressApp;
     using DevExpress.ExpressApp.Actions;
     using DevExpress.ExpressApp.Design;
@@ -13,7 +14,6 @@
     using DevExpress.ExpressApp.Utils;
     using DevExpress.ExpressApp.Xpo;
     using DevExpress.Persistent.Base;
-    using Model;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -24,7 +24,6 @@
     /// <summary>
     /// XAF ElasticSearch Base Module
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(XAF))]
     [CLSCompliant(false)]
     [ToolboxItem(true)]
     /*[ToolboxBitmap(typeof(BYteWareModule), "Logo_16x16.bmp")]
@@ -96,7 +95,6 @@
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Justification = nameof(ElasticSearch))]
         public override IList<PopupWindowShowAction> GetStartupActions()
         {
             try
@@ -123,7 +121,6 @@
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(XAF))]
         protected override IEnumerable<Type> GetRegularTypes()
         {
             return new Type[]
@@ -196,6 +193,7 @@
         /// <inheritdoc/>
         protected override void RegisterEditorDescriptors(EditorDescriptorsFactory editorDescriptorsFactory)
         {
+            // Method intentionally left empty.
         }
 
         private static Type FindIndexType()
@@ -254,8 +252,7 @@
 
         private void Application_Disposed(object sender, EventArgs e)
         {
-            var application = sender as XafApplication;
-            if (application != null)
+            if (sender is XafApplication application)
             {
                 application.Disposed -= Application_Disposed;
                 application.ObjectSpaceCreated -= ElasticSearchModule_ObjectSpaceCreated;

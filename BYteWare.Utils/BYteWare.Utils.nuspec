@@ -1,18 +1,19 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package >
   <metadata>
     <id>$id$</id>
     <version>$version$</version>
     <title>$title$</title>
     <authors>$author$</authors>
-    <owners>$author$</owners>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>$description$</description>
     <projectUrl>https://github.com/BYteWareGmbH/XAF.ElasticSearch</projectUrl>
-    <copyright>Copyright 2016</copyright>
+    <description>$description$</description>
+    <copyright>$copyright$</copyright>
     <tags>Common</tags>
-  </metadata>
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>  </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net452" />
+    <file src="bin\$configuration$\netstandard2.0\$id$.pdb" target="lib\netstandard2.0" />
   </files>
 </package>

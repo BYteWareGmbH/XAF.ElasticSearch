@@ -11,7 +11,6 @@
         /// <summary>
         /// Name of the index
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
         [JsonProperty("index")]
         public string Index
         {
@@ -22,7 +21,6 @@
         /// <summary>
         /// Number of the shard
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
         [JsonProperty("shard")]
         public int Shard
         {
@@ -33,7 +31,6 @@
         /// <summary>
         /// Status code
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
         [JsonProperty("status")]
         public int Status
         {
@@ -44,7 +41,6 @@
         /// <summary>
         /// Failure Reason
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
         [JsonProperty("reason")]
         public string Reason
         {

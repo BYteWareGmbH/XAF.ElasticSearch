@@ -1,12 +1,12 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Model
 {
+    using BYteWare.Utils.Extension;
     using DevExpress.ExpressApp.Model;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
-    using Utils.Extension;
 
     /// <summary>
     /// Determines visibility of ElasticSearch mapping properties
@@ -20,11 +20,9 @@
         /// <param name="node">The Model node to check</param>
         /// <param name="propertyName">name of the property to be checked</param>
         /// <returns>True if the Property should be visible; False otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(XAF))]
         public bool IsVisible(IModelNode node, string propertyName)
         {
-            var esProperties = node as IModelElasticSearchFieldProperties;
-            if (esProperties != null)
+            if (node is IModelElasticSearchFieldProperties esProperties)
             {
                 var fieldType = esProperties.FieldType;
                 switch (propertyName)
@@ -73,6 +71,8 @@
                         return fieldType == FieldType.completion;
                     case nameof(IModelElasticSearchFieldProperties.DefaultSuggestField):
                         return fieldType == FieldType.completion;
+                    default:
+                        break;
                 }
             }
             return false;

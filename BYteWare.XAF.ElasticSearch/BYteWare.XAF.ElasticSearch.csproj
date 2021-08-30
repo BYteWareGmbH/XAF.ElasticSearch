@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <UseWindowsForms>true</UseWindowsForms>
+    <TargetFramework>net462</TargetFramework>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
   <PropertyGroup>
@@ -76,17 +75,51 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="DevExpress.ExpressApp" Version="20.2.5" />
-    <PackageReference Include="DevExpress.ExpressApp.Security" Version="20.2.5" />
-    <PackageReference Include="DevExpress.Persistent.Base" Version="20.2.5" />
-    <PackageReference Include="DevExpress.Persistent.BaseImpl" Version="20.2.5" />
-    <PackageReference Include="DevExpress.Xpo" Version="20.2.5" />
-    <PackageReference Include="Elasticsearch.Net" Version="7.11.0" />
+    <PackageReference Include="Elasticsearch.Net" Version="5.2.0" />
     <PackageReference Include="fasterflect" Version="3.0.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
     <PackageReference Include="StyleCop.Analyzers" Version="1.1.118">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="DevExpress.Data.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.Data.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DevExpress.ExpressApp.Security.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.ExpressApp.Security.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DevExpress.ExpressApp.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.ExpressApp.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DevExpress.ExpressApp.Xpo.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.ExpressApp.Xpo.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DevExpress.Persistent.Base.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.Persistent.Base.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DevExpress.Persistent.BaseImpl.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.Persistent.BaseImpl.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="DevExpress.Xpo.v17.2">
+      <HintPath>C:\Program Files (x86)\DevExpress 17.2\Components\Bin\Framework\DevExpress.Xpo.v17.2.dll</HintPath>
+      <SpecificVersion>false</SpecificVersion>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="System.Configuration" />
   </ItemGroup>
 </Project>

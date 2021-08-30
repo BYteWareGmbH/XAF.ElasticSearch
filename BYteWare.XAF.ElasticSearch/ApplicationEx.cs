@@ -36,7 +36,7 @@
         /// <summary>
         /// Unknown Engine
         /// </summary>
-        Unknown
+        Unknown,
     }
 
     /// <summary>
@@ -58,8 +58,7 @@
             }
             if (application.ObjectSpaceProvider != null)
             {
-                var xposp = application.ObjectSpaceProvider as XPObjectSpaceProvider;
-                if (xposp != null)
+                if (application.ObjectSpaceProvider is XPObjectSpaceProvider xposp)
                 {
                     var dsp = (IXpoDataStoreProvider)xposp.GetPropertyValue("DataStoreProvider", Flags.InstanceAnyVisibility);
                     if (dsp != null)
@@ -115,8 +114,7 @@
         public static DBType GetDBType(this IObjectSpace objectSpace)
         {
             var type = DBType.Unknown;
-            var os = objectSpace as XPObjectSpace;
-            if (os != null)
+            if (objectSpace is XPObjectSpace os)
             {
                 type = GetDBType(os.Session);
             }
@@ -133,23 +131,19 @@
             var type = DBType.Unknown;
             if (session != null)
             {
-                var conn = session.DataLayer != null && session.DataLayer.Connection != null ? session.DataLayer.Connection : session.Connection;
-                if (conn == null)
+                var conn = session.DataLayer?.Connection ?? session.Connection;
+                if (conn == null && session.DataLayer is BaseDataLayer dataLayer)
                 {
-                    var dataLayer = session.DataLayer as BaseDataLayer;
-                    if (dataLayer != null && dataLayer.ConnectionProvider != null)
+                    if (dataLayer.ConnectionProvider is ConnectionProviderSql connProvider)
                     {
-                        var connProvider = dataLayer.ConnectionProvider as ConnectionProviderSql;
-                        if (connProvider != null)
-                        {
-                            conn = connProvider.Connection;
-                        }
-                        else if (dataLayer.ConnectionProvider is DataSetDataStore)
-                        {
-                            type = DBType.InMemory;
-                        }
+                        conn = connProvider.Connection;
+                    }
+                    else if (dataLayer.ConnectionProvider is DataSetDataStore)
+                    {
+                        type = DBType.InMemory;
                     }
                 }
+
                 if (conn != null)
                 {
                     var connType = conn.GetType().Name;

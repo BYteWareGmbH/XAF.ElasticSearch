@@ -27,8 +27,6 @@
         /// <param name="obj">Object where the Type T is deduced from.</param>
         /// <typeparam name="T">Type for the elements of the list.</typeparam>
         /// <returns>Empty List of Type T.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "obj", Justification = "Extension Method")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Extension Method")]
         public static List<T> CreateEmptyList<T>(T obj)
         {
             return new List<T>();
@@ -40,7 +38,6 @@
         /// <param name="elements">The elements to add to the list.</param>
         /// <typeparam name="T">Type for the elements of the list.</typeparam>
         /// <returns>List with elements.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = "Extension Method")]
         public static List<T> CreateList<T>(params T[] elements)
         {
             return new List<T>(elements);
@@ -61,6 +58,23 @@
         }
 
         /// <summary>
+        /// Returns null if the Enumeration items is null or empty.
+        /// </summary>
+        /// <typeparam name="T">Type for the elements of the list.</typeparam>
+        /// <param name="items">Enumeration to be tested.</param>
+        /// <returns>Null if the Enumeration is null or empty, items otherwise.</returns>
+        public static IEnumerable<T> AsNullIfEmpty<T>(this IEnumerable<T> items)
+        {
+            if (items == null || !items.Any())
+            {
+#pragma warning disable S1168 // Empty arrays and collections should be returned instead of null
+                return null;
+#pragma warning restore S1168 // Empty arrays and collections should be returned instead of null
+            }
+            return items;
+        }
+
+        /// <summary>
         /// Returns null if the String str is null or empty or contains only whitespace characters.
         /// </summary>
         /// <param name="str">String to be tested.</param>
@@ -72,21 +86,6 @@
                 return null;
             }
             return str;
-        }
-
-        /// <summary>
-        /// Returns null if the Enumeration items is null or empty.
-        /// </summary>
-        /// <typeparam name="T">Type for the elements of the list.</typeparam>
-        /// <param name="items">Enumeration to be tested.</param>
-        /// <returns>Null if the Enumeration is null or empty, items otherwise.</returns>
-        public static IEnumerable<T> AsNullIfEmpty<T>(this IEnumerable<T> items)
-        {
-            if (items == null || !items.Any())
-            {
-                return null;
-            }
-            return items;
         }
 
         /// <summary>
@@ -293,7 +292,6 @@
         /// <param name="value">String value to parse.</param>
         /// <param name="ignorecase">Ignore the case of the string being parsed.</param>
         /// <returns>The Enum corresponding to the stringExtensions.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly", Justification = "Generic Parameter")]
         public static T ToEnum<T>(this string value, bool ignorecase)
         {
             if (value == null)
@@ -312,7 +310,9 @@
             if (!t.IsEnum)
             {
 #pragma warning disable CC0002 // Invalid argument name
+#pragma warning disable S3928 // Parameter names used into ArgumentException constructors should match an existing one
                 throw new ArgumentException("Type provided must be an Enum.", "T");
+#pragma warning restore S3928 // Parameter names used into ArgumentException constructors should match an existing one
 #pragma warning restore CC0002 // Invalid argument name
             }
 
@@ -325,7 +325,6 @@
         /// <param name="value">The value.</param>
         /// <param name="defaultvalue">The default value.</param>
         /// <returns>Integer from String value.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "Extension Method")]
         public static int ToInteger(this string value, int defaultvalue)
         {
             return (int)ToDouble(value, defaultvalue);
@@ -336,7 +335,6 @@
         /// </summary>
         /// <param name="value">The value.</param>
         /// <returns>Integer from String value.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", MessageId = "integer", Justification = "Extension Method")]
         public static int ToInteger(this string value)
         {
             return ToInteger(value, 0);
@@ -350,8 +348,7 @@
         /// <returns>Double from String value.</returns>
         public static double ToDouble(this string value, double defaultvalue)
         {
-            double result;
-            if (double.TryParse(value, out result))
+            if (double.TryParse(value, out double result))
             {
                 return result;
             }
@@ -379,8 +376,7 @@
         /// <returns>DateTime from String value.</returns>
         public static DateTime? ToDateTime(this string value, DateTime? defaultvalue)
         {
-            DateTime result;
-            if (DateTime.TryParse(value, out result))
+            if (DateTime.TryParse(value, out DateTime result))
             {
                 return result;
             }
@@ -415,8 +411,7 @@
             {
                 return false;
             }
-            bool result;
-            if (bool.TryParse(value, out result))
+            if (bool.TryParse(value, out bool result))
             {
                 return result;
             }
@@ -604,6 +599,17 @@
         }
 
         /// <summary>
+        /// Returns true if enum matches any of the given values.
+        /// </summary>
+        /// <param name="value">Value to match.</param>
+        /// <param name="values">Values to match against.</param>
+        /// <returns>Return true if matched.</returns>
+        public static bool In(this Enum value, params Enum[] values)
+        {
+            return values.Any(v => v == value);
+        }
+
+        /// <summary>
         /// Checks string object's value to array of string values.
         /// </summary>
         /// <param name="value">The String to test.</param>
@@ -677,17 +683,6 @@
         }
 
         /// <summary>
-        /// Returns true if enum matches any of the given values.
-        /// </summary>
-        /// <param name="value">Value to match.</param>
-        /// <param name="values">Values to match against.</param>
-        /// <returns>Return true if matched.</returns>
-        public static bool In(this Enum value, params Enum[] values)
-        {
-            return values.Any(v => v == value);
-        }
-
-        /// <summary>
         /// Adds the String append to each Word in String text, that doesn't already contain append.
         /// </summary>
         /// <param name="text">The String where each word is appended with c.</param>
@@ -739,7 +734,6 @@
         /// <param name="obj">The Object to start with.</param>
         /// <param name="children">The function which delivers the children.</param>
         /// <returns>Enumeration of obj and all its children, recursively.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Func")]
         public static IEnumerable<T> DescendantsAndSelf<T>(this T obj, Func<T, IEnumerable<T>> children)
         {
             if (obj != null)
@@ -747,9 +741,11 @@
                 yield return obj;
 
                 var stack = new Stack<T>();
-                var visited = new HashSet<T>();
-                visited.Add(obj);
                 stack.Push(obj);
+                var visited = new HashSet<T>
+                {
+                    obj,
+                };
 
                 while (stack.Count > 0)
                 {
@@ -778,10 +774,12 @@
         /// <returns>
         ///     <c>true</c> if name fits the mask expression otherwise, <c>false</c>.
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Extension Method")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = "Extension Method")]
         public static bool FitsMask(this string name, string expression)
         {
+#pragma warning disable S1854 // Unused assignments should be removed
+#pragma warning disable S907 // "goto" statement should not be used
+#pragma warning disable CC0120 // Your Switch maybe include default clause
+#pragma warning disable IDE0059 // Unnötige Zuweisung eines Werts.
             if (name == null)
             {
                 throw new ArgumentNullException(nameof(name));
@@ -959,6 +957,10 @@
             }
             num9 = sourceArray[num7 - 1];
             return num9 == num8;
+#pragma warning restore IDE0059 // Unnötige Zuweisung eines Werts.
+#pragma warning restore CC0120 // Your Switch maybe include default clause
+#pragma warning restore S907 // "goto" statement should not be used
+#pragma warning restore S1854 // Unused assignments should be removed
         }
 
         private class ChunkedEnumerable<T> : IEnumerable<T>
@@ -966,15 +968,21 @@
             private class ChildEnumerator : IEnumerator<T>
             {
                 private readonly ChunkedEnumerable<T> parent;
-                private int position;
-                private bool done;
+                private bool _Disposed;
                 private T current;
+                private bool done;
+                private int position;
 
                 public ChildEnumerator(ChunkedEnumerable<T> parent)
                 {
                     this.parent = parent;
                     position = -1;
                     parent.wrapper.AddRef();
+                }
+
+                ~ChildEnumerator()
+                {
+                    Dispose(false);
                 }
 
                 public T Current
@@ -989,21 +997,18 @@
                     }
                 }
 
-                public void Dispose()
-                {
-                    if (!done)
-                    {
-                        done = true;
-                        parent.wrapper.RemoveRef();
-                    }
-                }
-
                 object System.Collections.IEnumerator.Current
                 {
                     get
                     {
                         return Current;
                     }
+                }
+
+                public void Dispose()
+                {
+                    Dispose(true);
+                    GC.SuppressFinalize(this);
                 }
 
                 public bool MoveNext()
@@ -1027,6 +1032,17 @@
                 {
                     // per http://msdn.microsoft.com/en-us/library/system.collections.ienumerator.reset.aspx
                     throw new NotSupportedException();
+                }
+
+                private void Dispose(bool disposing)
+                {
+                    if (!_Disposed && disposing)
+                    {
+                        done = true;
+                        parent.wrapper.RemoveRef();
+                    }
+
+                    _Disposed = true;
                 }
             }
 
@@ -1104,7 +1120,7 @@
                     };
                 }
 
-                item = default(T);
+                item = default;
                 if (currentEnumeration.AtEnd)
                 {
                     return false;
@@ -1153,7 +1169,6 @@
         /// <param name="source">The source Enumeration.</param>
         /// <param name="chunksize">The maximum number of elements of a chunk.</param>
         /// <returns>An Enumeration of Enumerations of maximum chunksize elements.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures", Justification = "Extension Method")]
         public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunksize)
         {
             if (chunksize < 1)
@@ -1164,11 +1179,10 @@
             var wrapper = new EnumeratorWrapper<T>(source);
 
             var currentPos = 0;
-            T ignore;
             try
             {
                 wrapper.AddRef();
-                while (wrapper.Get(currentPos, out ignore))
+                while (wrapper.Get(currentPos, out T ignore))
                 {
                     yield return new ChunkedEnumerable<T>(wrapper, chunksize, currentPos);
                     currentPos += chunksize;
@@ -1452,7 +1466,7 @@
         /// <returns>True if value equals the default value of Type tp; otherwise False.</returns>
         public static bool IsDefaultValue<T>(this T value)
         {
-            return EqualityComparer<T>.Default.Equals(value, default(T));
+            return EqualityComparer<T>.Default.Equals(value, default);
         }
 
         /// <summary>

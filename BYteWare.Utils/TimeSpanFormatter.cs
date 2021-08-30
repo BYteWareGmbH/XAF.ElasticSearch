@@ -67,8 +67,7 @@
 
         private static string HandleOtherFormats(string format, object arg)
         {
-            var farg = arg as IFormattable;
-            if (farg != null)
+            if (arg is IFormattable farg)
             {
                 return farg.ToString(format, CultureInfo.CurrentCulture);
             }
@@ -90,7 +89,6 @@
             return m => EvaluateMatch(m, timeSpan);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Just a switch statement")]
         private static string EvaluateMatch(Match match, TimeSpan timeSpan)
         {
             switch (match.Value)

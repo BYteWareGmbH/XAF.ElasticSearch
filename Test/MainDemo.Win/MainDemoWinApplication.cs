@@ -17,9 +17,10 @@ namespace MainDemo.Win {
 		}
         private void MainDemoWebApplication_LastLogonParametersRead(object sender, LastLogonParametersReadEventArgs e) {
             // Just to read demo user name for logon.
-            AuthenticationStandardLogonParameters logonParameters = e.LogonObject as AuthenticationStandardLogonParameters;
-            if(logonParameters != null) {
-                if(String.IsNullOrEmpty(logonParameters.UserName)) {
+            if (e.LogonObject is AuthenticationStandardLogonParameters logonParameters)
+            {
+                if (String.IsNullOrEmpty(logonParameters.UserName))
+                {
                     logonParameters.UserName = "Sam";
                 }
             }

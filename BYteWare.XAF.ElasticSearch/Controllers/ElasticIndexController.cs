@@ -1,12 +1,12 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Controllers
 {
+    using BYteWare.XAF.ElasticSearch;
+    using BYteWare.XAF.ElasticSearch.BusinessObjects;
     using DevExpress.ExpressApp;
     using DevExpress.ExpressApp.Actions;
     using DevExpress.ExpressApp.Utils;
     using DevExpress.ExpressApp.Xpo;
     using DevExpress.Persistent.Base;
-    using ElasticSearch;
-    using ElasticSearch.BusinessObjects;
     using System;
     using System.Globalization;
     using System.Linq;
@@ -26,15 +26,15 @@
         public ElasticIndexController()
         {
             TargetObjectType = typeof(IElasticSearchIndex);
-
-#pragma warning disable CC0009 // Use object initializer
             SimpleAction tempAction = null;
             try
             {
-                tempAction = new SimpleAction(this, "ElasticSearchReIndex", PredefinedCategory.Edit);
-                tempAction.Caption = "Rebuild";
-                tempAction.ConfirmationMessage = "Do you want to rebuild the ElasticSearch Index?";
-                tempAction.SelectionDependencyType = SelectionDependencyType.RequireMultipleObjects;
+                tempAction = new SimpleAction(this, "ElasticSearchReIndex", PredefinedCategory.Edit)
+                {
+                    Caption = "Rebuild",
+                    ConfirmationMessage = "Do you want to rebuild the ElasticSearch Index?",
+                    SelectionDependencyType = SelectionDependencyType.RequireMultipleObjects,
+                };
                 tempAction.Execute += ReIndexAction_Execute;
                 ReIndexAction = tempAction;
                 tempAction = null;
@@ -50,11 +50,13 @@
             tempAction = null;
             try
             {
-                tempAction = new SimpleAction(this, "ElasticSearchFullReIndex", PredefinedCategory.Edit);
-                tempAction.Caption = "Rebuild all";
-                tempAction.ConfirmationMessage = "Do you want to rebuild all ElasticSearch Indexes?";
-                tempAction.TargetViewType = ViewType.ListView;
-                tempAction.TypeOfView = typeof(DevExpress.ExpressApp.ListView);
+                tempAction = new SimpleAction(this, "ElasticSearchFullReIndex", PredefinedCategory.Edit)
+                {
+                    Caption = "Rebuild all",
+                    ConfirmationMessage = "Do you want to rebuild all ElasticSearch Indexes?",
+                    TargetViewType = ViewType.ListView,
+                    TypeOfView = typeof(DevExpress.ExpressApp.ListView),
+                };
                 tempAction.Execute += ElasticSearchFullReIndex_Execute;
                 ElasticSearchFullReIndexAction = tempAction;
                 tempAction = null;
@@ -66,7 +68,6 @@
                     tempAction.Dispose();
                 }
             }
-#pragma warning restore CC0009 // Use object initializer
 
             RegisterActions(ReIndexAction, ElasticSearchFullReIndexAction);
         }
@@ -74,8 +75,7 @@
         private void ReIndexAction_Execute(object sender, SimpleActionExecuteEventArgs e)
         {
             ObjectSpace.CommitChanges();
-            var index = e.CurrentObject as IElasticSearchIndex;
-            if (index != null)
+            if (e.CurrentObject is IElasticSearchIndex index)
             {
                 try
                 {
@@ -84,7 +84,7 @@
                     using (var osp = new XPObjectSpaceProvider(Application.GetConnectionString(), null, true))
                     using (var objectspace = (XPObjectSpace)osp.CreateObjectSpace())
                     {
-                        index = objectspace.GetObject(index) as IElasticSearchIndex;
+                        index = objectspace.GetObject(index);
                         if (index != null)
                         {
                             ElasticSearchClient.Instance.Reindex(index, (ci, i) =>

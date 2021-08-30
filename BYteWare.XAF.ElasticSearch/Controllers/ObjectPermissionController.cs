@@ -1,9 +1,9 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Controllers
 {
+    using BYteWare.XAF.ElasticSearch.BusinessObjects;
     using DevExpress.ExpressApp;
     using DevExpress.ExpressApp.SystemModule;
     using DevExpress.Persistent.Base;
-    using ElasticSearch.BusinessObjects;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -43,25 +43,21 @@
 
         private void NewController_CollectDescendantTypes(object sender, CollectTypesEventArgs e)
         {
-            if (newController != null)
+            if (newController != null && newController.View is ListView listView && listView.ObjectTypeInfo != null)
             {
-                var listView = newController.View as ListView;
-                if (listView != null && listView.ObjectTypeInfo != null)
+                List<Type> esFilterTypes = null;
+                if (typeof(DevExpress.ExpressApp.Security.Strategy.SecuritySystemObjectPermissionsObject).IsAssignableFrom(listView.ObjectTypeInfo.Type))
                 {
-                    List<Type> esFilterTypes = null;
-                    if (typeof(DevExpress.ExpressApp.Security.Strategy.SecuritySystemObjectPermissionsObject).IsAssignableFrom(listView.ObjectTypeInfo.Type))
-                    {
-                        esFilterTypes = XafTypesInfo.Instance.PersistentTypes.Where(p => p.Implements<IObjectPermissionElasticSearchFilter>() && typeof(DevExpress.ExpressApp.Security.Strategy.SecuritySystemObjectPermissionsObject).IsAssignableFrom(p.Type)).Select(p => p.Type).ToList();
-                    }
-                    if (typeof(IPermissionPolicyObjectPermissionsObject).IsAssignableFrom(listView.ObjectTypeInfo.Type))
-                    {
-                        esFilterTypes = XafTypesInfo.Instance.PersistentTypes.Where(p => p.Implements<IObjectPermissionElasticSearchFilter>() && p.Implements<IPermissionPolicyObjectPermissionsObject>()).Select(p => p.Type).ToList();
-                    }
-                    if (esFilterTypes != null && esFilterTypes.Any())
-                    {
-                        e.Types.Clear();
-                        esFilterTypes.ForEach(e.Types.Add);
-                    }
+                    esFilterTypes = XafTypesInfo.Instance.PersistentTypes.Where(p => p.Implements<IObjectPermissionElasticSearchFilter>() && typeof(DevExpress.ExpressApp.Security.Strategy.SecuritySystemObjectPermissionsObject).IsAssignableFrom(p.Type)).Select(p => p.Type).ToList();
+                }
+                if (typeof(IPermissionPolicyObjectPermissionsObject).IsAssignableFrom(listView.ObjectTypeInfo.Type))
+                {
+                    esFilterTypes = XafTypesInfo.Instance.PersistentTypes.Where(p => p.Implements<IObjectPermissionElasticSearchFilter>() && p.Implements<IPermissionPolicyObjectPermissionsObject>()).Select(p => p.Type).ToList();
+                }
+                if (esFilterTypes != null && esFilterTypes.Any())
+                {
+                    e.Types.Clear();
+                    esFilterTypes.ForEach(e.Types.Add);
                 }
             }
         }

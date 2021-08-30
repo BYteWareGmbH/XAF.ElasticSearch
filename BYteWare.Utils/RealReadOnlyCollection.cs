@@ -23,11 +23,7 @@
         /// <param name="collection">Internally used collection.</param>
         public RealReadOnlyCollection(ICollection<T> collection)
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
-            this.collection = collection;
+            this.collection = collection ?? throw new ArgumentNullException(nameof(collection));
         }
 
         /// <summary>
@@ -157,8 +153,7 @@
         /// <param name="index">The zero-based index in array at which copying begins.</param>
         void ICollection.CopyTo(Array array, int index)
         {
-            var items = array as T[];
-            if (items != null)
+            if (array is T[] items)
             {
                 collection.CopyTo(items, index);
             }

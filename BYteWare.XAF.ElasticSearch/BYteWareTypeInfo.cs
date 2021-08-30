@@ -1,15 +1,15 @@
 ﻿namespace BYteWare.XAF
 {
+    using BYteWare.Utils.Extension;
     using BYteWare.XAF.ElasticSearch;
+    using BYteWare.XAF.ElasticSearch.Model;
     using DevExpress.ExpressApp;
     using DevExpress.ExpressApp.DC;
     using DevExpress.ExpressApp.Model;
-    using DevExpress.ExpressApp.Utils.Reflection;
     using DevExpress.ExpressApp.Xpo;
     using DevExpress.Xpo;
     using DevExpress.Xpo.Metadata;
     using DevExpress.Xpo.Metadata.Helpers;
-    using ElasticSearch.Model;
     using Fasterflect;
     using System;
     using System.Collections;
@@ -20,12 +20,10 @@
     using System.Linq;
     using System.Reflection;
     using System.Text;
-    using Utils.Extension;
 
     /// <summary>
     /// Type Specific Settings
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(XAF))]
     public class BYteWareTypeInfo
     {
         private static readonly Dictionary<Type, BYteWareTypeInfo> TypeDictionary = new Dictionary<Type, BYteWareTypeInfo>();
@@ -64,8 +62,7 @@
         /// <returns>The ByteWareTypeInfo instance for type</returns>
         public static BYteWareTypeInfo GetBYteWareTypeInfo(Type type)
         {
-            BYteWareTypeInfo ci;
-            if (!TypeDictionary.TryGetValue(type, out ci))
+            if (!TypeDictionary.TryGetValue(type, out BYteWareTypeInfo ci))
             {
                 lock (TypeDictionary)
                 {
@@ -155,7 +152,6 @@
         /// <summary>
         /// The Type instance
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1721:PropertyNamesShouldNotMatchGetMethods", Justification = "MetaData")]
         public Type Type
         {
             get;
@@ -201,7 +197,6 @@
         /// Returns a MemberInfoCollection instance for the defined (Xaf)Default Property of the type, null if no such attribute was defined.
         /// This helps to support a Default Property with a path to a nested property, e. g. in a ToString implementation.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = nameof(XAF))]
         public MemberInfoCollection DefaultPropertyMemberInfoCol
         {
             get
@@ -220,8 +215,7 @@
                             }
                             else
                             {
-                                var defaultPropertyAttribute = ClassInfo.FindAttributeInfo(typeof(DefaultPropertyAttribute)) as DefaultPropertyAttribute;
-                                if (defaultPropertyAttribute != null)
+                                if (ClassInfo.FindAttributeInfo(typeof(DefaultPropertyAttribute)) is DefaultPropertyAttribute defaultPropertyAttribute)
                                 {
                                     defaultPropertyName = defaultPropertyAttribute.Name;
                                 }
@@ -264,8 +258,7 @@
                             {
                                 foreach (var op in ClassInfo.ObjectProperties)
                                 {
-                                    var mi = op as XPMemberInfo;
-                                    if (mi != null && mi.IsAssociation)
+                                    if (op is XPMemberInfo mi && mi.IsAssociation)
                                     {
                                         var asmi = mi.GetAssociatedMember();
                                         if (asmi != null && asmi.IsAggregated && GetBYteWareTypeInfo(asmi.Owner.ClassType).IsMemberESIndexed(asmi.Name))
@@ -290,7 +283,6 @@
         /// <summary>
         /// List of types where properties of this type's instances are used to construct their ElasticSearch document
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(XAF))]
         public ReadOnlyCollection<ContainingType> ContainingTypes
         {
             get
@@ -317,7 +309,7 @@
                                         {
                                             BYteWareType = ici,
                                             MemberInfo = mi,
-                                            HasContainingSetting = ici.IsMemberESContaining(mi.Name)
+                                            HasContainingSetting = ici.IsMemberESContaining(mi.Name),
                                         });
                                     }
                                 }
@@ -442,9 +434,6 @@
         /// <summary>
         /// List of ElasticSearch suggest field informations
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = "Suggestions are complicated")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         public ReadOnlyCollection<SuggestField> ESSuggestFields
         {
             get
@@ -469,7 +458,7 @@
                                     {
                                         var sf = new SuggestField
                                         {
-                                            FieldName = fieldName
+                                            FieldName = fieldName,
                                         };
                                         suggestFields.Add(sf);
                                         sf.Default = props.DefaultSuggestField;
@@ -492,7 +481,7 @@
                                     {
                                         var sf = new SuggestField
                                         {
-                                            FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, multiField.FieldName.ToLowerInvariant())
+                                            FieldName = string.Format(CultureInfo.InvariantCulture, "{0}.{1}", fieldName, multiField.FieldName.ToLowerInvariant()),
                                         };
                                         suggestFields.Add(sf);
                                         sf.Default = multiField.DefaultSuggestField;
@@ -500,8 +489,7 @@
                                         {
                                             sf.WeightField = TypeInfo.FindMember(props.WeightField);
                                         }
-                                        var modelMultiField = multiField as IModelElasticSearchFieldProperties;
-                                        if (modelMultiField != null)
+                                        if (multiField is IModelElasticSearchFieldProperties modelMultiField)
                                         {
                                             sf.ContextSettings = new List<SuggestContextInfo>(modelMultiField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
                                         }
@@ -654,8 +642,7 @@
         {
             get
             {
-                var esModelClass = ModelClass as IModelClassElasticSearch;
-                return esModelClass == null ? ESAttribute != null : esModelClass.ElasticSearchIndex != null;
+                return !(ModelClass is IModelClassElasticSearch esModelClass) ? ESAttribute != null : esModelClass.ElasticSearchIndex != null;
             }
         }
 
@@ -666,8 +653,7 @@
         /// <returns>True if the member is indexed in an ElasticSearch index; otherwise False</returns>
         public bool IsMemberESIndexed(string member)
         {
-            var modelESMember = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
-            return modelESMember == null ? ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticPropertyAttribute)) ?? false : !string.IsNullOrWhiteSpace(modelESMember.ElasticSearch.FieldName);
+            return !(ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) is IModelMemberElasticSearch modelESMember) ? ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticPropertyAttribute)) ?? false : !string.IsNullOrWhiteSpace(modelESMember.ElasticSearch.FieldName);
         }
 
         /// <summary>
@@ -677,8 +663,7 @@
         /// <returns>True if the member is marked as contained in an ElasticSearch index; otherwise False</returns>
         public bool IsMemberESContaining(string member)
         {
-            var modelESMember = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
-            return modelESMember == null ? ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticContainingAttribute)) ?? false : modelESMember.Containing;
+            return !(ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) is IModelMemberElasticSearch modelESMember) ? ClassInfo?.FindMember(member)?.HasAttribute(typeof(ElasticContainingAttribute)) ?? false : modelESMember.Containing;
         }
 
         /// <summary>
@@ -689,8 +674,7 @@
         {
             get
             {
-                var esModelClass = ModelClass as IModelClassElasticSearch;
-                return esModelClass == null ? ESAttribute?.IndexName : esModelClass.ElasticSearchIndex?.Name;
+                return !(ModelClass is IModelClassElasticSearch esModelClass) ? ESAttribute?.IndexName : esModelClass.ElasticSearchIndex?.Name;
             }
         }
 
@@ -702,8 +686,7 @@
         {
             get
             {
-                var esModelClass = ModelClass as IModelClassElasticSearch;
-                var tname = esModelClass == null ? ESAttribute?.TypeName : esModelClass.TypeName;
+                var tname = !(ModelClass is IModelClassElasticSearch esModelClass) ? ESAttribute?.TypeName : esModelClass.TypeName;
                 return string.IsNullOrEmpty(tname) ? Type.Name : tname;
             }
         }
@@ -716,8 +699,7 @@
         {
             get
             {
-                var esModelClass = ModelClass as IModelClassElasticSearch;
-                return esModelClass == null ? ESAttribute?.SourceFieldDisabled : esModelClass.SourceFieldDisabled;
+                return !(ModelClass is IModelClassElasticSearch esModelClass) ? ESAttribute?.SourceFieldDisabled : esModelClass.SourceFieldDisabled;
             }
         }
 
@@ -797,8 +779,7 @@
         /// <returns>ElasticSearch Field Properties</returns>
         public IElasticProperties ESProperties(string member)
         {
-            var modelESField = ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) as IModelMemberElasticSearch;
-            if (modelESField == null)
+            if (!(ModelClass?.AllMembers.FirstOrDefault(t => t.Name == member) is IModelMemberElasticSearch modelESField))
             {
                 return ClassInfo?.FindMember(member)?.FindAttributeInfo(typeof(ElasticPropertyAttribute)) as IElasticProperties;
             }
@@ -882,8 +863,7 @@
                     {
                         yield return item;
                     }
-                    var modelESField = props as IModelMemberElasticSearchField;
-                    var multiFields = modelESField != null ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
+                    var multiFields = props is IModelMemberElasticSearchField modelESField ? modelESField.Fields : Attribute.GetCustomAttributes(p, typeof(ElasticMultiFieldAttribute), true).OfType<IElasticSearchFieldProperties>();
                     foreach (var ga in multiFields.GroupBy(t => t.FieldName))
                     {
                         var a = ga.First();

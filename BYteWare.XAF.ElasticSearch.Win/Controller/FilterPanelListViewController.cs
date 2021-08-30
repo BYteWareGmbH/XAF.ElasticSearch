@@ -56,19 +56,18 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="FilterPanelListViewController"/> class.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Mobility", "CA1601:DoNotUseTimersThatPreventPowerStateChanges", Justification = "Suggest List")]
         public FilterPanelListViewController()
         {
-#pragma warning disable CC0009 // Use object initializer
-#pragma warning disable S2583 // Conditionally executed blocks should be reachable
             ParametrizedAction tempAction = null;
             try
             {
-                tempAction = new ParametrizedAction(this, "FilterPanelSearchEdit", FilterPanelGroup, typeof(string));
-                tempAction.Caption = "Search";
-                tempAction.ToolTip = "Search entries that contain the specified words";
-                tempAction.NullValuePrompt = "Text to search";
-                tempAction.PaintStyle = ActionItemPaintStyle.Image;
+                tempAction = new ParametrizedAction(this, "FilterPanelSearchEdit", FilterPanelGroup, typeof(string))
+                {
+                    Caption = "Search",
+                    ToolTip = "Search entries that contain the specified words",
+                    NullValuePrompt = "Text to search",
+                    PaintStyle = ActionItemPaintStyle.Image
+                };
                 tempAction.Execute += SearchTextActionExecute;
                 searchTextAction = tempAction;
                 tempAction = null;
@@ -84,9 +83,11 @@
             SimpleAction tempSimpleAction = null;
             try
             {
-                tempSimpleAction = new SimpleAction(this, "FilterPanelFuzzySearch", FilterPanelGroup);
-                tempSimpleAction.Caption = "Fuzzy Search";
-                tempSimpleAction.PaintStyle = ActionItemPaintStyle.Caption;
+                tempSimpleAction = new SimpleAction(this, "FilterPanelFuzzySearch", FilterPanelGroup)
+                {
+                    Caption = "Fuzzy Search",
+                    PaintStyle = ActionItemPaintStyle.Caption
+                };
                 tempSimpleAction.Execute += FuzzySearchActionExecute;
                 fuzzySearchAction = tempSimpleAction;
                 tempSimpleAction = null;
@@ -102,10 +103,12 @@
             SingleChoiceAction tempChoiceAction = null;
             try
             {
-                tempChoiceAction = new SingleChoiceAction(this, "FilterPanelFilterFields", FilterPanelGroup);
-                tempChoiceAction.Caption = "Search in";
-                tempChoiceAction.ImageName = "Action_ParametrizedAction";
-                tempChoiceAction.PaintStyle = ActionItemPaintStyle.Caption;
+                tempChoiceAction = new SingleChoiceAction(this, "FilterPanelFilterFields", FilterPanelGroup)
+                {
+                    Caption = "Search in",
+                    ImageName = "Action_ParametrizedAction",
+                    PaintStyle = ActionItemPaintStyle.Caption
+                };
                 newFilterFieldsAction = tempChoiceAction;
                 tempChoiceAction = null;
             }
@@ -122,8 +125,10 @@
             Forms.Timer tempTimer = null;
             try
             {
-                tempTimer = new Forms.Timer();
-                tempTimer.Interval = 500;
+                tempTimer = new Forms.Timer
+                {
+                    Interval = 500
+                };
                 tempTimer.Tick += SearchTextTimer_TickAsync;
                 searchTextTimer = tempTimer;
                 tempTimer = null;
@@ -135,8 +140,6 @@
                     tempTimer.Dispose();
                 }
             }
-#pragma warning restore S2583 // Conditionally executed blocks should be reachable
-#pragma warning restore CC0009 // Use object initializer
         }
 
         /// <inheritdoc/>
@@ -160,8 +163,7 @@
         {
             if (Active[nameof(IModelFilterPanel.FilterPanelPosition)] && View?.Editor != null && View.IsControlCreated)
             {
-                var control = View.Editor.Control as GridControl;
-                if (control != null)
+                if (View.Editor.Control is GridControl control)
                 {
                     control.BringToFront();
                 }
@@ -198,8 +200,7 @@
         protected override void OnDeactivated()
         {
             _FillActionContainersController.CustomFillContainers -= FillActionContainersController_CustomFillContainers;
-            var control = View.Editor.Control as Forms.Control;
-            if (control != null)
+            if (View.Editor.Control is Forms.Control control)
             {
                 control.HandleCreated -= GridControlHandleCreated;
             }
@@ -215,8 +216,7 @@
             }
             if (buttonsContainer != null)
             {
-                var template = Frame?.Template as IDynamicContainersTemplate;
-                if (template != null)
+                if (Frame?.Template is IDynamicContainersTemplate template)
                 {
                     template.UnregisterActionContainers(new IActionContainer[] { buttonsContainer });
                 }
@@ -245,8 +245,7 @@
         {
             if (Active)
             {
-                var control = View.Editor.Control as Forms.Control;
-                if (control != null)
+                if (View.Editor.Control is Forms.Control control)
                 {
                     control.HandleCreated += GridControlHandleCreated;
                 }
@@ -265,8 +264,7 @@
 
         private void FillActionContainersController_CustomFillContainers(object sender, CustomFillContainersEventArgs e)
         {
-            var looukupTemplate = e.Template as LookupControlTemplate;
-            if (looukupTemplate != null)
+            if (e.Template is LookupControlTemplate looukupTemplate)
             {
                 looukupTemplate.SearchActionContainer.ActionItemAdding += ButtonsContainer_ActionItemAdding;
             }
@@ -317,8 +315,7 @@
 
                     if (Frame != null && Frame.Template != null)
                     {
-                        var template = Frame.Template as IDynamicContainersTemplate;
-                        if (template != null)
+                        if (Frame.Template is IDynamicContainersTemplate template)
                         {
                             template.RegisterActionContainers(new IActionContainer[] { buttonsContainer });
                         }
@@ -359,8 +356,7 @@
                 }
                 buttons.BarManager.Items.Add(e.Item.ShortcutHandler);
                 searchTextActionItem.Control.TextChanged += Control_TextChangedAsync;
-                var be = searchTextActionItem.Control as ComboBoxEdit;
-                if (be != null)
+                if (searchTextActionItem.Control is ComboBoxEdit be)
                 {
                     be.Properties.AutoComplete = false;
                     be.SelectedIndexChanged += ComboBox_SelectedIndexChanged;
@@ -412,8 +408,7 @@
 
         private async void Control_TextChangedAsync(object sender, EventArgs e)
         {
-            var control = sender as Forms.Control;
-            if (control != null)
+            if (sender is Forms.Control control)
             {
                 fuzzySearchAction.Enabled[FuzzySearchReason] = !string.IsNullOrWhiteSpace(control.Text);
             }
@@ -453,8 +448,7 @@
         {
             if (filterController != null && searchTextActionItem != null)
             {
-                var combobox = searchTextActionItem.Control as ComboBoxEdit;
-                if (combobox != null && !string.IsNullOrEmpty(combobox.Text))
+                if (searchTextActionItem.Control is ComboBoxEdit combobox && !string.IsNullOrEmpty(combobox.Text))
                 {
                     var suggest = await filterController.SuggestAsync(combobox.Text).ConfigureAwait(true);
                     var suggestList = suggest?.ToList();

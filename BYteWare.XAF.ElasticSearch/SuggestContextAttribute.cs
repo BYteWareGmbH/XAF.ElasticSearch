@@ -1,7 +1,7 @@
 ﻿namespace BYteWare.XAF.ElasticSearch
 {
+    using BYteWare.XAF.ElasticSearch.Model;
     using DevExpress.Persistent.Base;
-    using Model;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -16,14 +16,12 @@
         /// <summary>
         /// The category context allows you to associate one or more categories with suggestions at index time. At query time, suggestions can be filtered and boosted by their associated categories.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(category), Justification = nameof(ElasticSearch))]
         category,
 
         /// <summary>
         /// A geo context allows you to associate one or more geo points or geohashes with suggestions at index time. At query time, suggestions can be filtered and boosted if they are within a certain distance of a specified geo location.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(geo), Justification = nameof(ElasticSearch))]
-        geo
+        geo,
     }
 #pragma warning restore SA1300
 

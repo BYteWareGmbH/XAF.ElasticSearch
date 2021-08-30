@@ -18,31 +18,21 @@
         /// </summary>
         /// <param name="elasticSearchFieldsItem">IModelElasticSearchFieldsItem instance</param>
         /// <returns>Type Info for a IModelElasticSearchFieldsItem instance</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Justification = nameof(XAF))]
         public static ITypeInfo Get_TypeInfo(IModelElasticSearchFieldsItem elasticSearchFieldsItem)
         {
-            if (elasticSearchFieldsItem != null)
+            if (elasticSearchFieldsItem != null && elasticSearchFieldsItem.Parent is IModelElasticSearchFieldsList modelElasticSearchFieldsList && modelElasticSearchFieldsList.Parent is IModelElasticSearchFilterSettings modelClassElasticSearchFilterSettings)
             {
-                var modelElasticSearchFieldsList = elasticSearchFieldsItem.Parent as IModelElasticSearchFieldsList;
-                if (modelElasticSearchFieldsList != null)
+                if (modelClassElasticSearchFilterSettings is IModelClass modelClass)
                 {
-                    var modelClassElasticSearchFilterSettings = modelElasticSearchFieldsList.Parent as IModelElasticSearchFilterSettings;
-                    if (modelClassElasticSearchFilterSettings != null)
-                    {
-                        var modelClass = modelClassElasticSearchFilterSettings as IModelClass;
-                        if (modelClass != null)
-                        {
-                            return modelClass.TypeInfo;
-                        }
-                        var modelListView = modelClassElasticSearchFilterSettings as IModelListView;
-                        if (modelListView != null && modelListView.ModelClass != null)
-                        {
-                            return modelListView.ModelClass.TypeInfo;
-                        }
-                    }
+                    return modelClass.TypeInfo;
+                }
+                if (modelClassElasticSearchFilterSettings is IModelListView modelListView && modelListView.ModelClass != null)
+                {
+                    return modelListView.ModelClass.TypeInfo;
                 }
             }
+
+
             return null;
         }
     }

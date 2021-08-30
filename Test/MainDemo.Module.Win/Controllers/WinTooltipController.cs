@@ -12,9 +12,10 @@ namespace MainDemo.Module.Win.Controllers {
             RegisterActions(components);
         }
         private void WinTooltipController_ViewControlsCreated(object sender, EventArgs e) {
-            GridListEditor listEditor = ((ListView)View).Editor as GridListEditor;
-            if(listEditor != null) {
-                foreach(GridColumn column in listEditor.GridView.Columns) {
+            if (((ListView)View).Editor is GridListEditor listEditor)
+            {
+                foreach (GridColumn column in listEditor.GridView.Columns)
+                {
                     column.ToolTip = "Click to sort by " + column.Caption;
                 }
             }

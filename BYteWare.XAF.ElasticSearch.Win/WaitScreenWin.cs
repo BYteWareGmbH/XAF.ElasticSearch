@@ -29,7 +29,6 @@
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline", Justification = "WinForms Implementation")]
         static WaitScreenWin()
         {
             _Lazy = new Lazy<WaitScreen>(() => new WaitScreenWin());
@@ -50,8 +49,7 @@
             {
                 WaitSplashScreen.Start();
             }
-            var updateSplash = WaitSplashScreen as ISupportUpdateSplash;
-            if (updateSplash != null)
+            if (WaitSplashScreen is ISupportUpdateSplash updateSplash)
             {
                 updateSplash.UpdateSplash(caption, displayText);
             }
@@ -66,8 +64,7 @@
         public override void Update(string caption, string displayText)
         {
             base.Update(caption, displayText);
-            var updateSplash = WaitSplashScreen as ISupportUpdateSplash;
-            if (updateSplash != null)
+            if (WaitSplashScreen is ISupportUpdateSplash updateSplash)
             {
                 updateSplash.UpdateSplash(caption, displayText);
             }

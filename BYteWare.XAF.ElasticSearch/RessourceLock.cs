@@ -34,7 +34,7 @@
         /// <summary>
         /// Exclusive (X) locks prevent access to a resource by concurrent transactions.
         /// </summary>
-        Exclusive
+        Exclusive,
     }
 
     /// <summary>

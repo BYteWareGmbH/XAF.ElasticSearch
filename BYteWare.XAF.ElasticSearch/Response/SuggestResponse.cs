@@ -30,7 +30,6 @@
         /// <summary>
         /// Dictionary of all Suggestions per Request
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly", Justification = nameof(Newtonsoft.Json))]
         public IDictionary<string, Suggest[]> Suggestions
         {
             get;

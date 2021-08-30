@@ -1,16 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BYteWare.Utils", "BYteWare.Utils\BYteWare.Utils.csproj", "{A592B97C-279C-48AC-B14E-765FB0543EEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BYteWare.Utils", "BYteWare.Utils\BYteWare.Utils.csproj", "{A592B97C-279C-48AC-B14E-765FB0543EEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BYteWare.XAF.ElasticSearch", "BYteWare.XAF.ElasticSearch\BYteWare.XAF.ElasticSearch.csproj", "{7171A283-10A5-47C0-942E-633680BEC541}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BYteWare.XAF.ElasticSearch", "BYteWare.XAF.ElasticSearch\BYteWare.XAF.ElasticSearch.csproj", "{7171A283-10A5-47C0-942E-633680BEC541}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BYteWare.XAF.ElasticSearch.Win", "BYteWare.XAF.ElasticSearch.Win\BYteWare.XAF.ElasticSearch.Win.csproj", "{9EB06157-D9D4-43D4-8184-DCE348544B9E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{D7D3DCB3-8730-498B-8E84-9BEC01DC5836}"
 	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
 		AssemblyInfoBYteWare.cs = AssemblyInfoBYteWare.cs
 		BYteWare.XAF.ElasticSearch.snk = BYteWare.XAF.ElasticSearch.snk
 		BYteWareXAF.ruleset = BYteWareXAF.ruleset
@@ -169,5 +170,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D7127164-1E2D-41AF-A534-C8A1C0B27281}
 	EndGlobalSection
 EndGlobal

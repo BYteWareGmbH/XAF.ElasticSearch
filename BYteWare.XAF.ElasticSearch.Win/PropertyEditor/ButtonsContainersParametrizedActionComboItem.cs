@@ -40,11 +40,11 @@
             try
             {
                 var type = GetType().BaseType;
-#pragma warning disable CC0009 // Use object initializer
-                tempControl = new ComboBoxEdit();
-#pragma warning restore CC0009 // Use object initializer
-                tempControl.AutoSizeInLayoutControl = false;
-                tempControl.MinimumSize = new Size(150, 20);
+                tempControl = new ComboBoxEdit
+                {
+                    AutoSizeInLayoutControl = false,
+                    MinimumSize = new Size(150, 20)
+                };
                 tempControl.Properties.NullValuePrompt = Action.NullValuePrompt;
                 tempControl.Properties.NullValuePromptShowForEmptyValue = true;
                 if (ShowExecuteButton)

@@ -17,8 +17,6 @@
         /// </summary>
         /// <param name="model">IModelElasticSearchFieldsList instance</param>
         /// <returns>List of Filter Field Action item names</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = nameof(XAF))]
         public static List<string> Get_ElasticSearchFieldsList(IModelElasticSearchFieldsList model)
         {
             if (model == null)

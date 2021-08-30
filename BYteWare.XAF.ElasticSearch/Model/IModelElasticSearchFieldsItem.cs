@@ -1,8 +1,8 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Model
 {
+    using BYteWare.XAF.ElasticSearch;
     using DevExpress.ExpressApp.DC;
     using DevExpress.ExpressApp.Model;
-    using ElasticSearch;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
@@ -17,40 +17,27 @@
         /// <summary>
         /// (default) Finds documents which match any field, but uses the _score from the best field.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "fields", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "best", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
         best_fields,
 
         /// <summary>
         /// Finds documents which match any field and combines the _score from each field.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "most", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "fields", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
         most_fields,
 
         /// <summary>
         /// Treats fields with the same analyzer as though they were one big field. Looks for each word in any field.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "fields", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "cross", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
         cross_fields,
 
         /// <summary>
         /// Runs a match_phrase query on each field and combines the _score from each field.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(phrase), Justification = nameof(ElasticSearch))]
         phrase,
 
         /// <summary>
         /// Runs a match_phrase_prefix query on each field and combines the _score from each field.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "prefix", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = nameof(phrase), Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(ElasticSearch))]
-        phrase_prefix
+        phrase_prefix,
     }
 #pragma warning restore SA1300
 

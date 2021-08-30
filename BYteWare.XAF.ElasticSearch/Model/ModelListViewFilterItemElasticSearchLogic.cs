@@ -1,8 +1,8 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Model
 {
+    using BYteWare.XAF.ElasticSearch;
     using DevExpress.ExpressApp.DC;
     using DevExpress.ExpressApp.Model;
-    using ElasticSearch;
     using System;
 
     /// <summary>
@@ -17,7 +17,6 @@
         /// </summary>
         /// <param name="model">IModelListViewFilterItemElasticSearch instance</param>
         /// <returns>Validation errors for the ElasticSearchFilter</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
         public static string Get_ElasticSearchFilterSyntax(IModelListViewFilterItemElasticSearch model)
         {
             if (model != null && !string.IsNullOrWhiteSpace(model.ElasticSearchFilter))
@@ -36,11 +35,9 @@
         /// </summary>
         /// <param name="model">IModelListViewFilterItemElasticSearch instance</param>
         /// <param name="value">The value to set</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "value", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "model", Justification = nameof(XAF))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores", Justification = nameof(XAF))]
         public static void Set_ElasticSearchFilterSyntax(IModelListViewFilterItemElasticSearch model, string value)
         {
+            // Method intentionally left empty.
         }
     }
 }

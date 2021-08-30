@@ -18,8 +18,7 @@
         public bool IsReadOnly(IModelNode node, IModelNode childNode)
         {
             var result = false;
-            var props = node?.Parent as IModelElasticSearchFieldProperties;
-            if (props != null)
+            if (node?.Parent is IModelElasticSearchFieldProperties props)
             {
                 result = props.FieldType != FieldType.completion;
             }

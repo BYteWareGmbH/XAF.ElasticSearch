@@ -13,7 +13,6 @@
         /// <summary>
         /// WaitScreen instance
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2211:NonConstantFieldsShouldNotBeVisible", Justification = nameof(XAF))]
         [CLSCompliant(false)]
         protected static Lazy<WaitScreen> _Lazy = new Lazy<WaitScreen>(() => new WaitScreen());
 #pragma warning restore SA1401 // Fields must be private

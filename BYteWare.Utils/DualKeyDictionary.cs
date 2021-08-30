@@ -12,8 +12,6 @@
     /// <typeparam name="TKey1">Type for the first key level.</typeparam>
     /// <typeparam name="TKey2">Type for the second key level.</typeparam>
     /// <typeparam name="TValue">Type for the elements.</typeparam>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable", Justification = "Serialization not implemented")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1005:AvoidExcessiveParametersOnGenericTypes", Justification = "Multi Key Dictionary")]
     public class DualKeyDictionary<TKey1, TKey2, TValue> : Dictionary<TKey1, Dictionary<TKey2, TValue>>
     {
         /// <summary>
@@ -21,7 +19,6 @@
         /// </summary>
         /// <param name="key1">First level key.</param>
         /// <param name="key2">Second level key.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1023:IndexersShouldNotBeMultidimensional", Justification = "Multi Key Dictionary")]
         public TValue this[TKey1 key1, TKey2 key2]
         {
             get
@@ -31,8 +28,7 @@
             }
             set
             {
-                Dictionary<TKey2, TValue> sdic;
-                if (!TryGetValue(key1, out sdic))
+                if (!TryGetValue(key1, out Dictionary<TKey2, TValue> sdic))
                 {
                     sdic = new Dictionary<TKey2, TValue>();
                     this[key1] = sdic;
@@ -49,8 +45,7 @@
         /// <param name="value">Value to Add.</param>
         public void Add(TKey1 key1, TKey2 key2, TValue value)
         {
-            Dictionary<TKey2, TValue> sdic;
-            if (!TryGetValue(key1, out sdic))
+            if (!TryGetValue(key1, out Dictionary<TKey2, TValue> sdic))
             {
                 sdic = new Dictionary<TKey2, TValue>();
                 this[key1] = sdic;
@@ -66,8 +61,7 @@
         /// <returns>Contains the dictionary a value for both key levels.</returns>
         public bool ContainsKey(TKey1 key1, TKey2 key2)
         {
-            Dictionary<TKey2, TValue> sdic;
-            if (TryGetValue(key1, out sdic))
+            if (TryGetValue(key1, out Dictionary<TKey2, TValue> sdic))
             {
                 return sdic.ContainsKey(key2);
             }
@@ -83,8 +77,7 @@
         /// <returns>true if the Dictionary contains an element with the specified keys; otherwise, false.</returns>
         public bool TryGetValue(TKey1 key1, TKey2 key2, out TValue value)
         {
-            Dictionary<TKey2, TValue> sdic;
-            if (TryGetValue(key1, out sdic))
+            if (TryGetValue(key1, out Dictionary<TKey2, TValue> sdic))
             {
                 return sdic.TryGetValue(key2, out value);
             }

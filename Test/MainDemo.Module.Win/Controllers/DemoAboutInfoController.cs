@@ -13,8 +13,10 @@ namespace Demo.Module.Win {
 
         public DemoAboutInfoController()
             : base() {
-            demoAboutInfoAction = new SimpleAction(this, "Demo About Info", DevExpress.Persistent.Base.PredefinedCategory.About);
-            demoAboutInfoAction.Caption = "About...";
+            demoAboutInfoAction = new SimpleAction(this, "Demo About Info", DevExpress.Persistent.Base.PredefinedCategory.About)
+            {
+                Caption = "About..."
+            };
         }
         protected override void OnActivated() {
             base.OnActivated();

@@ -6,7 +6,6 @@
     /// <summary>
     /// Represents a lock that is used to manage access to a resource, allowing multiple threads for reading or exclusive access for writing.
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1815:OverrideEqualsAndOperatorEqualsOnValueTypes", Justification = "Comparison isn't needed")]
     public struct ReaderWriterLockTiny
     {
         // if lock is above this value then somebody has a write lock

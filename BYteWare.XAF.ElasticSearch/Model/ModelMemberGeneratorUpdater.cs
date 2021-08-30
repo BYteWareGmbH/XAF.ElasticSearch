@@ -22,8 +22,7 @@
         /// <param name="node">The Business Class Member Model node</param>
         public override void UpdateNode(ModelNode node)
         {
-            var members = node as IModelBOModelClassMembers;
-            if (members != null)
+            if (node is IModelBOModelClassMembers members)
             {
                 foreach (var member in members)
                 {

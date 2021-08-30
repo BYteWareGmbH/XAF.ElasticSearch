@@ -35,8 +35,7 @@
             if (_Member != null)
             {
                 var v = _Member.GetValue(target);
-                var e = v as IEnumerable;
-                if (e != null)
+                if (v is IEnumerable e)
                 {
                     return e.Cast<object>().Select(o => o?.ToString()).Where(s => !string.IsNullOrEmpty(s));
                 }

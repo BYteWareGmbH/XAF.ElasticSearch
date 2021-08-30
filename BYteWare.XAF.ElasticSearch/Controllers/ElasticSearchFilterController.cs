@@ -1,6 +1,10 @@
 ﻿namespace BYteWare.XAF.ElasticSearch.Controllers
 {
     using BYteWare.Utils.Extension;
+    using BYteWare.XAF.ElasticSearch;
+    using BYteWare.XAF.ElasticSearch.BusinessObjects;
+    using BYteWare.XAF.ElasticSearch.Model;
+    using BYteWare.XAF.ElasticSearch.Response;
     using DevExpress.Data.Filtering;
     using DevExpress.ExpressApp;
     using DevExpress.ExpressApp.Actions;
@@ -8,10 +12,6 @@
     using DevExpress.ExpressApp.Utils;
     using DevExpress.ExpressApp.Xpo;
     using DevExpress.Persistent.Base;
-    using ElasticSearch;
-    using ElasticSearch.BusinessObjects;
-    using ElasticSearch.Response;
-    using Model;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -47,14 +47,14 @@
         /// </summary>
         public ElasticSearchFilterController()
         {
-#pragma warning disable CC0009 // Use object initializer
-#pragma warning disable S2583 // Conditionally executed blocks should be reachable
             SingleChoiceAction tempAction = null;
             try
             {
-                tempAction = new SingleChoiceAction(this, "FilterFields", PredefinedCategory.FullTextSearch);
-                tempAction.Caption = "Search in";
-                tempAction.ImageName = "Action_ParametrizedAction";
+                tempAction = new SingleChoiceAction(this, "FilterFields", PredefinedCategory.FullTextSearch)
+                {
+                    Caption = "Search in",
+                    ImageName = "Action_ParametrizedAction",
+                };
                 tempAction.Execute += FilterFieldsActionExecute;
                 filterFieldsAction = tempAction;
                 tempAction = null;
@@ -70,9 +70,11 @@
             tempAction = null;
             try
             {
-                tempAction = new SingleChoiceAction(this, "LookupFilterFields", "ElasticActionContainer");
-                tempAction.Caption = "Search in";
-                tempAction.ImageName = "Action_ParametrizedAction";
+                tempAction = new SingleChoiceAction(this, "LookupFilterFields", "ElasticActionContainer")
+                {
+                    Caption = "Search in",
+                    ImageName = "Action_ParametrizedAction",
+                };
                 tempAction.Execute += FilterFieldsActionExecute;
                 lookupFilterFieldsAction = tempAction;
                 tempAction = null;
@@ -88,9 +90,11 @@
             tempAction = null;
             try
             {
-                tempAction = new SingleChoiceAction(this, "LookupSetFilter", "ElasticActionContainer");
-                tempAction.Caption = "Filter";
-                tempAction.ImageName = "MenuBar_Filter";
+                tempAction = new SingleChoiceAction(this, "LookupSetFilter", "ElasticActionContainer")
+                {
+                    Caption = "Filter",
+                    ImageName = "MenuBar_Filter",
+                };
                 tempAction.Execute += LookupSetFilterAction_Execute;
                 lookupSetFilterAction = tempAction;
                 tempAction = null;
@@ -102,8 +106,6 @@
                     tempAction.Dispose();
                 }
             }
-#pragma warning restore S2583 // Conditionally executed blocks should be reachable
-#pragma warning restore CC0009 // Use object initializer
         }
 
         /// <summary>
@@ -255,7 +257,6 @@
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Complex?")]
         protected override void FullTextSearch(ParametrizedActionExecuteEventArgs args)
         {
             if (args == null)
@@ -276,22 +277,17 @@
                     if (!ci.ElasticIndexError)
                     {
                         var searchText = args.ParameterCurrentValue == null ? string.Empty : args.ParameterCurrentValue.ToString();
-                        bool fuzzy;
-                        bool wildcard;
                         if (string.IsNullOrEmpty(searchText))
                         {
                             searchText = "*";
                         }
-                        searchText = ElasticSearchClient.PrepareSearchText(searchText, out fuzzy, out wildcard);
+                        searchText = ElasticSearchClient.PrepareSearchText(searchText, out bool fuzzy, out bool wildcard);
                         var filter = string.Empty;
-                        if (SetFilterAction.Active && SetFilterAction.SelectedItem != null && SetFilterAction.SelectedItem.Model != null)
+                        if (SetFilterAction.Active && SetFilterAction.SelectedItem != null && SetFilterAction.SelectedItem.Model != null && SetFilterAction.SelectedItem.Model is IModelListViewFilterItemElasticSearch filterExtension)
                         {
-                            var filterExtension = SetFilterAction.SelectedItem.Model as IModelListViewFilterItemElasticSearch;
-                            if (filterExtension != null)
-                            {
-                                filter = filterExtension.ElasticSearchFilter ?? string.Empty;
-                            }
+                            filter = filterExtension.ElasticSearchFilter ?? string.Empty;
                         }
+
                         var customSearchEventArgs = new CustomSearchEventArgs(
                             args.ParameterCurrentValue == null ? string.Empty : args.ParameterCurrentValue.ToString(),
                             ci.ESIndexes.ToArray(),
@@ -396,8 +392,7 @@
             View.ModelChanged += View_ModelChanged;
             isElasticSearchAvailable = false;
             var ti = View.ObjectTypeInfo;
-            var os = ObjectSpace as XPObjectSpace;
-            if (os != null && ElasticSearchClient.Instance.IsElasticSearchAvailable(ti))
+            if (ObjectSpace is XPObjectSpace os && ElasticSearchClient.Instance.IsElasticSearchAvailable(ti))
             {
                 var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(ti.Type);
                 if (ci.ESIndexes.All(t => ElasticSearchClient.Instance.IsIndexActive(t, os.Session)))
@@ -414,7 +409,9 @@
         {
             base.OnViewControlsCreated();
             var model = (IModelListViewElasticSearchFilterSettings)View.Model;
+#pragma warning disable IDE0041 // "Ist NULL"-Prüfung verwenden
             if (model != null && model.OnlyLoadWhenFullTextFilter && ReferenceEquals(View.CollectionSource.Criteria[FullTextSearchCriteriaName], null))
+#pragma warning restore IDE0041 // "Ist NULL"-Prüfung verwenden
             {
                 View.CollectionSource.Criteria[FullTextSearchCriteriaName] = _FalseCriteria;
             }
@@ -511,8 +508,7 @@
             IModelElasticSearchFieldsList filters = null;
             if (View != null && View.Model != null)
             {
-                var filterSettings = View.Model as IModelElasticSearchFilterSettings;
-                if (filterSettings != null)
+                if (View.Model is IModelElasticSearchFilterSettings filterSettings)
                 {
                     filters = filterSettings.ElasticSearchFieldsList;
                 }
@@ -542,19 +538,14 @@
 
         private void CollectionSource_CollectionReloaded(object sender, EventArgs e)
         {
-            var col = sender as CollectionSourceBase;
-            if (col != null && !scores.IsNullOrEmpty())
+            if (sender is CollectionSourceBase col && !scores.IsNullOrEmpty())
             {
                 var list = new List<ISearchPosition>(col.List.OfType<ISearchPosition>());
                 foreach (var bo in list)
                 {
-                    if (bo != null)
+                    if (bo != null && scores.TryGetValue(bo.Session.GetKeyValue(bo).ToString(), out int pos))
                     {
-                        int pos;
-                        if (scores.TryGetValue(bo.Session.GetKeyValue(bo).ToString(), out pos))
-                        {
-                            bo.SearchPosition = pos;
-                        }
+                        bo.SearchPosition = pos;
                     }
                 }
             }

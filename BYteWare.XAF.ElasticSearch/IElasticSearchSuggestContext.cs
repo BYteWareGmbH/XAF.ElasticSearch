@@ -1,7 +1,7 @@
 ﻿namespace BYteWare.XAF.ElasticSearch
 {
+    using BYteWare.XAF.ElasticSearch.Model;
     using DevExpress.Persistent.Base;
-    using Model;
     using System;
     using System.ComponentModel;
     using System.Linq;

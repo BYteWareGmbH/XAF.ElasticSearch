@@ -1,8 +1,10 @@
 ﻿namespace BYteWare.XAF.ElasticSearch
 {
-    using BusinessObjects;
     using BYteWare.Utils;
     using BYteWare.Utils.Extension;
+    using BYteWare.XAF.ElasticSearch.BusinessObjects;
+    using BYteWare.XAF.ElasticSearch.Model;
+    using BYteWare.XAF.ElasticSearch.Response;
     using DevExpress.Data.Filtering;
     using DevExpress.ExpressApp;
     using DevExpress.ExpressApp.DC;
@@ -18,11 +20,9 @@
     using DevExpress.Xpo.Metadata.Helpers;
     using Elasticsearch.Net;
     using Fasterflect;
-    using Model;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
     using Newtonsoft.Json.Linq;
-    using Response;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -41,7 +41,6 @@
     /// <summary>
     /// ElasticSearch XAF/XPO Client
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
     public class ElasticSearchClient
     {
         /// <summary>
@@ -122,7 +121,6 @@
         /// </summary>
         /// <param name="name">Name to convert</param>
         /// <returns>Elasticsearch Field Name</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(ElasticSearch))]
         public static string FieldName(string name)
         {
             return name?.ToLowerInvariant();
@@ -133,7 +131,6 @@
         /// </summary>
         /// <param name="propertyType">Type of the property</param>
         /// <returns>FieldType or null if can not be inferred</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         public static FieldType GetFieldTypeFromType(Type propertyType)
         {
             propertyType = BYteWareTypeInfo.GetUnderlyingType(propertyType);
@@ -179,6 +176,8 @@
                         case "Char":
                         case "Guid":
                             return FieldType.keyword;
+                        default:
+                            break;
                     }
                 }
             }
@@ -222,9 +221,7 @@
             if (fieldType.HasValue)
             {
                 var s = Enum.GetName(typeof(FieldType), fieldType.Value);
-#pragma warning disable CC0021 // Use nameof
                 var posA = s.IndexOf("_type", StringComparison.CurrentCulture);
-#pragma warning restore CC0021 // Use nameof
                 if (posA == -1)
                 {
                     return s;
@@ -388,8 +385,6 @@
         /// <param name="user">The XAF Security System User</param>
         /// <param name="type">The XPO BusinessClass Type</param>
         /// <returns>The ElasticSearch Filter string</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         public static string SecurityFilter(object user, Type type)
         {
             if (user is ISecurityUserWithRoles u && type != null)
@@ -414,8 +409,7 @@
                                 {
                                     foreach (var objectPermission in typePermission.ObjectPermissions.Where(t => t.AllowRead))
                                     {
-                                        var esFilter = objectPermission as IObjectPermissionElasticSearchFilter;
-                                        if (esFilter == null || string.IsNullOrWhiteSpace(esFilter.ElasticSearchFilter))
+                                        if (!(objectPermission is IObjectPermissionElasticSearchFilter esFilter) || string.IsNullOrWhiteSpace(esFilter.ElasticSearchFilter))
                                         {
                                             noFilter = true;
                                             break;
@@ -452,8 +446,7 @@
                                     // TODO: Deny Rule with MustNot; and respect ServerPermissionPolicyRequestProcessor.AllowPermissionPriorityInSameRole and AllowPermissionPriorityDifferentRole
                                     foreach (var objectPermission in typePermission.ObjectPermissions.Where(t => t.ReadState.HasValue && t.ReadState.Value == SecurityPermissionState.Allow))
                                     {
-                                        var esFilter = objectPermission as IObjectPermissionElasticSearchFilter;
-                                        if (esFilter == null || string.IsNullOrWhiteSpace(esFilter.ElasticSearchFilter))
+                                        if (!(objectPermission is IObjectPermissionElasticSearchFilter esFilter) || string.IsNullOrWhiteSpace(esFilter.ElasticSearchFilter))
                                         {
                                             noFilter = true;
                                             break;
@@ -575,8 +568,8 @@
                                      '^',
                                      ':',
                                      '\\',
-                                     '/'
-                                };
+                                     '/',
+                    };
                     if (specialChars.Contains(c))
                     {
                         sb.Append('\\');
@@ -634,7 +627,6 @@
         /// <summary>
         /// The ElasticSearch.Net low level client instance
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Objekte verwerfen, bevor Bereich verloren geht", Justification = nameof(ElasticSearch))]
         [CLSCompliant(false)]
         public ElasticLowLevelClient ElasticLowLevelClient
         {
@@ -711,7 +703,7 @@
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         ContractResolver = new ElasticSearchContractResolver(),
-                        NullValueHandling = NullValueHandling.Ignore
+                        NullValueHandling = NullValueHandling.Ignore,
                     };
                     jsonSerializerSettings.Converters.Add(new StringEnumConverter());
                 }
@@ -732,7 +724,7 @@
                     {
                         ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                         MissingMemberHandling = MissingMemberHandling.Ignore,
-                        NullValueHandling = NullValueHandling.Ignore
+                        NullValueHandling = NullValueHandling.Ignore,
                     };
                 }
                 return jsonDeserializerSettings;
@@ -808,7 +800,6 @@
         /// </summary>
         /// <param name="name">Name of the Index</param>
         /// <returns>Converted Index Name</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         public string IndexName(string name)
         {
             return "{0}{1}".FormatWith(ElasticSearchIndexPrefix ?? string.Empty, name).ToLowerInvariant();
@@ -819,7 +810,6 @@
         /// </summary>
         /// <param name="name">Name of the Type</param>
         /// <returns>Converted Type Name</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         public string TypeName(string name)
         {
             return name?.ToLowerInvariant();
@@ -1045,7 +1035,6 @@
         /// <param name="indexed">List of already indexed instances</param>
         /// <param name="memberInfo">A Member Info to filter for containing instances instead of key values</param>
         /// <param name="progress">Progress Callback</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
         [CLSCompliant(false)]
         public void IndexList(Session session, XPClassInfo xci, IReadOnlyCollection<object> keyList, Dictionary<XPClassInfo, HashSet<object>> indexed, IMemberInfo memberInfo, Action<IWorkerProgress> progress)
         {
@@ -1069,7 +1058,7 @@
             var typeProgress = new WorkerProgress
             {
                 Name = string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(MessageGroup, "IndexListProgress"), xci.TableName, memberInfo == null ? string.Empty : memberInfo.Name),
-                Maximum = keyList.Count
+                Maximum = keyList.Count,
             };
             var ci = BYteWareTypeInfo.GetBYteWareTypeInfo(xci.ClassType);
             var typeLists = new Dictionary<ContainingType, HashSet<object>>();
@@ -1098,7 +1087,7 @@
                     }
                     var cursor = new XPCursor(session, xci, crit)
                     {
-                        PageSize = 100
+                        PageSize = 100,
                     };
                     foreach (XPBaseObject bo in cursor)
                     {
@@ -1265,8 +1254,6 @@
         /// <param name="ti">The Type Info to test if searching with ElasticSearch is available</param>
         /// <param name="filter">The filter string to test</param>
         /// <returns>The error messages; empty array if valid</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         [CLSCompliant(false)]
         public string[] ValidateFilter(ITypeInfo ti, string filter)
         {
@@ -1379,8 +1366,6 @@
         /// <param name="application">A XafApplication instance</param>
         /// <param name="progress">Optional Progress Callback method</param>
         /// <param name="indexNames">Array of the Names of the indexes to refresh</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         [CLSCompliant(false)]
         public void RefreshIndexes(XafApplication application, Action<IWorkerProgress> progress, params string[] indexNames)
         {
@@ -1388,7 +1373,7 @@
             {
                 Name = CaptionHelper.GetLocalizedText(MessageGroup, "RefreshIndexesProgressName"),
                 Phase = CaptionHelper.GetLocalizedText(MessageGroup, "RefreshIndexesProgressPhase"),
-                Position = 0
+                Position = 0,
             };
             try
             {
@@ -1432,7 +1417,7 @@
                                         }
                                     }
 
-                                     var indexList = objectspace.GetObjects(elasticSearchIndexPersistentType).OfType<IElasticSearchIndex>().ToList();
+                                    var indexList = objectspace.GetObjects(elasticSearchIndexPersistentType).OfType<IElasticSearchIndex>().ToList();
 
                                     // Delete ElasticSearchIndex'es, who are in indexNames but not in indexes
                                     objectspace.Delete(indexList.Where(t => !indexes.Select(IndexName).Contains(t.Name) && (indexNames == null || indexNames.Length == 0 || indexNames.Contains(t.Name))).ToList());
@@ -1441,21 +1426,21 @@
                                     indexList = indexList.Where(t => indexes.Select(IndexName).Contains(t.Name)).ToList();
                                     Parallel.ForEach(
                                         new OrderableListPartitioner<IElasticSearchIndex>(indexList),
-                                    new ParallelOptions
-                                    {
-                                        MaxDegreeOfParallelism = Environment.ProcessorCount
-                                    },
-                                    ei =>
-                                    {
-                                        Reindex(ei, (ci, i) =>
+                                        new ParallelOptions
                                         {
-                                            if (i == -1)
+                                            MaxDegreeOfParallelism = Environment.ProcessorCount,
+                                        },
+                                        ei =>
+                                        {
+                                            Reindex(ei, (ci, i) =>
                                             {
-                                                workerProgress.Position++;
-                                                progress?.Invoke(workerProgress);
-                                            }
+                                                if (i == -1)
+                                                {
+                                                    workerProgress.Position++;
+                                                    progress?.Invoke(workerProgress);
+                                                }
+                                            });
                                         });
-                                    });
                                     var si = string.Join(",", indexes.ToArray());
                                     if (!string.IsNullOrWhiteSpace(si))
                                     {
@@ -1559,7 +1544,6 @@
                                 };
                                 foreach (var modelContext in modelSuggestField.Contexts)
                                 {
-                                    var sci = field.ContextSettings.First(cs => cs.ContextName == modelContext.Name);
                                     if (!string.IsNullOrEmpty(modelContext.Value))
                                     {
                                         suggester.Contexts[modelContext.Name] = ParameterContent(modelContext.Value);
@@ -1664,8 +1648,6 @@
         /// </summary>
         /// <param name="index">The index to rebuild</param>
         /// <param name="progress">Progress Callback</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling", Justification = nameof(ElasticSearch))]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = nameof(ElasticSearch))]
         public void Reindex(IElasticSearchIndex index, Action<BYteWareTypeInfo, int> progress)
         {
             if (index == null)
@@ -1712,7 +1694,7 @@
                         new OrderableListPartitioner<ITypeInfo>(typeList),
                         new ParallelOptions
                         {
-                            MaxDegreeOfParallelism = Environment.ProcessorCount
+                            MaxDegreeOfParallelism = Environment.ProcessorCount,
                         },
                         ti =>
                         {
@@ -1734,7 +1716,7 @@
                                             ti.Type,
                                             criteria)
                                     {
-                                        PageSize = 100
+                                        PageSize = 100,
                                     };
 
                                     var sb = new StringBuilder();
@@ -1767,10 +1749,7 @@
                             }
                             progress?.Invoke(ci, -1);
                         });
-                    if (maxAktualisieren != null)
-                    {
-                        DeleteIndexAktualisieren(index.Name, index.Session, maxAktualisieren);
-                    }
+                    DeleteIndexAktualisieren(index.Name, index.Session, maxAktualisieren);
                 }
                 else
                 {
@@ -2118,6 +2097,28 @@
             }
         }
 
+        private void BulkIndex(ITypeInfo ti, string s)
+        {
+            var errors = true;
+            var retries = 0;
+            Exception e = null;
+            ElasticsearchResponse<string> res = null;
+            while (errors && retries++ < 3 && e == null)
+            {
+                res = ElasticLowLevelClient.Bulk<string>(s);
+                e = res.OriginalException;
+                errors = !res.Success || res.Body == null || !res.Body.Contains("\"errors\":false");
+            }
+            if (e == null && errors && res != null)
+            {
+                e = new ElasticIndexException(res.Body);
+            }
+            if (e != null)
+            {
+                throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "IndexError"), ti.Name, res.HttpStatusCode), e);
+            }
+        }
+
         private void DeleteIndexAktualisieren(string indexName, Session session, DateTime timeStamp)
         {
             for (int attempt = 1; attempt <= MaxAttemptsCounter; ++attempt)
@@ -2177,28 +2178,6 @@
                         throw;
                     }
                 }
-            }
-        }
-
-        private void BulkIndex(ITypeInfo ti, string s)
-        {
-            var errors = true;
-            var retries = 0;
-            Exception e = null;
-            ElasticsearchResponse<string> res = null;
-            while (errors && retries++ < 3 && e == null)
-            {
-                res = ElasticLowLevelClient.Bulk<string>(s);
-                e = res.OriginalException;
-                errors = !res.Success || res.Body == null || !res.Body.Contains("\"errors\":false");
-            }
-            if (e == null && errors && res != null)
-            {
-                e = new ElasticIndexException(res.Body);
-            }
-            if (e != null)
-            {
-                throw new ElasticIndexException(string.Format(CultureInfo.CurrentCulture, CaptionHelper.GetLocalizedText(IndexExceptionGroup, "IndexError"), ti.Name, res.HttpStatusCode), e);
             }
         }
 
@@ -2386,7 +2365,7 @@
                             containingType.BYteWareType.Type,
                             crit)
                         {
-                            PageSize = 100
+                            PageSize = 100,
                         };
 
                         // Loop through all the objects.

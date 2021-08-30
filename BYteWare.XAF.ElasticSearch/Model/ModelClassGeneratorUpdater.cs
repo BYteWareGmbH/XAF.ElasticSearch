@@ -21,9 +21,7 @@
         /// <param name="node">The Business Class Model node</param>
         public override void UpdateNode(ModelNode node)
         {
-            var boModel = node as IModelBOModel;
-            var appElasticSearch = node?.Application as IModelApplicationElasticSearch;
-            if (boModel != null && appElasticSearch != null)
+            if (node is IModelBOModel boModel && node?.Application is IModelApplicationElasticSearch appElasticSearch)
             {
                 foreach (var modelClass in boModel)
                 {

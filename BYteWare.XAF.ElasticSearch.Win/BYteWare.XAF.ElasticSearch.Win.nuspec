@@ -9,14 +9,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>$description$</description>
     <projectUrl>https://github.com/BYteWareGmbH/XAF.ElasticSearch</projectUrl>
-    <copyright>Copyright 2016</copyright>
+    <copyright>Copyright 2021</copyright>
     <tags>XAF ElasticSearch</tags>
   </metadata>
   <files>
-    <file src="bin\$configuration$\$id$.pdb" target="lib\net452" />
-    <file src="bin\$configuration$\de\$id$.resources.dll" target="lib\net452\de" />
-    <file src="bin\$configuration$\es\$id$.resources.dll" target="lib\net452\es" />
-    <file src="bin\$configuration$\ja\$id$.resources.dll" target="lib\net452\ja" />
-    <file src="bin\$configuration$\ru\$id$.resources.dll" target="lib\net452\ru" />
+    <file src="bin\$configuration$\net462\$id$.pdb" target="lib\net462" />
+    <file src="bin\$configuration$\net462\de\$id$.resources.dll" target="lib\net462\de" />
+    <file src="bin\$configuration$\net462\es\$id$.resources.dll" target="lib\net462\es" />
+    <file src="bin\$configuration$\net462\ja\$id$.resources.dll" target="lib\net462\ja" />
+    <file src="bin\$configuration$\net462\ru\$id$.resources.dll" target="lib\net462\ru" />
   </files>
 </package>

@@ -12,7 +12,6 @@
         /// <summary>
         /// Total number of hits
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
         [JsonProperty("total")]
         public long Total
         {
@@ -23,7 +22,6 @@
         /// <summary>
         /// Maximum Score value of all reported hits
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
         [JsonProperty("max_score")]
         public double MaxScore
         {
@@ -34,8 +32,6 @@
         /// <summary>
         /// List of all hits
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Justification = "Serialization")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = nameof(Newtonsoft.Json))]
         [JsonProperty("hits")]
         public List<Hit> Hits
         {

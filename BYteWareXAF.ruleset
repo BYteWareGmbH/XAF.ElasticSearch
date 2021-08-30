@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<RuleSet Name="BYteWare XAF Regelsatz" Description="Dieser Regelsatz enthält alle Regeln die für BYteWare XAF Sinn machen." ToolsVersion="14.0">
+<RuleSet Name="BYteWare XAF Regelsatz" Description="Dieser Regelsatz enthält alle Regeln die für BYteWare XAF Sinn machen." ToolsVersion="16.0">
   <IncludeAll Action="Warning" />
   <Rules AnalyzerId="CodeCracker.CSharp" RuleNamespace="CodeCracker.CSharp">
     <Rule Id="CC0003" Action="None" />
@@ -66,6 +66,7 @@
     <Rule Id="SA1624" Action="None" />
     <Rule Id="SA1625" Action="Warning" />
     <Rule Id="SA1627" Action="Warning" />
+    <Rule Id="SA1629" Action="None" />
     <Rule Id="SA1633" Action="None" />
     <Rule Id="SA1634" Action="None" />
     <Rule Id="SA1635" Action="None" />

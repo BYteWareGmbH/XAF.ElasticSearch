@@ -57,7 +57,6 @@
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists", Justification = nameof(Newtonsoft.Json))]
         protected override List<MemberInfo> GetSerializableMembers(Type objectType)
         {
             var source = new List<MemberInfo>();
@@ -108,7 +107,6 @@
         }
 
         /// <inheritdoc/>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Justification = nameof(Elasticsearch))]
         protected override string ResolvePropertyName(string propertyName)
         {
             return ElasticSearchClient.FieldName(propertyName);
