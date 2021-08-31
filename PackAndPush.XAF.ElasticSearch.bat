@@ -1,2 +1,2 @@
-FOR /F "tokens=2*" %%A IN ('REG.EXE QUERY "HKLM\SOFTWARE\WOW6432Node\Microsoft\VisualStudio\SxS\VS7" 2^>NUL ^| FIND "REG_SZ"') DO SET VSPath=%%B
-CMD /c "pushd "%~dp0" && "%VSPath%Common7\Tools\VsMSBuildCmd.bat" && popd && msbuild /m XAF.ElasticSearch.msbuild /clp:WarningsOnly /l:FileLogger,Microsoft.Build.Engine;logfile=Build.log"
+FOR /F "tokens=* USEBACKQ" %%B IN (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -property installationPath`) DO SET VSPath=%%B
+CMD /c "pushd "%~dp0" && "%VSPath%\Common7\Tools\VsMSBuildCmd.bat" && popd && msbuild /m XAF.ElasticSearch.msbuild /clp:WarningsOnly /l:FileLogger,Microsoft.Build.Engine;logfile=Build.log"

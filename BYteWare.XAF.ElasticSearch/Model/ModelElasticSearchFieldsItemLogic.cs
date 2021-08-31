@@ -31,8 +31,6 @@
                     return modelListView.ModelClass.TypeInfo;
                 }
             }
-
-
             return null;
         }
     }
