@@ -6,7 +6,7 @@ node {
 		checkout scm
 
 		// Get the MSBuild tool.
-		def msbHome = tool name: 'MSBuild64 15.0', type: 'hudson.plugins.msbuild.MsBuildInstallation'
+		def msbHome = tool name: 'MSBuild64 2019', type: 'hudson.plugins.msbuild.MsBuildInstallation'
 
 		// Mark the code build 'stage'....
 		stage 'Build'
