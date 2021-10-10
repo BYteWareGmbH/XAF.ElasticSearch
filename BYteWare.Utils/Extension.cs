@@ -27,7 +27,9 @@
         /// <param name="obj">Object where the Type T is deduced from.</param>
         /// <typeparam name="T">Type for the elements of the list.</typeparam>
         /// <returns>Empty List of Type T.</returns>
+#pragma warning disable IDE0060 // Nicht verwendete Parameter entfernen
         public static List<T> CreateEmptyList<T>(T obj)
+#pragma warning restore IDE0060 // Nicht verwendete Parameter entfernen
         {
             return new List<T>();
         }
@@ -130,9 +132,19 @@
         /// <returns>The Substring from text starting at start with maximum length characters.</returns>
         public static string SafeSubstring(this string text, int start, int length)
         {
-            return text == null ? null : text.Length <= start ? string.Empty
-                : text.Length - start <= length ? text.Substring(start)
-                : text.Substring(start, length);
+            if (text is null)
+            {
+                return null;
+            }
+            if (text.Length <= start)
+            {
+                return string.Empty;
+            }
+            if (text.Length - start <= length)
+            {
+                return text.Substring(start);
+            }
+            return text.Substring(start, length);
         }
 
         /// <summary>
@@ -521,58 +533,60 @@
             return truncatedString;
         }
 
+#pragma warning disable S125 // Sections of code should not be commented out
         /*/// <summary>
-        /// Converts to a HTML-encoded string
-        /// </summary>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
-        public static string HtmlEncode(this string data)
-        {
-            return System.Web.HttpUtility.HtmlEncode(data);
-        }
+                /// Converts to a HTML-encoded string
+                /// </summary>
+                /// <param name="data">The data.</param>
+                /// <returns></returns>
+                public static string HtmlEncode(this string data)
+                {
+                    return System.Web.HttpUtility.HtmlEncode(data);
+                }
 
-        /// <summary>
-        /// Converts the HTML-encoded string into a decoded string
-        /// </summary>
-        public static string HtmlDecode(this string data)
-        {
-            return System.Web.HttpUtility.HtmlDecode(data);
-        }
+                /// <summary>
+                /// Converts the HTML-encoded string into a decoded string
+                /// </summary>
+                public static string HtmlDecode(this string data)
+                {
+                    return System.Web.HttpUtility.HtmlDecode(data);
+                }
 
-        /// <summary>
-        /// Parses a query string into a System.Collections.Specialized.NameValueCollection
-        /// using System.Text.Encoding.UTF8 encoding.
-        /// </summary>
-        public static System.Collections.Specialized.NameValueCollection ParseQueryString(this string query)
-        {
-            return System.Web.HttpUtility.ParseQueryString(query);
-        }
+                /// <summary>
+                /// Parses a query string into a System.Collections.Specialized.NameValueCollection
+                /// using System.Text.Encoding.UTF8 encoding.
+                /// </summary>
+                public static System.Collections.Specialized.NameValueCollection ParseQueryString(this string query)
+                {
+                    return System.Web.HttpUtility.ParseQueryString(query);
+                }
 
-        /// <summary>
-        /// Encode an Url string
-        /// </summary>
-        public static string UrlEncode(this string url)
-        {
-            return System.Web.HttpUtility.UrlEncode(url);
-        }
+                /// <summary>
+                /// Encode an Url string
+                /// </summary>
+                public static string UrlEncode(this string url)
+                {
+                    return System.Web.HttpUtility.UrlEncode(url);
+                }
 
-        /// <summary>
-        /// Converts a string that has been encoded for transmission in a URL into a
-        /// decoded string.
-        /// </summary>
-        public static string UrlDecode(this string url)
-        {
-            return System.Web.HttpUtility.UrlDecode(url);
-        }
+                /// <summary>
+                /// Converts a string that has been encoded for transmission in a URL into a
+                /// decoded string.
+                /// </summary>
+                public static string UrlDecode(this string url)
+                {
+                    return System.Web.HttpUtility.UrlDecode(url);
+                }
 
-        /// <summary>
-        /// Encodes the path portion of a URL string for reliable HTTP transmission from
-        /// the Web server to a client.
-        /// </summary>
-        public static string UrlPathEncode(this string url)
-        {
-            return System.Web.HttpUtility.UrlPathEncode(url);
-        }*/
+                /// <summary>
+                /// Encodes the path portion of a URL string for reliable HTTP transmission from
+                /// the Web server to a client.
+                /// </summary>
+                public static string UrlPathEncode(this string url)
+                {
+                    return System.Web.HttpUtility.UrlPathEncode(url);
+                }*/
+#pragma warning restore S125 // Sections of code should not be commented out
 
         /// <summary>
         /// Determines whether [is not null or empty] [the specified input].
@@ -1142,7 +1156,9 @@
                 return true;
             }
 
+#pragma warning disable CRRSP12 // A misspelled word has been found
             private int refs;
+#pragma warning restore CRRSP12 // A misspelled word has been found
 
             // needed for dispose semantics
             public void AddRef()
@@ -1162,6 +1178,7 @@
             }
         }
 
+#pragma warning disable CRRSP04 // A misspelled word has been found
         /// <summary>
         /// Splits the Enumeration source into chunks with maximum chunksize elements.
         /// </summary>
@@ -1170,6 +1187,7 @@
         /// <param name="chunksize">The maximum number of elements of a chunk.</param>
         /// <returns>An Enumeration of Enumerations of maximum chunksize elements.</returns>
         public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> source, int chunksize)
+#pragma warning restore CRRSP04 // A misspelled word has been found
         {
             if (chunksize < 1)
             {

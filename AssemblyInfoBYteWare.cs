@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 
 [assembly: AssemblyCompany("BYteWare GmbH")]
-[assembly: AssemblyCopyright("Copyright © BYteWare GmbH 2016")]
+[assembly: AssemblyCopyright("Copyright © BYteWare GmbH 2021")]
 [assembly: AssemblyTrademark("")]
 #if DEBUG
 [assembly: AssemblyConfiguration("Debug")]

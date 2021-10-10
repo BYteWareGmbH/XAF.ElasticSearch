@@ -2,3 +2,6 @@
 
 # IDE0065: Die using-Anweisung wurde falsch platziert.
 csharp_using_directive_placement = inside_namespace
+
+# IDE0079: Unnötige Unterdrückung entfernen
+dotnet_diagnostic.IDE0079.severity = none
