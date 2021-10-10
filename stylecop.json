@@ -9,6 +9,9 @@
   "settings": {
     "documentationRules": {
       "companyName": "BYteWare GmbH"
+    },
+    "usingDirectives": {
+      "systemUsingDirectivesFirst": false
     }
   }
 }
