@@ -11,6 +11,20 @@
     /// </summary>
     public class SuggestContextInfo : IElasticSearchSuggestContext
     {
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SuggestContextInfo"/> class.
+        /// </summary>
+        /// <param name="source">Source Suggest settings</param>
+        public SuggestContextInfo(IElasticSearchSuggestContext source)
+        {
+            ContextName = source.ContextName;
+            ContextType = source.ContextType;
+            PathField = source.PathField;
+            Precision = source.Precision;
+            QueryParameter = source.QueryParameter;
+        }
+
         /// <summary>
         /// Name for the context
         /// </summary>

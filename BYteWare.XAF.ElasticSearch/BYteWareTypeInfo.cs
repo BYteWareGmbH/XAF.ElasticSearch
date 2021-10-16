@@ -468,11 +468,11 @@
                                         }
                                         if (modelESField != null)
                                         {
-                                            sf.ContextSettings = new List<SuggestContextInfo>(modelESField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
+                                            sf.ContextSettings = new List<SuggestContextInfo>(modelESField.SuggestContexts.Select(t => new SuggestContextInfo(t))).AsReadOnly();
                                         }
                                         else
                                         {
-                                            sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>().Select(CreateContextInfo)).AsReadOnly();
+                                            sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextAttribute), true).OfType<SuggestContextAttribute>().Select(t => new SuggestContextInfo(t))).AsReadOnly();
                                         }
                                         AddSuggestContextPathFieldInfo(sf);
                                     }
@@ -491,11 +491,11 @@
                                         }
                                         if (multiField is IModelElasticSearchFieldProperties modelMultiField)
                                         {
-                                            sf.ContextSettings = new List<SuggestContextInfo>(modelMultiField.SuggestContexts.Select(CreateContextInfo)).AsReadOnly();
+                                            sf.ContextSettings = new List<SuggestContextInfo>(modelMultiField.SuggestContexts.Select(t => new SuggestContextInfo(t))).AsReadOnly();
                                         }
                                         else
                                         {
-                                            sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase)).Select(CreateContextInfo)).AsReadOnly();
+                                            sf.ContextSettings = new List<SuggestContextInfo>(Attribute.GetCustomAttributes(pi, typeof(ElasticSuggestContextMultiFieldAttribute), true).OfType<ElasticSuggestContextMultiFieldAttribute>().Where(t => multiField.FieldName.Equals(t.FieldName, StringComparison.OrdinalIgnoreCase)).Select(t => new SuggestContextInfo(t))).AsReadOnly();
                                         }
                                         AddSuggestContextPathFieldInfo(sf);
                                     }
@@ -514,7 +514,7 @@
                                                 var contexts = new List<SuggestContextInfo>();
                                                 foreach (var context in nci.ESSuggestFields[i].ContextSettings)
                                                 {
-                                                    var ncontext = CreateContextInfo(context);
+                                                    var ncontext = new SuggestContextInfo(context);
                                                     if (context.ContextPathFieldInfo != null)
                                                     {
                                                         var mi = context.ContextPathFieldInfo.MemberInfo;
@@ -841,13 +841,6 @@
                     yield return propertyName;
                 }
             }
-        }
-
-        private static SuggestContextInfo CreateContextInfo(IElasticSearchSuggestContext source)
-        {
-            var sci = new SuggestContextInfo();
-            source.MapProperties(sci);
-            return sci;
         }
 
         private IEnumerable<string> ESFieldsInternal(bool wildcards)
